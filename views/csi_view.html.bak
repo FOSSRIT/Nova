@@ -1,0 +1,4 @@
+{{extend 'csi_base.html'}}
+        <div id="mainContent">
+            {{include}}
+        </div> <!-- end mainContent -->

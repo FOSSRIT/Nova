@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or 'en'}}">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{=response.title or request.application}}</title>
+<link href="{{=URL(request.application,'static','csi_main.css')}}" rel="stylesheet" type="text/css" />
+{{include 'web2py_ajax.html'}}
+</head>
+
+<body>
+<div class="flash">{{=response.flash or ''}}</div>
+    <div id="container">
+        <div id="header">
+            <p>header</p>
+        </div> <!-- end header -->
+
+        <div id="navigation">
+        <ul>
+        {{for men_link in response.menu:}}
+            <li><a href="{{=men_link[1]}}">{{=men_link[0]}}</a></li>
+        {{pass}}
+        </ul>
+        </div> <!--end navigation -->
+
+        {{include}}
+
+        <br class="clearfloat" />
+
+    </div><!-- end Container -->
+
+    <div id="footer">
+            <p>footer</p>
+        </div> <!-- end footer -->
+</body>
+</html>

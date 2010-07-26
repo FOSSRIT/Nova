@@ -1,0 +1,30 @@
+{{extend 'csi_view.html'}}
+{{if len(attr) != 0:}}
+<h2>Current Attributes</h2>
+
+<br />
+{{for x in attr:}}
+
+{{data = db(db.vocab.id==x.vocab).select()}}
+
+{{=data[0].value}}: {{=x.value}}
+
+<br />
+
+
+{{pass}}
+{{pass}}
+<a href="{{='http://%s/%s/%s/addVocab/%s' % (request.env.http_host, request.application, request.controller, nodeName)}}">
+Add a new Attribute</a>
+
+<form method="post" action="{{='http://%s/%s/%s/addAttr/%s' % (request.env.http_host, request.application, request.controller, nodeName)}}">
+<select name="attr">
+{{for x in vocab:}}
+<option value="{{=x.id}}">{{=x.value}}</option>
+{{pass}}
+</select>
+<input type="hidden" name="nodeId" value="{{=nodeId}}" />
+<input type="hidden" name="nodeUrl" value="{{=nodeName}}" />
+<input type="submit" value="Add Attribute" />
+</form>
+{{=BEAUTIFY(response._vars)}}

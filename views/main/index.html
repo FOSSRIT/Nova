@@ -1,0 +1,11 @@
+{{extend 'csi_view.html'}}
+<h1>Categories</h1><br />
+
+<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/addCat">Add a Category</a>
+<br />
+<br />
+{{for x in types:}}
+<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/view/{{=x.value}}">{{=x.value}}</a><br />
+{{pass}}
+
+<br />

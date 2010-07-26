@@ -1,0 +1,13 @@
+{{extend 'csi_view.html'}}
+<h1>{{=page}}</h1><br />
+{{if len(data) == 0:}}
+There are no nodes for this category
+<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit">
+Add a Node</a>
+{{pass}}
+
+
+{{for x in data:}}
+<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}">{{=x.name}}</a><br />
+{{pass}}
+<br />

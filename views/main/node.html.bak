@@ -1,0 +1,17 @@
+{{extend 'csi_node.html'}}
+
+<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit/{{=node.url}}">Edit this Node</a>
+<br />
+<br />
+Name: {{=node.name}}<br />
+Short URL: {{=node.url}}<br /><br />
+
+{{for x in data:}}
+
+{{vocab = db(db.vocab.id==x.vocab).select()}}
+
+{{=vocab[0].value}}: {{=x.value}}
+
+<br />
+{{pass}}
+{{=BEAUTIFY(response._vars)}}

@@ -1,0 +1,30 @@
+{{extend 'csi_base.html'}}
+        <div id="sidebar">
+            <h3>sidebar</h3>
+
+            {{for node_name, node_holder in node_list.items():}}
+            <div class="sidebar_block">
+              <h4>{{=node_name}}</h4>
+              <ul class="panel" title="{{=node_name}}">
+                  {{for node in node_holder:}}
+                  <li class="panelItem">
+                  {{=node}}
+                      <img src="{{=node['pic']}}" class="panelItemPic" /><a href="#">{{=node['name']}}</a>
+                  </li>
+                  {{pass}}
+               </ul>
+            </div>
+            {{pass}}
+
+            <h3>Social</h3>
+
+            <div id="socialBar">
+            SOCIAL LINKS HERE
+            </div> <!-- end social bar -->
+
+
+        </div> <!-- end sidebar -->
+
+        <div id="mainContent">
+            {{include}}
+        </div> <!-- end mainContent -->

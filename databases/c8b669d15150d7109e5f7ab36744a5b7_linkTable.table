@@ -1,0 +1,18 @@
+(dp1
+S'linkId'
+p2
+S'INTEGER'
+p3
+sS'link'
+p4
+S'INTEGER'
+p5
+sS'id'
+p6
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p7
+sS'nodeId'
+p8
+S'INTEGER'
+p9
+s.

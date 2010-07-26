@@ -1,0 +1,29 @@
+{{extend 'csi_view.html'}}
+<form method="post" action="{{='http://%s/%s/%s/edit' % (request.env.http_host, request.application, request.controller)}}">
+<select name="nodeType">
+{{for x in types:}}
+<option value="{{=x.id}}"{{if(node[1] == x.id):}}{{="selected='selected'"}}
+{{elif x.id == 1:}}
+{{="select='selected'"}}
+{{pass}}>{{=x.value}}</option>
+{{pass}}
+</select><br />
+<input type="hidden" name="id" value="{{=node[0]}}" />
+<input type="hidden" name="new" value="{{=new}}" />
+Name: <input type="text" name="name" value="{{=node[2]}}" /><br />
+short URL: <input type="text" name="url" value="{{=node[3]}}" /><br />
+{{if attr:}}
+{{for x in attr:}}
+{{label=db(db.vocab.id==x.vocab).select()}}
+{{=label[0].value}}: <input type="text" name="attr.{{=x.id}}" value="{{=x.value}}" /><br />
+{{pass}}
+{{pass}}
+
+<input type="submit" value="{{if new:}}{{="Create Node"}}{{else:}}{{="Edit Node"}}{{pass}}" />
+</form>
+
+{{if len(request.args) != 0:}}
+<a href="{{='http://%s/%s/%s/addAttr/%s' % (request.env.http_host, request.application, request.controller, request.args[0])}}">Add an Attribute</a>
+
+{{pass}}
+{{=BEAUTIFY(response._vars)}}

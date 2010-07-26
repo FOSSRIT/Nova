@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{=response.title or request.application}}</title>
+{{response.files.append(URL(request.application,'static','csi_main.css'))}}
+</head>
+
+<body class="">
+<div class="flash">{{=response.flash or ''}}</div>
+<div id="container">
+        
+        <div id="header">
+        
+            <p>
+            header: {{=A(response.title or request.application, _href=URL(request.application,'default','index'))}}
+            {{=response.subtitle or ''}}
+            </p>
+        
+        </div> <!-- end header -->
+        
+        
+        
+        <div id="navigation">
+        
+            <p>navigation</p>
+            {{if response.menu:}}
+            <h2>{{=T('Main Menu')}}</h2>
+            {{=MENU(response.menu)}}
+            {{pass}}
+             {{if response.menu_edit:}}
+            <h2>{{=T('Edit This App')}}</h2>
+            {{=MENU(response.menu_edit)}}       
+            {{pass}}
+        
+        </div> <!--end navigation -->
+        
+      
+        
+        
+        
+        
+        <div id="sidebar">
+    
+            <p>sidebar</p>
+            
+            <div id="mainProjects">
+              
+              <ul class="panel" title="Project">
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  
+               </ul>
+            </div> <!-- end mainprojects -->
+            
+            <div id="mainGroups">
+             
+               <ul class="panel" title="Groups">
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  <li class="panelItem"> <a href="/"ul.title"/test.html">test</a>   </li>
+                  
+                  
+               </ul>
+               
+             </div> <!-- end mainGroups -->
+             
+             <div id="mainPeople">
+             
+                 <ul class="panel" title="People">
+                    
+                    <li class="panelItem"> <a href="/"ul.title"/test.html">test</a> </li>
+                    
+                    <li class="panelItem"> <a href="/"ul.title"/test.html">test</a> </li>
+                    
+                    <li class="panelItem"> <a href="/"ul.title"/test.html">test</a> </li>
+                    
+                    
+                 </ul>
+                 
+            </div> <!-- end mainPeople -->
+            
+            <h3> Social </h3>
+            
+            <div id="socialBar">
+            
+            </div> <!-- end social bar -->
+            
+            
+            
+            <h3>Live Feed</h3>
+            
+            <div id="liveFeed">
+            
+            </div> <!-- end liveFeed -->
+            
+    
+        </div> <!-- end sidebar -->
+    
+        <div id="mainContent">
+            {{include}}
+        </div> <!-- end mainContent -->
+        
+        <br class="clearfloat" />
+        
+        
+        
+        
+    
+    
+    </div><!-- end Container -->
+    
+    <div id="footer">
+            
+            <p>footer</p>
+            
+        </div> <!-- end footer -->
+</body>
+</html>

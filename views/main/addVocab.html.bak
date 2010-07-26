@@ -1,0 +1,7 @@
+{{extend 'csi_view.html'}}
+<form method="post" action="{{='http://%s/%s/%s/addVocab' % (request.env.http_host, request.application, request.controller)}}">
+Attribute Name: <input type="text" name="value" value="New Attribute" /><br />
+<input type="submit" value="Add New Attribute" />
+<input type="hidden" name="nodeUrl" value="nodeUrl" />
+</form>
+{{=BEAUTIFY(response._vars)}}
