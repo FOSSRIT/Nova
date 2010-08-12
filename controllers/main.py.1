@@ -13,10 +13,6 @@ def index():
     
     
     
-def about():
-
-    return dict()    
-    
 def view():
 
 
@@ -141,30 +137,17 @@ def nodeJon():
 
 def link():
 
-    # handle database update and redirect
-    if(request.vars != {}):
-        
-        # TODO: Prevent redundant entries     
-        db.linkTable.insert(nodeId=int(request.vars.node), linkId=int(request.vars.linkNode))
-        
-        redirect(URL(request.application, request.controller, "node/%s" % request.vars.url))   
-
-    # handle empty arguments
     if(len(request.args) != 0):
-        
-        # grab the node with this url
+    
         node = db(db.node.url == request.args[0]).select()
         
     else:
     
         raise HTTP(404, "Node not found")
-        
-    # Generate a set containing all nodes
+
     nodeSet = db(db.node.id != None).select()
 
-    return dict( node=node[0], nodeSet=nodeSet )
-
-
+    return dict( node=node, nodeSet=nodeSet )
 
 def edit():
 
@@ -194,25 +177,14 @@ def edit():
                 
                     db(db.nodeAttr.id==key[5:]).update(value=attr)
             
-            
-            # delete checked attributes
-            if request.vars.removeAttr != None:
-                
-                if len(request.vars.removeAttr) == 1:
-                
-                    db(db.nodeAttr.id == int(request.vars.removeAttr)).delete()
-                
-                else:
-                    for remAttr in request.vars.removeAttr:
-            
-                        db(db.nodeAttr.id == int(remAttr)).delete()     
-                            
+                  
+             
         redirect('http://%s/%s/%s/node/%s' % (request.env.http_host, request.application, request.controller, request.vars.url))
 
     nodeList = []
 
     if(len(request.args) != 0):
-        node = (db(db.node.url == request.args[0]).select())[0]
+        node = db(db.node.url == request.args[0]).select()
        
     
         attr = db(db.nodeAttr.nodeId==node[0]).select()
@@ -221,9 +193,6 @@ def edit():
         
     else:
         #THIS WILL BREAK HERE AS NODE IS NOT SET
-        
-        node = None
-        
         attr = None
         
         new = True
@@ -232,9 +201,9 @@ def edit():
     
     vocab = db(db.vocab.id != None).select()
     
-    nodeSet = db(db.node.id != None).select()
+    
 
-    return dict( types=rows, node=node, attr=attr, vocab=vocab, new=new, nodeSet=nodeSet )
+    return dict( types=rows, node=node[0], attr=attr, vocab=vocab, new=new )
     
 def addCat():
         
@@ -243,10 +212,9 @@ def addCat():
 def addAttr():
 
     if len(request.vars) != 0:
-               
+    
         db.nodeAttr.insert(nodeId=request.vars.nodeId, vocab=request.vars.attr, value="default")
         
-               
         redirect('http://%s/%s/%s/edit/%s' % (request.env.http_host, request.application, request.controller, request.vars.nodeUrl))
 
     node = db(db.node.url == request.args[0]).select()

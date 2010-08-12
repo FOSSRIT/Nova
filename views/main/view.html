@@ -1,5 +1,18 @@
 {{extend 'csi_view.html'}}
-<h1>{{=page}}</h1><br />
+
+    <div id="viewbar">
+        
+        <h1 style="float:left; margin:20px; color:#FFF;">{{=page}}</h1>
+
+            <div id="addyourself"> <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit">Add your own!</a>
+            
+            </div> <!-- end addyourself -->
+
+        <br />
+        
+    </div> <!-- end viewbar -->
+
+
 {{if len(data) == 0:}}
 There are no nodes for this category
 <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit">
@@ -8,6 +21,33 @@ Add a Node</a>
 
 
 {{for x in data:}}
-<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}">{{=x.name}}</a><br />
-{{pass}}
-<br />
+    
+    <div class="nodeBox">
+        
+        <div class="nodePic">
+            
+            <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}" >
+            
+            {{if x.picURL == "":}}
+                
+                <img src="http://news.softpedia.com/images/news2/Keep-Chrome-for-Mac-OS-X-Updated-with-Chromium-Updater-2.jpg"  width="160px" height="160px"/></a>
+            
+            {{else:}}
+            
+                <img src="{{=x.picURL}}" width="160px" height="160px" /></a>
+                
+            {{pass}}
+        
+        </div> <!-- end nodePic -->
+        
+        <div class="nodeName">
+            
+            <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}">{{=x.name}}</a>
+            
+        </div> <!-- end nodeName -->
+        
+        
+    </div> <!-- end nodeBox -->
+    
+    {{pass}}
+<br class="clearfloat"/>

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-    font: 100% Verdana, Arial, Helvetica, sans-serif;
+    font: 100% Tahoma,Verdana, Arial, Helvetica, sans-serif;
     background: #FFF;
     margin: 0;
     padding: 0;
@@ -12,6 +12,28 @@ a{
     color: #fff;
 }
 
+#addyourself a {
+    float:right;
+    height:50px;
+    width:250px;
+    font-size:24px;
+    margin-right:50px;
+    margin-top:20px;
+    background-color: #666;
+    border-radius: 16px; /* half of button size + padding */
+    text-align: center;
+    padding-top:10px;
+    vertical-align: middle;
+    text-decoration:none;
+    
+}
+
+#addyouself a:hover {
+    text-decoration: underline;
+    color:#999;
+    background-color:#FFF;
+}
+
 .clearfloat { /* this class should be placed on a div or break element and should be the final element before the close of a container that should fully contain a float */
     clear:both;
     height:0;
@@ -19,21 +41,92 @@ a{
     line-height: 0px;
 }
 
+#bigPic {
+    width:300px;
+    max-width:300px;
+    max-height:400px;
+    margin-left: 20px;
+    margin-top:20px;
+    float:left;
+    margin-bottom:20px;
+}
+
 #container {
     width: 900px;
     height: auto;
     margin: 0 auto;
     padding:0px;
+    margin-bottom:20px;
+}
+
+#description {
+
+}
+
+
+#descriptionBox {
+    
+    
+    border-radius: 16px; /* half of button size + padding */
+    width:90%;
+    height:auto;
+    background-color:#999;
+    clear:both;
+    margin: 0 auto;
+    margin-top:20px;
+    margin-bottom:20px;
+    padding:10px;
+}
+
+#editForm {
+
+    width:auto;
+    height:auto;
+    margin: 0 auto;
+}
+
+.formright {
+    float:right;
+    margin-right:0px;
+    clear:right;
 }
 
 #footer {
     margin: 0; /* zeroing the margins of the first element in the footer will avoid the possibility of margin collapse - a space between divs */
     padding: 10px 0; /* padding on this element will create space, just as the the margin would have, without the margin collapse issue */
     width: 100%;
-    height: 200px;
+    min-height: 200px;
     clear:both;
     background:#333
+    margin-top:20px;
+    background-color:#999;
 }
+
+fieldset {
+    width:700px;
+    margin: 0 auto;
+}
+
+fieldset ul, fieldset li{
+border:0; margin:0; padding:0; list-style:none;
+}
+fieldset li{
+clear:both;
+list-style:none;
+padding-bottom:10px;
+}
+
+fieldset input{
+float:left;
+}
+fieldset label{
+width:140px;
+float:left;
+}
+
+
+
+
 
 #header {
     background: #DDDDDD;
@@ -45,16 +138,18 @@ a{
 }
 
 #mainContent, #onlyMainContent {
-    border-radius: 16px; /* half of button size + padding */
-    margin: 20px 320px 0 20px;
-    padding-top: 0px;
-    padding-right: 20px;
-    padding-bottom: 0;
-    padding-left: 20px;
+    
+    margin: 20px 290px 0 10px;
+    padding-top: 10px;
+    padding-right: 0px;
+    padding-bottom: 20px;
+    padding-left: 0px;
     background:#666;
     width:auto;
     float: none;
     text-align: left;
+    height:auto;
+    
 }
 
 #onlyMainContent{
@@ -63,15 +158,20 @@ a{
 
 #navigation {
     width:90%;
+    height:40px;
     margin:0 auto;
     background:#666;
-    padding:0px;
+    margin-top:10px;
+    font-size:24px;
     clear:both;
+    vertical-align:middle;
+    font-family:tahoma
 }
 
 #navigation ul {
     list-style: none;
     list-style-type: none;
+    margin:5px;
 }
 
 #navigation li {
@@ -82,6 +182,74 @@ a{
     content: "|";
 }
 
+#navigation li a {
+    text-decoration: none;
+}
+
+#navigation li a:hover {
+    text-decoration: underline;
+}
+
+.nodeBox {
+    width: 180px;
+    height:215px;
+    margin-right: 36px;
+    margin-left:50px;
+    margin-top:30px;
+    float:left;
+    background-color:#999;
+}
+.nodePic {
+    width:160px;
+    height:160px;
+    margin: 0 auto;
+    margin-top:10px;
+    background-color:#CCC;
+}
+
+.nodeName {
+    width:160px;
+    height:25px;
+    margin: 0 auto;
+    margin-top:10px;
+    background-color:#CCC;
+    text-align: center;
+}
+.nodeName a {
+    text-decoration:none;
+}
+.nodeName a:hover {
+    text-decoration:underline;
+}
+
+.nodeTopLinks a  {
+    margin-left:20px;
+    margin-top:20px;
+    margin-bottom:10px;
+    display:block;
+    width:150px;
+    height:30px;
+    background-color:#333;
+    float:left;
+    text-align:center;
+    padding-top:3px;
+    text-decoration:none;
+    }
+    
+.nodeTopLinks a:hover {
+    background-color:#999;
+    color:#000;
+}
+
+#nodeTitle {
+    font-size:24px;
+    color:#FFF;
+    margin-left:20px;
+    clear:left;
+}
+
+
+
 .panel {
     width: 230px;
     display:block;
@@ -89,17 +257,32 @@ a{
     list-style-image:none;
     list-style-type:none;
     padding:0px;
+    margin: 0 auto;
+    vertical-align: middle;
 
 }
 
 .panelItem {
     list-style-image:none;
-    color:#FFF;
+    color:#666;
+    background-color:#999;
     display:block;
     width:230px;
     height:40px;
-    margin-left:0px;
+    margin: 0 auto;
+    margin-bottom:3px;
+    
+    
+}
 
+.panelItem:hover {
+    background-color:#333;
+}
+
+.panelItem a {
+    margin-top:10px;
+    text-decoration:none;
+    padding-top:10px;
 }
 
 .panelItemPic {
@@ -113,16 +296,22 @@ a{
 
 }
 
+.panelItemName {
+    
+    padding-top:10px;
+}
+
 #sidebar {
+    border-radius: 16px; /* half of button size + padding */
     float: right;
     width: 240px;
     height: auto;
     background: #EBEBEB;
     margin-top:20px;
-    margin-bottom:20px;
+    margin-bottom:50px;
     padding-top: 0px;
     padding-right: 10px;
-    padding-bottom: 0px;
+    padding-bottom: 20px;
     padding-left: 10px;
     text-align:left;
 }
@@ -132,4 +321,50 @@ a{
     margin:0 auto;
     background-color:#666;
     margin-bottom: 10px;
+    padding-bottom:10px;
+    padding-top: 3px;
+    padding-left:0px;
+    clear:both;
+}
+.socialPic {
+    float:left;
+    margin-right:5px;
+}
+
+#sideStats {
+    border-radius: 16px; /* half of button size + padding */
+    float:right;
+    width:220px;
+    height:auto;
+    margin-right:20px;
+    margin-top:20px;
+    background-color:#999;
+    margin-bottom:20px;
+    
+    
+}
+
+.statTitle, .statValue {
+    width:200px;
+    height:20px;
+    margin: 0 auto;
+    margin-top:10px;
+}
+
+.statTitle {
+    color:#FFF;
+    border-bottom-width: thin;
+    border-bottom-style: solid;
+    border-bottom-color: #000;
+}
+
+.statValue {
+    margin-bottom:20px;
+}
+
+#viewbar {
+    width: 100%;
+    height:100px;
+    background-color:#999;
+    
 }

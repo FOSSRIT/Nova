@@ -8,9 +8,8 @@ response.title = "Center for Student Innovation"
 ##########################################
 
 response.menu = [
-    [T('Index'),  URL(request.application,'default','index')],
-    [T('Site Edit'), URL('admin', 'default', 'design/%s' % request.application)],
-    [T('App Edit'), URL(request.application, 'appadmin', 'index')]
+    [T('Home'),  URL(request.application,'main','Home')],
+    [T('About'),  URL(request.application,'main','about')]
     ]
     
 #Dynamically add types to main menu

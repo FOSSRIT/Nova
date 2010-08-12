@@ -11,12 +11,7 @@
                             <select name="nodeType">
                                 {{for x in types:}}
                                
-                                    <option value="{{=x.id}}" 
-                                    
-                                    {{if new == "False":}}
-                                    
-                                        {{if(node.type.id == x.id):}}{{="selected='selected'"}}
-                                        {{pass}}
+                                    <option value="{{=x.id}}"{{if(node.type.id == x.id):}}{{="selected='selected'"}}
                                
                                     {{elif x.id == 1:}}
                             
@@ -60,7 +55,6 @@
                                <br />
                                 (Check a box to remove that attribute)
                                 <br />
-                                <br />
                         
                         {{if attr:}}
                             {{for x in attr:}}
@@ -83,11 +77,11 @@
                                 <br />
                          
                          <li><label for="desc">Description:</label>       
-                                <textarea name="desc" class="formright" rows="20" cols="60">{{=node.description}}</textarea>
+                                <textarea name="desc" class="formright" rows="20" cols="50">{{=node.description}}</textarea>
                          </li>
                          
                          <li>       
-                                <input type="submit" value="{{if new:}}{{="Create Node"}}{{else:}}{{="Save Changes"}}{{pass}}" />
+                                <input type="submit" value="{{if new:}}{{="Create Node"}}{{else:}}{{="Save changes"}}{{pass}}" />
                          </li>   
                           </ul>  
                                 

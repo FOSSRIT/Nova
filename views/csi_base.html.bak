@@ -29,7 +29,14 @@
     </div><!-- end Container -->
 
     <div id="footer">
-            <p>footer</p>
+       <p>footer</p>
+       <p>TEMP Dev Links
+          <a href="/admin/default/design/csi2">Site Edit</a> | 
+          <a href="/csi2/appadmin/index">App Edit</a>
+       <br><br>
+<b>DEBUG INFO</b>:<br />
+
+</p>
         </div> <!-- end footer -->
 </body>
 </html>

@@ -64,8 +64,31 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+
+#db.define_table('nodeType', Field('value', 'string'))
+#db.define_table('node', Field('type', 'integer', requires=IS_IN_DB(db, 'nodeType.id'), widget=SQLFORM.widgets.radio.widget), Field('name', 'string'), Field('url', unique=True), Field('picURL','string'))
+#db.define_table('nodeAttr', Field('nodeId', 'integer'), Field('vocab', 'integer'), Field('value'))
+#db.define_table('linkTable', Field('nodeId', 'integer'), Field('linkId', 'integer'))
+#db.define_table('vocab', Field('value', 'string', unique=True))
+
+
+# Define Base Tales
 db.define_table('nodeType', Field('value', 'string'))
-db.define_table('node', Field('type', 'integer', requires=IS_IN_DB(db, 'nodeType.id'), widget=SQLFORM.widgets.radio.widget), Field('name', 'string'), Field('url', unique=True))
-db.define_table('nodeAttr', Field('nodeId', 'integer'), Field('vocab', 'integer'), Field('value'))
-db.define_table('linkTable', Field('nodeId', 'integer'), Field('linkId', 'integer'))
-db.define_table('vocab', Field('value', 'string'))
+db.define_table('vocab', Field('value', 'string', unique=True))
+
+# Define Compound Tables
+db.define_table('node',
+    Field('type', db.nodeType),
+    Field('name', 'string'),
+    Field('url', unique=True),
+    Field('picURL','string'),
+    Field('description','string'))
+
+db.define_table('nodeAttr',
+    Field('nodeId', db.node),
+    Field('vocab', db.vocab),
+    Field('value'))
+    
+db.define_table('linkTable',
+    Field('nodeId', db.node),
+    Field('linkId', db.node))

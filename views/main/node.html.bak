@@ -1,17 +1,59 @@
 {{extend 'csi_node.html'}}
 
-<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit/{{=node.url}}">Edit this Node</a>
+
+    <div class="nodeTopLinks">
+    
+        <a  href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit/{{=node.url}}">Edit this Node</a>
+        
+    </div>        
+     
+    <div class="nodeTopLinks">
+        
+        <a  href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/link/{{=node.url}}">Link this Node</a>
+
+    </div>
+    
 <br />
-<br />
-Name: {{=node.name}}<br />
-Short URL: {{=node.url}}<br /><br />
 
-{{for x in data:}}
 
-{{vocab = db(db.vocab.id==x.vocab).select()}}
+    <div id="nodeTitle">
+        {{=node.name}}
+    </div> <!-- end nodeTitle -->
+    
+    
+    
+    
+    <div id="bigPic">
+          <img src="{{=node.picURL}}"  width="300px" />
+    </div> <!-- end bigPic -->
+    
+    
+    
+    
+    
+    
+    <div id="sideStats">
+    
+    {{for x in node_attributes:}}
+        
+        <div class="statTitle">
+            {{=x.vocab.value}}
+        </div> <!-- end statTitle -->
+            
+        <div class="statValue">
+            {{=x.value}}
+        </div> <!-- end statValue -->
+        
+    {{pass}}
+    
+    </div> <!-- end sideStats -->
+    
 
-{{=vocab[0].value}}: {{=x.value}}
-
-<br />
-{{pass}}
-{{=BEAUTIFY(response._vars)}}
+    
+    <div id="descriptionBox">
+       
+       {{=node.description}}
+       
+       
+    
+    </div> <!-- end description -->

@@ -1,18 +1,26 @@
 (dp1
-S'url'
+S'description'
 p2
 S'CHAR(512)'
 p3
-sS'type'
+sS'url'
 p4
-S'INTEGER'
-p5
-sS'id'
-p6
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
-p7
-sS'name'
-p8
 S'CHAR(512)'
+p5
+sS'picURL'
+p6
+S'CHAR(512)'
+p7
+sS'type'
+p8
+S'INTEGER'
 p9
+sS'id'
+p10
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p11
+sS'name'
+p12
+S'CHAR(512)'
+p13
 s.

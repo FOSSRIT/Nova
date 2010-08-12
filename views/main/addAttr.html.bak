@@ -14,7 +14,7 @@
 
 {{pass}}
 {{pass}}
-<a href="{{'http://%s/%s/%s/addVocab/%s' % (request.env.http_host, request.application, request.controller, nodeName)}}">
+<a href="{{='http://%s/%s/%s/addVocab/%s' % (request.env.http_host, request.application, request.controller, nodeName)}}">
 Add a new Attribute</a>
 
 <form method="post" action="{{='http://%s/%s/%s/addAttr/%s' % (request.env.http_host, request.application, request.controller, nodeName)}}">
@@ -24,7 +24,8 @@ Add a new Attribute</a>
 {{pass}}
 </select>
 <input type="hidden" name="nodeId" value="{{=nodeId}}" />
-<input type="hidden" name="nodeUrl" value="{{=nodeName}}" />
-<input type="submit" value="Add Attribute" />
+<input type="hidden" name="nodeUrl" value="{{=nodeName}}" /> <br />
+<input type="radio" name="add" value="add" CHECKED /> Add <br />
+<input type="radio" name="add" value="remove" /> Remove <br />
+<input type="submit" value="Edit Attribute" />
 </form>
-{{=BEAUTIFY(response._vars)}}
