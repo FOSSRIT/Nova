@@ -11,16 +11,20 @@ sS'picurl'
 p6
 S'CHAR(512)'
 p7
-sS'type'
+sS'date'
 p8
-S'INTEGER'
+S'TIMESTAMP'
 p9
-sS'id'
+sS'type'
 p10
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
+S'INTEGER'
 p11
-sS'name'
+sS'id'
 p12
-S'CHAR(512)'
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p13
+sS'name'
+p14
+S'CHAR(512)'
+p15
 s.

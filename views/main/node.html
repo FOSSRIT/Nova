@@ -1,7 +1,8 @@
 {{extend 'csi_node.html'}}
 
     <div class="nodeTopLinks">
-        <a href="{{=URL('edit','node',args=[node.url])}}">Edit this Node</a>
+        <a href="{{=URL('edit','node', args=[node.url])}}">Edit Node</a>
+        <a href="{{=URL('edit','link', args=node.url)}}">Link Node</a>
     </div>
     
 <br />

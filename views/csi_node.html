@@ -2,11 +2,7 @@
         <div id="sidebar">
             <span style="float:left;"><h3>Links</h3></span>
             
-            <div class="nodeTopLinks">
-        
-                <a  href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/link/{{=node.url}}">Link this Node</a>
-
-            </div>
+            <div class="nodeTopLinks"></div>
 
             {{for node_name, node_holder in node_list.items():}}
             <div class="sidebar_block">

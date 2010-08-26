@@ -80,31 +80,6 @@ def node():
         # No node was requested, Redirect to index of current controller
         redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))        
 
-def link():
-
-    # handle database update and redirect
-    if(request.vars != {}):
-        
-        # TODO: Prevent redundant entries     
-        db.linkTable.insert(nodeId=int(request.vars.node), linkId=int(request.vars.linkNode))
-        
-        redirect(URL(request.application, request.controller, "node/%s" % request.vars.url))   
-
-    # handle empty arguments
-    if(len(request.args) != 0):
-        
-        # grab the node with this url
-        node = db(db.node.url == request.args[0]).select()
-        
-    else:
-    
-        raise HTTP(404, "Node not found")
-        
-    # Generate a set containing all nodes
-    nodeSet = db(db.node.id != None).select()
-
-    return dict( node=node[0], nodeSet=nodeSet )
-
 def addCat():
         
     return dict()

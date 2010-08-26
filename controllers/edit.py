@@ -1,5 +1,7 @@
 # coding: utf8
 # try something like
+from datetime import datetime
+
 def index(): return dict(message="hello from edit.py")
 
 def node():
@@ -19,7 +21,8 @@ def node():
                             name=request.vars.name,
                             url=request.vars.url,
                             picURL=request.vars.pic_url,
-                            description=request.vars.desc
+                            description=request.vars.desc,
+                            date=datetime.now()
                           )
             response.flash = "%s Created" % request.vars.name
             
@@ -76,6 +79,37 @@ def node():
     # Get node types to show the user
     node_types = types=db(db.nodeType.id != None).select()
     return dict(types=node_types, node=node, attr=attr)
+
+def link():
+    """
+    Shows list of all nodes that can be linked with current node as
+    well as links any nodes requested.
+    
+    TODO: This is a temporary way as the the number of nodes increases,
+    this function will get out of control in its current state.  A better
+    way must be used then displaying all nodes and let them choose.
+    """
+    try:
+        node = db(db.node.url == request.args[0]).select()[0]
+    except:
+        raise HTTP(404, "Node Not Found")
+        
+        
+    # Apply Changes if link requested
+    if request.vars.linkNode:
+        db.linkTable.insert(nodeId=node, linkId=int(request.vars.linkNode), date=datetime.now())
+        response.flash = "Link Added"
+    
+    # Select all nodes that can be linked
+    nodeSet = []
+    
+    for row in db(db.node.id != node.id).select():
+        # Filter out existing links
+        if not db((db.linkTable.nodeId == node) & (db.linkTable.linkId == row)).count() and \
+           not db((db.linkTable.nodeId == row) & (db.linkTable.linkId == node)).count():
+            nodeSet.append(row)
+
+    return dict( node=node, nodeSet=nodeSet )
 
 def category():
     return dict(message="hello from edit.py")

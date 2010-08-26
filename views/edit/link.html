@@ -1,0 +1,14 @@
+{{extend 'csi_view.html'}}
+
+<form method="post" action="{{=URL(args=node.url)}}">
+
+Link this node to others:
+
+<select name="linkNode">
+  {{for x in nodeSet:}}
+    <option value="{{=x.id}}">{{=x.type.value}}: {{=x.name}}</option>
+  {{pass}}
+</select>
+<input type="submit" value="Link" />
+
+</form>

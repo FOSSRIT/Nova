@@ -62,7 +62,8 @@ db.define_table('node',
     Field('name', 'string'),
     Field('url', unique=True),
     Field('picURL','string'),
-    Field('description','text'))
+    Field('description','text'),
+    Field('date', 'datetime'))
 
 db.define_table('nodeAttr',
     Field('nodeId', db.node),
@@ -71,4 +72,5 @@ db.define_table('nodeAttr',
     
 db.define_table('linkTable',
     Field('nodeId', db.node),
-    Field('linkId', db.node))
+    Field('linkId', db.node),
+    Field('date', 'datetime'))

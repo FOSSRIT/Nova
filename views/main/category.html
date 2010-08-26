@@ -3,16 +3,15 @@
     <div id="viewbar">
         <h1 style="float:left; margin:20px; color:#FFF;">{{=page}}</h1>
             <div id="addyourself">
-                <a href="{{=URL('main', 'edit')}}">Add your own!</a>
+                <a href="{{=URL('edit', 'node')}}">Add your own!</a>
             </div> <!-- end addyourself -->
         <br />
     </div> <!-- end viewbar -->
 
 
 {{if len(data) == 0:}}
-There are no nodes for this category
-<a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit">
-Add a Node</a>
+No Nodes Here.
+<a href="{{=URL('edit', 'node')}}">Add your own!</a>
 {{pass}}
 
 

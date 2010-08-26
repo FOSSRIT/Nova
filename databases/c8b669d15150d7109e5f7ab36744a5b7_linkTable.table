@@ -1,18 +1,22 @@
 (dp1
-S'linkid'
+S'date'
 p2
-S'INTEGER'
+S'TIMESTAMP'
 p3
-sS'link'
+sS'linkid'
 p4
 S'INTEGER'
 p5
-sS'id'
+sS'link'
 p6
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
-p7
-sS'nodeid'
-p8
 S'INTEGER'
+p7
+sS'id'
+p8
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p9
+sS'nodeid'
+p10
+S'INTEGER'
+p11
 s.
