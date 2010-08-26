@@ -1,15 +1,11 @@
 {{extend 'csi_view.html'}}
 
     <div id="viewbar">
-        
         <h1 style="float:left; margin:20px; color:#FFF;">{{=page}}</h1>
-
-            <div id="addyourself"> <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit">Add your own!</a>
-            
+            <div id="addyourself">
+                <a href="{{=URL('main', 'edit')}}">Add your own!</a>
             </div> <!-- end addyourself -->
-
         <br />
-        
     </div> <!-- end viewbar -->
 
 
@@ -21,20 +17,17 @@ Add a Node</a>
 
 
 {{for x in data:}}
-    
     <div class="nodeBox">
-        
         <div class="nodePic">
+            <a href="{{=URL('main','node',args=[x.url])}}" >
             
-            <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}" >
-            
-            {{if x.picURL == "":}}
+            {{if x.picURL:}}
                 
-                <img src="http://news.softpedia.com/images/news2/Keep-Chrome-for-Mac-OS-X-Updated-with-Chromium-Updater-2.jpg"  width="160px" height="160px"/></a>
+                <img src="{{=x.picURL}}" width="160px" height="160px" /></a>
             
             {{else:}}
             
-                <img src="{{=x.picURL}}" width="160px" height="160px" /></a>
+                <img src="{{=URL('static', 'images', args=['Feed_32x32.png'])}}"  width="160px" height="160px"/></a>
                 
             {{pass}}
         
@@ -42,7 +35,7 @@ Add a Node</a>
         
         <div class="nodeName">
             
-            <a href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/node/{{=x.url}}">{{=x.name}}</a>
+            <a href="{{=URL('main', 'node', args=[x.url])}}">{{=x.name}}</a>
             
         </div> <!-- end nodeName -->
         
@@ -51,3 +44,13 @@ Add a Node</a>
     
     {{pass}}
 <br class="clearfloat"/>
+
+{{if total_pages > 1:}}
+  {{for pg in range(1,total_pages+1):}}
+    {{if pg != page_num:}}
+      <a href="{{=URL('main','category',args=[page,pg])}}">{{=pg}}</a>
+    {{else:}}
+      {{=pg}}
+    {{pass}}
+  {{pass}}
+{{pass}}

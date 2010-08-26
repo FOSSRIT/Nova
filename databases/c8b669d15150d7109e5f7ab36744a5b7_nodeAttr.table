@@ -11,7 +11,7 @@ sS'value'
 p6
 S'CHAR(512)'
 p7
-sS'nodeId'
+sS'nodeid'
 p8
 S'INTEGER'
 p9

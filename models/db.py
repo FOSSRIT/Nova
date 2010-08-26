@@ -18,7 +18,6 @@ else:                                         # else use a normal relational dat
 
 #########################################################################
 ## Here is sample code if you need for 
-## - email capabilities
 ## - authentication (registration, login, logout, ... )
 ## - authorization (role based authorization)
 ## - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)
@@ -27,24 +26,13 @@ else:                                         # else use a normal relational dat
 #########################################################################
 
 from gluon.tools import *
-mail = Mail()                                  # mailer
 auth = Auth(globals(),db)                      # authentication/authorization
 crud = Crud(globals(),db)                      # for CRUD helpers using auth
 service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc, amfrpc
 
-mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-mail.settings.sender = 'you@gmail.com'         # your email
-mail.settings.login = 'username:password'      # your credentials or None
-
 auth.settings.hmac_key = 'sha512:54d50bdb-f5f5-4878-8f8f-af19f2f49e5b'   # before define_tables()
 auth.define_tables()                           # creates all needed tables
-auth.settings.mailer = mail                    # for user email verification
-auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
-auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['verify_email'])+'/%(key)s to verify your email'
-auth.settings.reset_password_requires_verification = True
-auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL(r=request,c='default',f='user',args=['reset_password'])+'/%(key)s to reset your password'
-
 crud.settings.auth = None                      # =auth to enforce authorization on crud
 
 #########################################################################
@@ -63,14 +51,6 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
-
-
-#db.define_table('nodeType', Field('value', 'string'))
-#db.define_table('node', Field('type', 'integer', requires=IS_IN_DB(db, 'nodeType.id'), widget=SQLFORM.widgets.radio.widget), Field('name', 'string'), Field('url', unique=True), Field('picURL','string'))
-#db.define_table('nodeAttr', Field('nodeId', 'integer'), Field('vocab', 'integer'), Field('value'))
-#db.define_table('linkTable', Field('nodeId', 'integer'), Field('linkId', 'integer'))
-#db.define_table('vocab', Field('value', 'string', unique=True))
-
 
 # Define Base Tales
 db.define_table('nodeType', Field('value', 'string'))

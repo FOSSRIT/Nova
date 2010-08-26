@@ -7,7 +7,7 @@ sS'url'
 p4
 S'CHAR(512)'
 p5
-sS'picURL'
+sS'picurl'
 p6
 S'CHAR(512)'
 p7

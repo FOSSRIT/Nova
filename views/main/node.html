@@ -1,32 +1,19 @@
 {{extend 'csi_node.html'}}
 
-
     <div class="nodeTopLinks">
-    
-        <a  href="http://{{=request.env.http_host}}/{{=request.application}}/{{=request.controller}}/edit/{{=node.url}}">Edit this Node</a>
-        
-    </div>        
-     
+        <a href="{{=URL('edit','node',args=[node.url])}}">Edit this Node</a>
+    </div>
     
 <br />
-
 
     <div id="nodeTitle">
         {{=node.name}}
     </div> <!-- end nodeTitle -->
     
-    
-    
-    
     <div id="bigPic">
           <img src="{{=node.picURL}}"  width="300px" />
     </div> <!-- end bigPic -->
-    
-    
-    
-    
-    
-    
+     
     <div id="sideStats">
     
     {{for x in node_attributes:}}
@@ -43,12 +30,6 @@
     
     </div> <!-- end sideStats -->
     
-
-    
     <div id="descriptionBox">
-       
-       {{=node.description}}
-       
-       
-    
+       {{=node.description}} 
     </div> <!-- end description -->

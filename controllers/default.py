@@ -8,8 +8,7 @@
 ## - call exposes all registered services (none by default)
 #########################################################################  
 
-def index():
-    redirect('http://schoolserver.rit.edu:8000/csi2/main')
+def index(): redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, "main"))
     
 
 def user():
@@ -26,6 +25,9 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
+    #http://www.web2py.com/book/default/chapter/08
+    #from gluon.contrib.login_methods.ldap_auth import ldap_auth
+    #auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
     return dict(form=auth())
 
 

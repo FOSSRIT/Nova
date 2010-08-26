@@ -1,40 +1,37 @@
 # coding: utf8
-# try something like
-def index():
-      
-    if request.vars != {}:
-    
-        db.nodeType.insert(value=request.vars.value)
-      
-        
-    rows = db(db.nodeType.value!=None).select()
-    
-    return dict(types=rows)
-    
-    
-    
-def about():
+from math import ceil
+MAX_PER_PAGE = 10
 
-    return dict()    
+def index(): return dict()
+def about(): return dict()    
     
-def view():
-
-
-
-    if len(request.args) != 0:
-        
+def category():
+    """
+    Shows a category of nodes
+    Uses request args to determine args (TODO: pages)
+    """
+    # Check for category name
+    if len(request.args):
+        try:
+            page = int(request.args[1])
+            if page < 1:
+                page = 1
+        except:
+            page = 1
+            
+        # Get rows that match category type
         typeId = db(db.nodeType.value==request.args[0]).select()
-        
-        rows = db(db.node.type == typeId[0]).select()
+        rows = db(db.node.type == typeId[0]).select(limitby=((page - 1) * MAX_PER_PAGE, page * MAX_PER_PAGE))
+        pages = int(ceil(db(db.node.type == typeId[0]).count()/float(MAX_PER_PAGE)))
                                   
-        
-        return dict(page=request.args[0], data=rows)
+        return dict(page=request.args[0], data=rows, total_pages=pages, page_num=page)
     else:
-        redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))
+        # No category requested
+        raise HTTP(404, "Category not specified")
 
 def node():
     # Check if the supplied a node request
-    if len(request.args) != 0:
+    if len(request.args):
     
         # Search for the node
         current_node = db(db.node.url==request.args[0]).select()
@@ -81,63 +78,7 @@ def node():
             raise HTTP(404, "Node not Found")
     else:
         # No node was requested, Redirect to index of current controller
-        redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))
-        
-        
-
-def nodeJon():
-    if len(request.args) != 0:
-        nodeId = db(db.node.url==request.args[0]).select()
-                
-               
-        if len(nodeId) == 0:
-            raise HTTP(404, "Node not Found")
-            
-        else:
-            # retreive info on the node and it's linked nodes
-            
-            category = db(db.nodeType.id!=None).select()
-        
-            attrs = db(db.nodeAttr.nodeId==nodeId[0]).select()
-        
-            #grab rows where nodeId == node.id
-            links1 = db(db.linkTable.nodeId==nodeId[0].id).select()
-            #grab rows where linkId == node.id
-            links2 = db(db.linkTable.linkId == nodeId[0].id).select()
-        
-            links = []
-        
-            for row in links1:
-                
-                links.append(row.linkId)
-        
-            for row in links2:
-            
-                links.append(row.nodeId)
-            
-            relatedNodes = {}
-            
-            rows = db(db.node.id.belongs(links)).select()
-                  
-            for x in category:
-            
-                # relatedNodes is a dictionary with nodeType.id as the key, each entry is a
-                # list of dictionaries containing info on those nodes
-                relatedNodes[x.value] = []   
-                              
-                for y in rows:                   
-                
-                    if y.type==x.id:
-                    
-                        relatedNodes[x.value].append({'id':y.id, 'name':y.name, 'url':y.url, 'pic':'Test'})      
-                  
-                if len(relatedNodes[x.value])==0:
-                        
-                    del relatedNodes[x.value]
-                    
-            return dict(node=nodeId[0], data=attrs, links=links, node_list=relatedNodes)
-    else:
-        redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))
+        redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))        
 
 def link():
 
@@ -164,114 +105,9 @@ def link():
 
     return dict( node=node[0], nodeSet=nodeSet )
 
-
-
-def edit():
-
-    if(request.vars != {}):
-    
-        if(request.vars.new == True):
-        
-            db.node.insert(type=request.vars.nodeType, name=request.vars.name, url=request.vars.url)    
-    
-        else:
-    
-            #BAD TODO: RECODE
-            db(db.node.id == request.vars.id).update(type=request.vars.nodeType,
-                                                     name=request.vars.name,
-                                                     url=request.vars.url,
-                                                     picURL=request.vars.pic_url,
-                                                     description=request.vars.desc
-                                                     )
-        
-            for key,attr in request.vars.items():
-        
-                if key.startswith('attr.'):
-            
-                    print 'attr:', key[5:]," val", attr
-                
-                    #TODO: protect against misc hits
-                
-                    db(db.nodeAttr.id==key[5:]).update(value=attr)
-            
-            
-            # delete checked attributes
-            if request.vars.removeAttr != None:
-                
-                if len(request.vars.removeAttr) == 1:
-                
-                    db(db.nodeAttr.id == int(request.vars.removeAttr)).delete()
-                
-                else:
-                    for remAttr in request.vars.removeAttr:
-            
-                        db(db.nodeAttr.id == int(remAttr)).delete()     
-                            
-        redirect('http://%s/%s/%s/node/%s' % (request.env.http_host, request.application, request.controller, request.vars.url))
-
-    nodeList = []
-
-    if(len(request.args) != 0):
-        node = db(db.node.url == request.args[0]).select()
-       
-    
-        attr = db(db.nodeAttr.nodeId==node[0]).select()
-    
-        node = node[0]
-    
-        new = False
-        
-    else:
-        #THIS WILL BREAK HERE AS NODE IS NOT SET
-        
-        node = None
-        
-        attr = None
-        
-        new = True
-        
-    rows = db(db.nodeType.id != None).select()
-    
-    vocab = db(db.vocab.id != None).select()
-    
-    nodeSet = db(db.node.id != None).select()
-
-    return dict( types=rows, node=node, attr=attr, vocab=vocab, new=new, nodeSet=nodeSet )
-    
 def addCat():
         
     return dict()
-    
-def addAttr():
-
-    if len(request.vars) != 0:
-               
-        db.nodeAttr.insert(nodeId=request.vars.nodeId, vocab=request.vars.attr, value="default")
-        
-               
-        redirect('http://%s/%s/%s/edit/%s' % (request.env.http_host, request.application, request.controller, request.vars.nodeUrl))
-
-    node = db(db.node.url == request.args[0]).select()
-
-    attr = db(db.nodeAttr.nodeId == node[0].id).select()
-
-    vocab = db(db.vocab.id != None).select()
-
-    return dict(nodeName=request.args[0], nodeId=node[0].id, attr=attr, vocab=vocab)
-
-def addVocab():
-
-    if len(request.vars) != 0:
-    
-        db.vocab.insert(value=request.vars.value)
-        
-        redirect('http://%s/%s/%s/addAttr/%s' % (request.env.http_host, request.application, request.controller, request.vars.nodeUrl))
-
-    vocab = db(db.vocab.id != None).select()
-
-    return dict(nodeUrl=request.args[0], vocab=vocab )
-    
-
 
 def display_form():
    form = SQLFORM(db.node)

@@ -15,4 +15,4 @@ response.menu = [
 #Dynamically add types to main menu
 menu_types = db(db.nodeType.value!=None).select()
 for mnu_item in menu_types:
-    response.menu.append([mnu_item.value, URL(request.application, 'main', 'view/%s' % mnu_item.value )])
+    response.menu.append([mnu_item.value, URL(request.application, 'main', 'category/%s' % mnu_item.value )])

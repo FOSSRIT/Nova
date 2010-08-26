@@ -1,5 +1,5 @@
 (dp1
-S'linkId'
+S'linkid'
 p2
 S'INTEGER'
 p3
@@ -11,7 +11,7 @@ sS'id'
 p6
 S'INTEGER PRIMARY KEY AUTOINCREMENT'
 p7
-sS'nodeId'
+sS'nodeid'
 p8
 S'INTEGER'
 p9
