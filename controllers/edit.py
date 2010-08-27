@@ -4,6 +4,7 @@ from datetime import datetime
 
 def index(): return dict(message="hello from edit.py")
 
+@auth.requires_login()
 def node():
     """
     Display a node edit form.  If request has an id, it will attempt to
@@ -80,6 +81,7 @@ def node():
     node_types = types=db(db.nodeType.id != None).select()
     return dict(types=node_types, node=node, attr=attr)
 
+@auth.requires_login()
 def link():
     """
     Shows list of all nodes that can be linked with current node as
@@ -114,6 +116,7 @@ def link():
 def category():
     return dict(message="hello from edit.py")
     
+@auth.requires_login()
 def attribute():
     """
     Adds an attribute to a node

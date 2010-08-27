@@ -2,16 +2,18 @@
 
     <div id="viewbar">
         <h1 style="float:left; margin:20px; color:#FFF;">{{=page}}</h1>
+        {{if auth.is_logged_in():}}
             <div id="addyourself">
                 <a href="{{=URL('edit', 'node')}}">Add your own!</a>
             </div> <!-- end addyourself -->
+         {{pass}}
         <br />
     </div> <!-- end viewbar -->
 
 
 {{if len(data) == 0:}}
 No Nodes Here.
-<a href="{{=URL('edit', 'node')}}">Add your own!</a>
+{{if auth.is_logged_in():}}<a href="{{=URL('edit', 'node')}}">Add your own!</a>{{pass}}
 {{pass}}
 
 

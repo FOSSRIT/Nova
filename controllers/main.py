@@ -29,6 +29,14 @@ def category():
         # No category requested
         raise HTTP(404, "Category not specified")
 
+def nodeid():
+    try:
+        current_node = db(db.node.id==request.args[0]).select().first()
+        redirect( URL('node', args=current_node.url) )
+    except Exception, oops:
+        raise HTTP(404, oops)#"Node not found")
+
+
 def node():
     # Check if the supplied a node request
     if len(request.args):
