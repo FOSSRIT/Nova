@@ -106,3 +106,8 @@ if auth.is_logged_in():
         id = db.node.insert( type=1, name=auth.user.username, url=auth.user.username, date=datetime.now() )
         db(auth_table.id == auth.user.id).update(home_node = id)
         auth.user.home_node = id
+
+
+def get_home_node():
+    if auth.user.home_node:
+        return db(db.node.id == auth.user.home_node).select().first()
