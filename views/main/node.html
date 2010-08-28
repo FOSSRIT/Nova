@@ -25,7 +25,7 @@
         </div> <!-- end statTitle -->
             
         <div class="statValue">
-            {{=x.value}}
+            {{=MARKMIN(x.value)}}
         </div> <!-- end statValue -->
         
     {{pass}}
@@ -33,5 +33,5 @@
     </div> <!-- end sideStats -->
     
     <div id="descriptionBox">
-       {{=node.description}} 
+       {{=MARKMIN(node.description)}} 
     </div> <!-- end description -->

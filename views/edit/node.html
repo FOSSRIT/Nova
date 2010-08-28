@@ -1,9 +1,13 @@
 {{extend 'csi_view.html'}}
 
 <div id="editform">
+{{if node:}}
+<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.
+{{pass}}
     <fieldset>
         <legend>Node</legend>
         {{=form}}
+    Note: Description and Attributes can use <a href="{{=URL('examples','static','markmin.html')}}">markmin syntax</a>.
     </fieldset>
 
     {{if attribute_form:}}

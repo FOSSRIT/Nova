@@ -32,7 +32,7 @@ db.define_table('node',
                  comment="Each node can have their own short url, this is where you customize that url."),
     Field('picURL','string', label="Picture Url",
                  comment="This is where you can place the url of the image you wish to use for the node."),
-    Field('description','text', label="Node Description"),
+    Field('description','text', label="Node Description", default=""),
     Field('date', 'datetime', writable=False, readable=False))
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
