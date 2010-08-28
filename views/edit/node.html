@@ -1,53 +1,24 @@
 {{extend 'csi_view.html'}}
- <div id="editform">
-    <form method="post" action="{{=URL()}}">
-    <fieldset>
-     <legend>Edit this entry</legend>  
-       {{if node:}}
-         <input type="hidden" name="id" value="{{=node.id}}" />
-       {{else:}}
-         <input type="hidden" name="id" value="new" />
-       {{pass}} 
-       <ul>
-         <li>
-           <label for="nodeType">Type</label>
-           <select name="nodeType">
-               {{for x in types:}}
-                 {{sel=""}}
-                 {{if node:}}
-                   {{if node.type.id == x.id:}}{{sel="selected='selected'"}}{{pass}}
-                 {{else:}}
-                   {{if x.id == 1:}}{{sel="selected='selected'"}}{{pass}}
-                 {{pass}}
-                 
-                 <option value="{{=x.id}}" {{=sel}}>{{=x.value}}</option>
-               {{pass}}
-           </select>
-         </li>
 
-         <li><label for="name">Name:</label> 
-           <input type="text" name="name" value="{{if node:}}{{=node.name}}{{pass}}" />
-         </li>        
-                               
-         <li><label for="url">URL:</label>       
-           <input type="text"  name="url" value="{{if node:}}{{=node.url}}{{pass}}" />
-         </li>
-         
-         <li><label for="pic_url">Picture URL:</label>       
-           <input type="text" size="50px" name="pic_url" value="{{if node:}}{{=node.picURL}}{{pass}}" />
-         </li>
-         
-         <li><label for="desc">Description:</label>       
-           <textarea name="desc" class="formright" rows="20" cols="60">{{if node:}}{{=node.description}}{{pass}}</textarea>
-         </li>
-         </ul>
-         </fieldset>
-         
-         {{if node:}}
-          <fieldset>      
-           <legend>Attributes</legend>
-             <br />Leave blank to remove<br /><br />
-             {{if attr:}}
+<div id="editform">
+    <fieldset>
+        <legend>Node</legend>
+        {{=form}}
+    </fieldset>
+
+    <fieldset>
+        <legend>Add Attribute</legend>
+        {{=attribute_form}}
+        <a href="{{=URL('attribute_vocab', args=node.url)}}">Add New Attribute Vocab</a>.
+    </fieldset>
+ 
+  {{if attr:}}
+ <fieldset>
+ <legend>Current Attributes</legend>
+
+ <form method="post" action="{{=URL(args=node.url)}}">
+ <br />Leave blank to remove<br /><br />
+ 
                <ul>
                  {{for x in attr:}}
                  <li><label for="attr.{{=x.id}}">{{=x.vocab.value}}:</label>
@@ -55,14 +26,9 @@
                  </li>
                  {{pass}}
                </ul>
-             {{pass}}
-             <p style="clear: both;">
-             <a href="{{=URL('edit','attribute', args=[node.url])}}">Edit Attribute List</a>
-             </p>
-    </fieldset>                           
-    {{pass}}
-    
-    <input type="submit" value="{{if node:}}Save Changes{{else:}}Create Node{{pass}}" />
-    <input type="reset" value="Reset Form" />
-  </form>
-</div> <!-- end editform -->
+<br>
+ <input type="submit" />
+ </form>
+ </fieldset>
+ {{pass}}
+ </div>

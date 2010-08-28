@@ -1,0 +1,6 @@
+{{extend 'csi_view.html'}}
+{{=vocab_form}}
+
+{{if len(request.args):}}
+<a href="{{=URL('node',args=request.args[0])}}">Back to Edit Node</a>
+{{pass}}

@@ -20,11 +20,11 @@ def category():
             page = 1
             
         # Get rows that match category type
-        typeId = db(db.nodeType.value==request.args[0]).select()
-        rows = db(db.node.type == typeId[0]).select(limitby=((page - 1) * MAX_PER_PAGE, page * MAX_PER_PAGE))
-        pages = int(ceil(db(db.node.type == typeId[0]).count()/float(MAX_PER_PAGE)))
+        typeId = db(db.nodeType.value==request.args[0]).select().first()
+        rows = db(db.node.type == typeId).select(limitby=((page - 1) * MAX_PER_PAGE, page * MAX_PER_PAGE))
+        pages = int(ceil(db(db.node.type == typeId).count()/float(MAX_PER_PAGE)))
                                   
-        return dict(page=request.args[0], data=rows, total_pages=pages, page_num=page)
+        return dict(page=request.args[0], data=rows, total_pages=pages, page_num=page, category=typeId)
     else:
         # No category requested
         raise HTTP(404, "Category not specified")

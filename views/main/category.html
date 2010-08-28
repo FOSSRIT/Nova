@@ -1,10 +1,10 @@
 {{extend 'csi_view.html'}}
 
     <div id="viewbar">
-        <h1 style="float:left; margin:20px; color:#FFF;">{{=page}}</h1>
-        {{if auth.is_logged_in():}}
+        <h1 style="float:left; margin:20px; color:#FFF;">{{=category.value}}</h1>
+        {{if auth.is_logged_in() and category.public:}}
             <div id="addyourself">
-                <a href="{{=URL('edit', 'node')}}">Add your own!</a>
+                <a href="{{=URL('edit', 'node', vars={'type':category.value})}}">Add your own!</a>
             </div> <!-- end addyourself -->
          {{pass}}
         <br />
@@ -13,7 +13,7 @@
 
 {{if len(data) == 0:}}
 No Nodes Here.
-{{if auth.is_logged_in():}}<a href="{{=URL('edit', 'node')}}">Add your own!</a>{{pass}}
+{{if auth.is_logged_in() and category.public:}}<a href="{{=URL('edit', 'node', vars={'type':category.value})}}">Add your own!</a>{{pass}}
 {{pass}}
 
 

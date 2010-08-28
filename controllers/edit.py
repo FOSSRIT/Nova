@@ -13,73 +13,88 @@ def node():
     
     View will get node.  Node may be none, it is up to the view to detect
     and correctly handle an empty node (It will be making a new node)
-    """
-    # See if we need to update the database
-    if(request.vars):
-        if(request.vars.id == 'new'):
-            # Create new node with submitted data
-            db.node.insert( type=request.vars.nodeType,
-                            name=request.vars.name,
-                            url=request.vars.url,
-                            picURL=request.vars.pic_url,
-                            description=request.vars.desc,
-                            date=datetime.now()
-                          )
-            response.flash = "%s Created" % request.vars.name
-            
-        else:
-            # Update Node with submitted data
-            db(db.node.id == request.vars.id).update(type=request.vars.nodeType,
-                                                     name=request.vars.name,
-                                                     url=request.vars.url,
-                                                     picURL=request.vars.pic_url,
-                                                     description=request.vars.desc
-                                                     )
-            response.flash = "%s Updated" % request.vars.name
-
-            # Update all the attributes        
-            for key,attr in request.vars.items():
-            
-                # All attributes start with attr. then the key
-                if key.startswith('attr.'):
-                
-                    if attr == "":
-                        vocab = db(db.nodeAttr.id == key[5:]).select()[0].vocab
-                        db(db.nodeAttr.id==key[5:]).delete()
-                        
-                        # A small Cleanup Routine, check if attriubte is
-                        # still in use, if not delete the attribue
-                        thecount = db(db.nodeAttr.vocab==vocab).count()
-                        if thecount == 0:
-                            db(db.vocab.id==vocab.id).delete()
-                        
-                    else:
-                        #TODO: protect against misc hits
-                        db(db.nodeAttr.id==key[5:]).update(value=attr)
+    """   
     
     # Now we want to populate the response
     node = None
     attr = None
-    
-    # If edited, pull new node data
-    if request.vars.url:
-        try:
-            node = db(db.node.url == request.vars.url).select()[0]
-            attr = db(db.nodeAttr.nodeId==node).select()
-        except:
-            pass
-            
+
     # If requested a node in the url, pull from the database
-    elif len(request.args):
+    if len(request.args):
         try:
-            node = db(db.node.url == request.args[0]).select()[0]
-            attr = db(db.nodeAttr.nodeId==node).select()
+            node = db(db.node.url == request.args[0]).select().first()
         except:
             pass
         
-    # Get node types to show the user
-    node_types = types=db(db.nodeType.id != None).select()
-    return dict(types=node_types, node=node, attr=attr)
+    if node:
+    
+        # Make sure they are not trying to edit someone's node
+        # TODO ADD PERMISSION SYSTEM HERE
+        if node.type.public == False and node.id != auth.user.home_node:
+            raise HTTP(403, "Not Authorized to edit this node")
+    
+        # Update all the attributes if they exist
+        # This must be done before attribute form is created
+        # TODO NEED TO ADD SECURITY FOR THIS LOOP
+        for key,attr in request.vars.items():
+            
+            # All attributes start with attr. then the key
+            if key.startswith('attr.'):
+                
+                if attr == "":
+                    vocab = db(db.nodeAttr.id == key[5:]).select()[0].vocab
+                    db(db.nodeAttr.id==key[5:]).delete()
+                        
+                    # A small Cleanup Routine, check if attriubte is
+                    # still in use, if not delete the attribue
+                    thecount = db(db.nodeAttr.vocab==vocab).count()
+                    if thecount == 0:
+                        db(db.vocab.id==vocab.id).delete()
+                    
+                else:
+                    #TODO: protect against misc hits
+                    db(db.nodeAttr.id==key[5:]).update(value=attr)
+      
+        # Process NODE SQL FORM
+        form = SQLFORM(db.node, node)
+        
+        attribute_form = SQLFORM(db.nodeAttr)
+        attribute_form.vars.nodeId = node
+        
+        # Node found, Check and submit to db if needed
+        if request.vars:
+            if form.accepts(request.vars):
+                response.flash = 'form accepted'
+            elif form.errors:
+                response.flash = 'form has errors'
+                
+            if attribute_form.accepts(request.vars):
+                response.flash = 'Attribute Form accepted'
+            elif attribute_form.errors:
+                response.flash = 'Attribute Form has errors'
+                
+        # Get Attribute List
+        attr = db(db.nodeAttr.nodeId==node).select()
+        
+    elif not node and request.vars.type:
+        type = db(db.nodeType.value==request.vars.type).select().first()
+        if type and type.public:
+            form = SQLFORM(db.node, node)
+            form.vars.type=type
+            form.vars.date=datetime.now()
+             
+            if form.accepts(request.vars, session):
+                response.flash = 'form accepted'
+            elif form.errors:
+                response.flash = 'form has errors'
+
+        else:
+            raise HTTP(404, "Type Not Found")
+    else:
+        #No node found and no type requested (BAD)
+        raise HTTP(404, "No node requested, no type requested")
+    
+    return dict(node=node, attr=attr, form=form, attribute_form=attribute_form)
 
 @auth.requires_login()
 def link():
@@ -95,7 +110,6 @@ def link():
         node = db(db.node.url == request.args[0]).select()[0]
     except:
         raise HTTP(404, "Node Not Found")
-        
         
     # Apply Changes if link requested
     if request.vars.linkNode:
@@ -115,31 +129,15 @@ def link():
 
 def category():
     return dict(message="hello from edit.py")
-    
+
 @auth.requires_login()
-def attribute():
+def attribute_vocab():
     """
-    Adds an attribute to a node
+    Displays A form to allow people to add new attribute vocab
     """
-    try:
-        node = db(db.node.url == request.args[0]).select()[0]
-    except:
-        raise HTTP(404, "Node Not Found") 
-        
-    
-    # Check to see if we have submitted an attr to add
-    if request.vars.attr:  
-        db.nodeAttr.insert(nodeId=node, vocab=request.vars.attr, value=request.vars.value)
-        response.flash = "Attribute Saved"
-        
-    # Check if making a new attribute and adding it's data
-    elif request.vars.new_attr:
-        vocab_id = db.vocab.insert(value=request.vars.new_attr)
-        db.nodeAttr.insert(nodeId=node, vocab=vocab_id, value=request.vars.value)
-        response.flash = "Attribute Created and Saved"
-
-    # Grab current Attributes for the node and all possible vocab
-    attr = db(db.nodeAttr.nodeId == node).select()
-    vocab = db(db.vocab.id != None).select()
-
-    return dict(node=node, attr=attr, vocab=vocab)
+    vocab_form = SQLFORM(db.vocab)
+    if vocab_form.accepts(request.vars, session):
+        response.flash = 'New Attribute accepted'
+    elif vocab_form .errors:
+        response.flash = 'New Attribute has errors'
+    return dict(vocab_form=vocab_form)

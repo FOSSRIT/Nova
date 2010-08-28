@@ -7,7 +7,9 @@
             {{for node_name, node_holder in node_list.items():}}
             <div class="sidebar_block">
              
-              <h4 style="margin:5px; color:#FFF; text-align:center;"><a href="http://schoolserver.rit.edu:8000/csi2/main/view/{{=node_name}}">{{=node_name}}</a></h4>
+              <h4 style="margin:5px; color:#FFF; text-align:center;">
+                  <a href="{{=URL('category', args=node_name)}}">{{=node_name}}</a>
+              </h4>
               
               <ul class="panel" title="{{=node_name}}">
                   
@@ -17,7 +19,7 @@
                   
                       <a href="{{=node_item['url']}}">
                       
-                      {{if node_item.picURL == "":}}
+                      {{if not node_item.picURL:}}
                       
                           <img src="http://news.softpedia.com/images/news2/Keep-Chrome-for-Mac-OS-X-Updated-with-Chromium-Updater-2.jpg" class="panelItemPic" /></a>
                       
