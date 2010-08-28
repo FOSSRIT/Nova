@@ -9,7 +9,7 @@
 
 <body>
 <div class="flash">{{=response.flash or ''}}</div>
-<div style="background: #aaaaaa;">
+<div style="background: #999;">
 {{if auth.is_logged_in():}}
   
 Hello {{=auth.user.first_name}} ({{=auth.user.username}}). |

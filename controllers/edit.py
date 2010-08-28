@@ -28,7 +28,6 @@ def node():
             pass
         
     if node:
-    
         # Make sure they are not trying to edit someone's node
         # TODO ADD PERMISSION SYSTEM HERE
         if node.type.public == False and node.id != auth.user.home_node:
@@ -63,17 +62,17 @@ def node():
         attribute_form.vars.nodeId = node
         
         # Node found, Check and submit to db if needed
-        if request.vars:
-            if form.accepts(request.vars):
-                response.flash = 'form accepted'
-            elif form.errors:
-                response.flash = 'form has errors'
-                
-            if attribute_form.accepts(request.vars):
-                response.flash = 'Attribute Form accepted'
-            elif attribute_form.errors:
-                response.flash = 'Attribute Form has errors'
-                
+        if form.accepts(request.vars):
+            session.flash = 'form accepted'
+            redirect(URL(args=form.vars.url))
+        elif form.errors:
+            response.flash = 'form has errors'
+            
+        if attribute_form.accepts(request.vars):
+            response.flash = 'Attribute Form accepted'
+        elif attribute_form.errors:
+            response.flash = 'Attribute Form has errors'
+            
         # Get Attribute List
         attr = db(db.nodeAttr.nodeId==node).select()
         
@@ -84,7 +83,7 @@ def node():
             form.vars.type=type
             form.vars.date=datetime.now()
              
-            if form.accepts(request.vars, session):
+            if form.accepts(request.vars):
                 response.flash = 'form accepted'
             elif form.errors:
                 response.flash = 'form has errors'
