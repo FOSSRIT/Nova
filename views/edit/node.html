@@ -6,12 +6,14 @@
         {{=form}}
     </fieldset>
 
+    {{if attribute_form:}}
     <fieldset>
         <legend>Add Attribute</legend>
         {{=attribute_form}}
         <a href="{{=URL('attribute_vocab', args=node.url)}}">Add New Attribute Vocab</a>.
     </fieldset>
- 
+    {{pass}}
+    
   {{if attr:}}
  <fieldset>
  <legend>Current Attributes</legend>

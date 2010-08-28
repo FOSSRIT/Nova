@@ -18,6 +18,7 @@ def node():
     # Now we want to populate the response
     node = None
     attr = None
+    attribute_form = None
 
     # If requested a node in the url, pull from the database
     if len(request.args):
