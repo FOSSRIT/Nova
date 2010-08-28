@@ -25,6 +25,17 @@ def user():
         @auth.requires_permission('read','table name',record_id)
     to decorate functions that need access control
     """
+    
+    # THIS IS A HACK: It fixes usernames coming in in mixed case.
+    # The database is set to fix this, but the LDAP auth seems to cause
+    # problems by bypassing checks.  So this forces the username to be
+    # Lowercase before it gets processed by auth().
+    if request.vars.username:
+        request.vars.username = request.vars.username.lower()
+        response.flash = request
+    if request.post_vars.username:
+        request.post_vars.username = request.post_vars.username.lower()
+
     return dict(form=auth())
 
 

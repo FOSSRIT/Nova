@@ -56,15 +56,19 @@ def node():
                     db(db.nodeAttr.id==key[5:]).update(value=attr)
       
         # Process NODE SQL FORM
-        form = SQLFORM(db.node, node)
+        form = SQLFORM(db.node, node, deletable=node.type.public)
         
         attribute_form = SQLFORM(db.nodeAttr)
         attribute_form.vars.nodeId = node
         
         # Node found, Check and submit to db if needed
         if form.accepts(request.vars):
-            session.flash = 'form accepted'
-            redirect(URL(args=form.vars.url))
+            if form.vars.delete_this_record:
+                session.flash = 'Node Deleted'
+                redirect(URL('main','index'))
+            else:
+                session.flash = 'form accepted'
+                redirect(URL('edit','node',args=form.vars.url))
         elif form.errors:
             response.flash = 'form has errors'
             

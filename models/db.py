@@ -68,14 +68,14 @@ auth = Auth(globals(),db)                      # authentication/authorization
 auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
 
 # DISABLE EXTRA FEATURES
-auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email']
+auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email','profile']
 
 # CUSTOM AUTH TABLE
 auth_table = db.define_table(
     auth.settings.table_user_name,
     Field('first_name', length=128, default=''),
     Field('last_name', length=128, default=''),
-    Field('username', unique=True, writable=True),
+    Field('username', unique=True),
     Field('password', 'password', length=512, readable=False, label='Password'),
     Field('registration_key', length=512, writable=False, readable=False, default=''),
     Field('registration_id', length=512, writable=False, readable=False, default=''),
@@ -83,8 +83,8 @@ auth_table = db.define_table(
 
 auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 auth_table.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
-auth_table.password.requires = [ CRYPT()]
-auth_table.username.requires = IS_NOT_IN_DB(db, auth_table.username)
+auth_table.password.requires = [CRYPT()]
+auth_table.username.requires = [IS_LOWER(), IS_NOT_IN_DB(db, auth_table.username)]
 
 auth.settings.hmac_key = 'sha512:54d50bdb-f5f5-4878-8f8f-af19f2f49e5b'   # before define_tables()
 auth.define_tables(username=True)                           # creates all needed tables
