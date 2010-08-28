@@ -1,0 +1,22 @@
+(dp1
+S'date'
+p2
+S'TIMESTAMP'
+p3
+sS'linkid'
+p4
+S'INTEGER'
+p5
+sS'link'
+p6
+S'INTEGER'
+p7
+sS'id'
+p8
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p9
+sS'nodeid'
+p10
+S'INTEGER'
+p11
+s.
