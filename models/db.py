@@ -66,7 +66,7 @@ auth = Auth(globals(),db)                      # authentication/authorization
 auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
 
 # DISABLE EXTRA FEATURES
-auth.settings.actions_disabled=['register','change_password','request_reset_password']
+auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email']
 
 # CUSTOM AUTH TABLE
 auth_table = db.define_table(
