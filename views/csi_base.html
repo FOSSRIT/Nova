@@ -18,6 +18,12 @@ Hello
 {{else:}}
 <a href="{{=URL('default','user',args='login')}}">Login</a>
 {{pass}}
+
+<form method="get" action="{{=URL('main','search')}}" style="display:inline">
+Search: <input type="text" name="query">
+<input type="submit" value="Search">
+</form>
+
 </div>
     <div id="container">
         <div id="header">

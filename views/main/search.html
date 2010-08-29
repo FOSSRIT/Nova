@@ -1,0 +1,10 @@
+{{extend 'csi_view.html'}}
+<form method="get">
+<input type="text" name="query">
+<input type="submit" value="search">
+</form>
+<ul>
+{{for result in master:}}
+ <li><a href="{{=URL('main','node',args=result.url)}}">{{=result.name}}</a></li>
+{{pass}}
+</ul>

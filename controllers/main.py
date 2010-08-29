@@ -4,7 +4,29 @@ MAX_PER_PAGE = 10
 
 def index(): return dict()
 def about(): return dict()    
-    
+
+def search():
+    """
+    A Very basic search system, searches node desc, name and attributes for nodes.
+    Doesn't have ranking or duplicate removing at this time.
+    """
+    master = []
+    if request.vars.query:
+        # Search node names and descriptions
+        results = db( (db.node.description.contains(request.vars.query)) | (db.node.name.contains(request.vars.query))).select()
+        
+        # Search attributes
+        results2 = db(db.nodeAttr.value.contains(request.vars.query)).select(db.nodeAttr.nodeId)
+        
+        # Combine lists into one list of nodes
+        for result in results:
+            master.append(result)
+            
+        for result in results2:
+            master.append(result.nodeId)
+
+    return dict(master=master)
+
 def category():
     """
     Shows a category of nodes
