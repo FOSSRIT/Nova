@@ -29,9 +29,9 @@ db.define_table('node',
     Field('type', db.nodeType, writable=False, readable=False),
     Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name"),
     Field('url', unique=True, label="Node Url",
-                 comment="Each node can have their own short url, this is where you customize that url."),
+                 comment="Customize this node’s URL."),
     Field('picURL','string', label="Picture Url",
-                 comment="This is where you can place the url of the image you wish to use for the node."),
+                 comment="Provide a URL for this node's Image.  (jing can help)"),
     Field('description','text', label="Node Description", default=""),
     Field('date', 'datetime', writable=False, readable=False))
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
