@@ -79,10 +79,11 @@ auth_table = db.define_table(
     Field('password', 'password', length=512, readable=False, label='Password'),
     Field('registration_key', length=512, writable=False, readable=False, default=''),
     Field('registration_id', length=512, writable=False, readable=False, default=''),
-    Field('home_node', db.node, writable=False, readable=False))
+    Field('home_node', db.node, writable=False, readable=False),
+    Field('in_beta', 'boolean', default=False))
 
 auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
-auth_table.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
+#auth_table.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 auth_table.password.requires = [CRYPT()]
 auth_table.username.requires = [IS_LOWER(), IS_NOT_IN_DB(db, auth_table.username)]
 
@@ -100,6 +101,9 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 # If it is their first login, they will not have a home node, we must
 # Create a node for them and add it to the database
 if auth.is_logged_in():
+    if not auth.user.in_beta:
+        auth.logout(next=URL('default', 'not_in_beta'))
+
     # Make sure the user has a home node if not create one
     if not auth.user.home_node:
         from datetime import datetime
