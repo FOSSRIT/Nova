@@ -1,14 +1,29 @@
 {{extend 'csi_view.html'}}
 
+<fieldset>
+<legend>Add Links</legend>
 <form method="post" action="{{=URL(args=node.url)}}">
-
-Link this node to others:
+<label for="linkNode">Link to:</label>
 
 <select name="linkNode">
   {{for x in nodeSet:}}
     <option value="{{=x.id}}">{{=x.type.value}}: {{=x.name}}</option>
   {{pass}}
-</select>
+</select><br />
 <input type="submit" value="Link" />
 
 </form>
+</fieldset>
+
+<fieldset>
+<legend>Remove Links</legend>
+<form method="post" action="{{=URL(args=node.url)}}">
+<label for="unlinkNode">Remove Link:</label>
+<select name="unlinkNode">
+ {{for x in linkedSet:}}
+    <option value="{{=x.id}}">{{=x.type.value}}: {{=x.name}}</option>
+ {{pass}}
+ </select><br />
+ <input type="submit" value="Remove Link" />
+ </form>
+</fieldset>

@@ -119,17 +119,24 @@ def link():
     if request.vars.linkNode:
         db.linkTable.insert(nodeId=node, linkId=int(request.vars.linkNode), date=datetime.now())
         response.flash = "Link Added"
-    
+        
+    if request.vars.unlinkNode:
+        db((db.linkTable.nodeId == node) & (db.linkTable.linkId == int(request.vars.unlinkNode))).delete()
+        db((db.linkTable.nodeId == int(request.vars.unlinkNode)) & (db.linkTable.linkId==node)).delete() 
     # Select all nodes that can be linked
+    # While we are finding possible links, keep a list of nodes that we do have linked
     nodeSet = []
+    linkedSet = []
     
     for row in db(db.node.id != node.id).select():
         # Filter out existing links
         if not db((db.linkTable.nodeId == node) & (db.linkTable.linkId == row)).count() and \
            not db((db.linkTable.nodeId == row) & (db.linkTable.linkId == node)).count():
             nodeSet.append(row)
+        else:
+            linkedSet.append(row)
 
-    return dict( node=node, nodeSet=nodeSet )
+    return dict( node=node, nodeSet=nodeSet, linkedSet=linkedSet )
 
 def category():
     return dict(message="hello from edit.py")
