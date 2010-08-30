@@ -7,10 +7,6 @@
 if request.env.web2py_runtime_gae:            # if running on Google App Engine
     db = DAL('gae')                           # connect to Google BigTable
     session.connect(request, response, db = db) # and store sessions and tickets there
-    ### or use the following lines to store sessions in Memcache
-    # from gluon.contrib.memdb import MEMDB
-    # from google.appengine.api.memcache import Client
-    # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 
@@ -33,21 +29,26 @@ db.define_table('node',
     Field('picURL','string', label="Picture Url",
                  comment="Provide a URL for this node's Image.  (jing can help)"),
     Field('description','text', label="Node Description", default=""),
-    Field('date', 'datetime', writable=False, readable=False))
+    Field('date', 'datetime', writable=False, readable=False, default=request.now),
+    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now))
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
 db.define_table('nodeAttr',
     Field('nodeId', db.node, writable=False, readable=False),
     Field('vocab', db.vocab),
-    Field('value'))
+    Field('value'),
+    Field('created', 'datetime', writable=False, readable=False, default=request.now),
+    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now))
+    
 db.nodeAttr.vocab.requires = IS_IN_DB(db,db.vocab.id,'%(value)s')
 db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 
 db.define_table('linkTable',
     Field('nodeId', db.node),
     Field('linkId', db.node),
-    Field('date', 'datetime'))
+    Field('date', 'datetime', writable=False, readable=False, default=request.now))
+
 db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 # TODO, ADD MORE CHECKS that prevent multiple records
