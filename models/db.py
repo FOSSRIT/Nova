@@ -10,8 +10,21 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
 else:                                         # else use a normal relational database
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 
+#########################################################################
+## Prepare Auth
+##
+## Get auth defined, tables will be added later on
+#########################################################################
+from gluon.tools import *
+from gluon.contrib.login_methods.ldap_auth import ldap_auth
 
+auth = Auth(globals(),db)                      # authentication/authorization
 
+# RIT Ldap
+auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
+
+# DISABLE EXTRA FEATURES
+auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email','profile']
 #########################################################################
 ## DEFINE DATABASE
 #########################################################################
@@ -30,7 +43,8 @@ db.define_table('node',
                  comment="Provide a URL for this node's Image.  (jing can help)"),
     Field('description','text', label="Node Description", default=""),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
-    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now))
+    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False))
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
@@ -39,7 +53,8 @@ db.define_table('nodeAttr',
     Field('vocab', db.vocab),
     Field('value'),
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
-    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now))
+    Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))
     
 db.nodeAttr.vocab.requires = IS_IN_DB(db,db.vocab.id,'%(value)s')
 db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
@@ -47,7 +62,8 @@ db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.define_table('linkTable',
     Field('nodeId', db.node),
     Field('linkId', db.node),
-    Field('date', 'datetime', writable=False, readable=False, default=request.now))
+    Field('date', 'datetime', writable=False, readable=False, default=request.now),
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))
 
 db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
@@ -60,17 +76,6 @@ db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 #########################################################################
 ## Authentication
 #########################################################################
-from gluon.tools import *
-from gluon.contrib.login_methods.ldap_auth import ldap_auth
-
-auth = Auth(globals(),db)                      # authentication/authorization
-
-# RIT Ldap
-auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
-
-# DISABLE EXTRA FEATURES
-auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email','profile']
-
 # CUSTOM AUTH TABLE
 auth_table = db.define_table(
     auth.settings.table_user_name,
@@ -87,6 +92,16 @@ auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_emp
 #auth_table.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 auth_table.password.requires = [CRYPT()]
 auth_table.username.requires = [IS_LOWER(), IS_NOT_IN_DB(db, auth_table.username)]
+
+
+# Gets around circular dependancies
+db.node.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
+db.node.modified_by.represent = lambda id: db.auth_user(id).username
+db.nodeAttr.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
+db.nodeAttr.modified_by.represent = lambda id: db.auth_user(id).username
+db.linkTable.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
+db.linkTable.modified_by.represent = lambda id: db.auth_user(id).username
+
 
 auth.settings.hmac_key = 'sha512:54d50bdb-f5f5-4878-8f8f-af19f2f49e5b'   # before define_tables()
 auth.define_tables(username=True)                           # creates all needed tables
