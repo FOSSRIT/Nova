@@ -69,10 +69,6 @@ db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 # TODO, ADD MORE CHECKS that prevent multiple records
 
-
-## if no need for session
-# session.forget()
-
 #########################################################################
 ## Authentication
 #########################################################################
@@ -93,6 +89,7 @@ auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_emp
 auth_table.password.requires = [CRYPT()]
 auth_table.username.requires = [IS_LOWER(), IS_NOT_IN_DB(db, auth_table.username)]
 
+auth_table.home_node.requires=IS_NULL_OR(IS_IN_DB(db,db.node.id, '%(name)s (%(url)s)'))
 
 # Gets around circular dependancies
 db.node.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
