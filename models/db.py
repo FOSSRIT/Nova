@@ -48,6 +48,7 @@ db.define_table('node',
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
+
 db.define_table('nodeAttr',
     Field('nodeId', db.node, writable=False, readable=False),
     Field('vocab', db.vocab),
@@ -68,6 +69,12 @@ db.define_table('linkTable',
 db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 # TODO, ADD MORE CHECKS that prevent multiple records
+
+
+db.define_table('feedback',
+    Field('user_input', 'text'),
+    Field('user', 'integer', default=auth.user_id, writable=False, readable=False),
+    Field('date', writable=False, readable=False, default=request.now))
 
 #########################################################################
 ## Authentication
@@ -98,6 +105,8 @@ db.nodeAttr.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
 db.nodeAttr.modified_by.represent = lambda id: db.auth_user(id).username
 db.linkTable.modified_by.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
 db.linkTable.modified_by.represent = lambda id: db.auth_user(id).username
+db.feedback.user.requires=IS_IN_DB(db, auth_table.id, '%(username)s')
+db.feedback.user.represent = lambda id: db.auth_user(id).username
 
 
 auth.settings.hmac_key = 'sha512:54d50bdb-f5f5-4878-8f8f-af19f2f49e5b'   # before define_tables()

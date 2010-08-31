@@ -43,9 +43,16 @@ Search: <input type="text" name="query">
 </div>
     <div id="container">
         <div id="header">
+            {{if auth.is_logged_in():}}
+            <p>Welcome to the Virtual Innovation Center!<br/>
+               Thank you for trying out our beta! Please send us your
+                <a href="{{=URL('edit','feedback')}}">feedback</a>!<br/>
+               (Our informational website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>)</p>
+            {{else:}}
             <p>Welcome to the (beta) Virtual Innovation Center!<br/>
             Make, join, and share groups, projects, and ideas!<br/>
             (Our informational website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>) </p>
+            {{pass}}
         </div> <!-- end header -->
 
         <div id="navigation">

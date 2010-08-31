@@ -152,3 +152,16 @@ def attribute_vocab():
     elif vocab_form .errors:
         response.flash = 'New Attribute has errors'
     return dict(vocab_form=vocab_form)
+
+@auth.requires_login()
+def feedback():
+    """
+    Display and saves from feedback from
+    """
+    form = SQLFORM(db.feedback, labels={'user_input':""})
+    
+    # Check and submit to db if needed
+    if form.accepts(request.vars):
+        response.flash = 'Thankyou for your feedback'
+    
+    return dict(form=form)
