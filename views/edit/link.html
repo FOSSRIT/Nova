@@ -1,5 +1,9 @@
 {{extend 'csi_view.html'}}
 
+{{if node:}}
+<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.
+{{pass}}
+
 <fieldset>
 <legend>Add Links</legend>
 <form method="post" action="{{=URL(args=node.url)}}">

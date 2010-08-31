@@ -37,11 +37,11 @@ db.define_table('vocab', Field('value', 'string', unique=True))
 db.define_table('node',
     Field('type', db.nodeType, writable=False, readable=False),
     Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name"),
-    Field('url', unique=True, label="Node Url",
+    Field('url', unique=True, label="Page Url",
                  comment="Customize this node’s URL."),
     Field('picURL','string', label="Picture Url",
-                 comment="Provide a URL for this node's Image.  (jing can help)"),
-    Field('description','text', label="Node Description", default=""),
+                 comment="Provide an URL for this Page's Image."),
+    Field('description','text', label="Page Description", default=""),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False))
@@ -114,8 +114,8 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 # If it is their first login, they will not have a home node, we must
 # Create a node for them and add it to the database
 if auth.is_logged_in():
-    if not auth.user.in_beta:
-        auth.logout(next=URL('default', 'not_in_beta'))
+    #if not auth.user.in_beta:
+    #    auth.logout(next=URL('default', 'not_in_beta'))
 
     # Make sure the user has a home node if not create one
     if not auth.user.home_node:

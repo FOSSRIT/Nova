@@ -2,10 +2,15 @@
 
 <div id="editform">
 {{if node:}}
-<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.
+<a href="{{=URL('main','node', args=node.url)}}" >Back to Node</a>.
+
+<div id=pictureAdvice>
+To take a picture and get a Picture URL, <a href="http://cameroid.com/snap.php" target="_blank">click here</a>
+</div>
+
 {{pass}}
     <fieldset>
-        <legend>Node</legend>
+        <legend>Edit Page</legend>
         {{=form}}
     Note: Description and Attributes can use <a href="{{=URL('examples','static','markmin.html')}}">markmin syntax</a>.
     </fieldset>
@@ -31,9 +36,8 @@
                      <input type="text" name="attr.{{=x.id}}" value="{{=x.value}}" />
                  </li>
                  {{pass}}
-               </ul>
-<br>
- <input type="submit" />
+              </ul>
+              <input type="submit"/>
  </form>
  </fieldset>
  {{pass}}
