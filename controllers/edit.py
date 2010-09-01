@@ -1,8 +1,36 @@
 # coding: utf8
 # try something like
 from datetime import datetime
+import os.path
 
 def index(): return dict(message="hello from edit.py")
+
+@auth.requires_login()
+def take_picture():
+    node = None
+    if len(request.args):
+        try:
+            node = db(db.node.url == request.args[0]).select().first()
+        except:
+            raise HTTP(404, 'node not found')
+
+    if node:
+        # Make sure they are not trying to edit someone's node
+        # TODO ADD PERMISSION SYSTEM HERE
+        if node.type.public == False and node.id != auth.user.home_node:
+            raise HTTP(403, "Not Authorized to edit this node")
+            
+        if request.vars.do_upload:
+            open(os.path.join(request.folder,'static','user_upload','%s.jpg' % node.id),'wb').write(request.body.read())
+            my_url = URL('static', 'user_upload/%s.jpg' % node.id)
+            node.update_record(picURL = my_url)
+            response.view = "generic.load"
+            return dict(url=my_url)
+
+    else:
+        raise HTTP(404, 'node not found')
+
+    return dict(node=node)
 
 @auth.requires_login()
 def node():
