@@ -137,3 +137,12 @@ if auth.is_logged_in():
 def get_home_node():
     if auth.user.home_node:
         return db(db.node.id == auth.user.home_node).select().first()
+        
+def can_edit(node):
+    if auth.is_logged_in() and (node.type.public or node.id == auth.user.home_node):
+        return True
+    return False
+
+def is_linked(node1, node2):
+    return db((db.linkTable.nodeId == node1) & (db.linkTable.linkId == node2)).count() or \
+           db((db.linkTable.nodeId == node2) & (db.linkTable.linkId == node1)).count()

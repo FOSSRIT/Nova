@@ -6,6 +6,27 @@ import os.path
 def index(): return dict(message="hello from edit.py")
 
 @auth.requires_login()
+def link_me():
+    node = None
+    try:
+        node = db(db.node.url == request.args[1]).select().first()
+    except:
+        raise HTTP(404, 'node not found')
+    
+    if node and request.args[0]:
+        if request.args[0] == "add":
+            db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
+            session.flash = "Link Added"
+            redirect(URL('main','node',args=node.url))          
+        elif request.args[0] == "remove":
+            db((db.linkTable.nodeId == node) & (db.linkTable.linkId == auth.user.home_node)).delete()
+            db((db.linkTable.nodeId == auth.user.home_node) & (db.linkTable.linkId==node)).delete()
+            session.flash = "Link Removed"
+            redirect(URL('main','node',args=node.url))
+    else:
+        raise HTTP(404, 'Could not process request')
+
+@auth.requires_login()
 def take_picture():
     node = None
     if len(request.args):
@@ -158,11 +179,11 @@ def link():
     
     for row in db(db.node.id != node.id).select():
         # Filter out existing links
-        if not db((db.linkTable.nodeId == node) & (db.linkTable.linkId == row)).count() and \
-           not db((db.linkTable.nodeId == row) & (db.linkTable.linkId == node)).count():
-            nodeSet.append(row)
-        else:
+        if is_linked(node, row):
             linkedSet.append(row)
+            
+        else:
+            nodeSet.append(row)
 
     return dict( node=node, nodeSet=nodeSet, linkedSet=linkedSet )
 
