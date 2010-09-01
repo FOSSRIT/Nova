@@ -54,6 +54,29 @@ def take_picture():
     return dict(node=node)
 
 @auth.requires_login()
+def in_place():
+    try:
+        node = db(db.node.url == request.args[0]).select().first()
+    except:
+        raise HTTP(404, 'node not found')
+    try:
+        form = SQLFORM( db.node, node, fields=[request.args[1]], labels={request.args[1]:""},
+                        comments=False, formstyle="divs" , showid = False,
+                        _action = URL('edit','in_place', args=[node.url,request.args[1]]) )
+    except:
+        raise HTTP(404, "Field Not Found")
+        
+    response.view = "generic.load"
+    if form.accepts(request.vars):
+        # Get updated node informatoin
+        node = db(db.node.url == request.args[0]).select().first()
+        return dict(node=MARKMIN(node.get(request.args[1])))
+    else:
+        return dict(form=form)
+    
+    
+
+@auth.requires_login()
 def node():
     """
     Display a node edit form.  If request has an id, it will attempt to

@@ -1,6 +1,6 @@
 {{extend 'csi_node.html'}}
 
-{{if auth.is_logged_in() and (node.type.public or node.id == auth.user.home_node):}}
+{{if can_edit(node):}}
     <div class="nodeTopLinks">
         <a href="{{=URL('edit','node', args=[node.url])}}">Edit Node</a>
         <a href="{{=URL('edit','link', args=node.url)}}"  >Link Node</a>
@@ -32,8 +32,38 @@
     
     </div> <!-- end sideStats -->
     
-    
+    <script type="text/javascript">
+        function edit_request(url, div_loc){
+ 
+            var div = $("#" + div_loc);
+
+            div.load(url, function() {
+                var form = $("#" + div_loc + " form");
+                
+                form.submit(function() {
+                    var inputs = [];
+                    $("#" + div_loc + " form :input").each( function() {
+                        inputs.push(this.name + '=' + escape(this.value))
+                    });
+                  
+                  $.ajax({
+                      data: inputs.join('&'),
+                      type: 'post',
+                      url: $("#" + div_loc + " form").attr('action'),
+                      success: function(r) { document.getElementById(div_loc).innerHTML=r; },
+                      error: function() { alert("Failed to submit"); },
+                   });
+                  return false;
+                });
+            });
+        }
+    </script>
     
     <div id="descriptionBox">
-       {{=MARKMIN(node.description)}} 
+    {{if can_edit(node):}}
+    <a href="#" onClick='edit_request("{{=URL('edit','in_place',args=[node.url,'description'])}}","descriptionBox_cont");return false;'>EDIT</a>
+    {{pass}}
+    <div id="descriptionBox_cont">
+    {{=MARKMIN(node.description)}} 
+    </div>
     </div> <!-- end description -->
