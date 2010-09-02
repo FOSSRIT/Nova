@@ -1,7 +1,9 @@
 {{extend 'csi_view.html'}}
 
 <div id="editform">
-    <a href="{{=URL('main','node', args=node.url)}}" >Back to Node</a>.
+    {{if node:}}
+        <a href="{{=URL('main','node', args=node.url)}}" >Back to Node</a>.
+    {{pass}}
     <fieldset>
         <legend>Edit Page</legend>
          Note: Description and Attributes can use <a href="{{=URL('examples','static','markmin.html')}}">markmin syntax</a>.
@@ -20,8 +22,10 @@
 });
 </script>
         <br>Got a webcam? <a href="#" id="slick-toggle">Click here to take take a snapshot</a><br>
+        
         <div id="upload_results" style="background-color:#eee;"></div>
         <div id="slickbox">
+        {{if node:}}
             <!-- First, include the JPEGCam JavaScript Library -->
             <script type="text/javascript" src="{{=URL('static','jpegcam/webcam.js')}}"></script>
     
@@ -65,6 +69,9 @@
                     $('#slickbox').toggle(4000);
                 }
             </script>
+            {{else:}}
+            Please create node first before trying to upload a picture.
+            {{pass}}
         </div>
     </fieldset>
 
