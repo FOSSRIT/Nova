@@ -60,7 +60,18 @@ def in_place():
     except:
         raise HTTP(404, 'node not found')
     try:
-        form = SQLFORM( db.node, node, fields=[request.args[1]], labels={request.args[1]:""},
+        if request.args[1].startswith("attr_"):
+            attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
+            if attr:
+                form = SQLFORM( db.nodeAttr, attr, showid = False,
+                                comments=False, fields=['value'], labels={'value':""},
+                                _action = URL('edit','in_place', args=[node.url,request.args[1]]))
+                
+            else:
+                raise HTTP(404, "Attribute not found")
+                    
+        else:
+            form = SQLFORM( db.node, node, fields=[request.args[1]], labels={request.args[1]:""},
                         comments=False, formstyle="divs" , showid = False,
                         _action = URL('edit','in_place', args=[node.url,request.args[1]]) )
     except:
@@ -68,9 +79,14 @@ def in_place():
         
     response.view = "generic.load"
     if form.accepts(request.vars):
-        # Get updated node informatoin
-        node = db(db.node.url == request.args[0]).select().first()
-        return dict(node=MARKMIN(node.get(request.args[1])))
+        # Get updated node information
+        if request.args[1].startswith("attr_"):
+            attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
+            
+            return dict(t=MARKMIN(attr.value))
+        else:
+            node = db(db.node.url == request.args[0]).select().first()
+            return dict(node=MARKMIN(node.get(request.args[1])))
     else:
         return dict(form=form)
     

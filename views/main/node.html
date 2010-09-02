@@ -1,38 +1,22 @@
 {{extend 'csi_node.html'}}
 
-{{if can_edit(node):}}
-    <div class="nodeTopLinks">
-        <a href="{{=URL('edit','node', args=[node.url])}}">Edit Node</a>
-        <a href="{{=URL('edit','link', args=node.url)}}"  >Link Node</a>
-    </div>
-{{pass}}
-<br />
 
-    <div id="nodeTitle">
-        {{=node.name}}
-    </div> <!-- end nodeTitle -->
-    
-    <div id="bigPic">
-          <img src="{{=node.picURL}}"  width="300px" />
-    </div> <!-- end bigPic -->
-     
-    <div id="sideStats">
-    
-    {{for x in node_attributes:}}
-        
-        <div class="statTitle">
-            {{=x.vocab.value}}
-        </div> <!-- end statTitle -->
-            
-        <div class="statValue">
-            {{=MARKMIN(x.value)}}
-        </div> <!-- end statValue -->
-        
-    {{pass}}
-    
-    </div> <!-- end sideStats -->
-    
+{{if can_edit(node):}}    
     <script type="text/javascript">
+    $(document).ready(function() {
+        $(".db_editable").each( function(){
+            var edit_image=document.createElement('img');
+            edit_image.src= "/csi2/static/images/edit.png";
+            edit_image.alt="Edit";
+            var edit_link = document.createElement("a");
+            edit_link.setAttribute('href','#');
+            edit_link.setAttribute('onclick','edit_request("/csi2/edit/in_place/{{=node.url}}/' + this.id + '","'+this.id+'"); return false'); 
+            edit_link.setAttribute('style', 'float:left;');
+            edit_link.appendChild(edit_image);
+            this.parentNode.insertBefore(edit_link,this)
+        });
+    });
+
         function edit_request(url, div_loc){
  
             var div = $("#" + div_loc);
@@ -58,12 +42,40 @@
             });
         }
     </script>
-    
-    <div id="descriptionBox">
-    {{if can_edit(node):}}
-    <a href="#" onClick='edit_request("{{=URL('edit','in_place',args=[node.url,'description'])}}","descriptionBox_cont");return false;'>EDIT</a>
-    {{pass}}
-    <div id="descriptionBox_cont">
-    {{=MARKMIN(node.description)}} 
+{{pass}}
+
+{{if can_edit(node):}}
+    <div class="nodeTopLinks">
+        <a href="{{=URL('edit','node', args=[node.url])}}">Edit Node</a>
+        <a href="{{=URL('edit','link', args=node.url)}}"  >Link Node</a>
     </div>
+{{pass}}
+<br />
+
+    <div id="nodeTitle">
+        <div id="name" class="db_editable">{{=node.name}}</div>
+    </div> <!-- end nodeTitle -->
+    
+    <div id="bigPic">
+          <img src="{{=node.picURL}}"  width="300px" />
+    </div> <!-- end bigPic -->
+     
+    <div id="sideStats">
+    
+    {{for x in node_attributes:}}
+        
+        <div class="statTitle">
+            {{=x.vocab.value}}
+        </div> <!-- end statTitle -->
+            
+        <div class="statValue">
+            <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div>
+        </div> <!-- end statValue -->
+        
+    {{pass}}
+    
+    </div> <!-- end sideStats -->
+
+    <div id="descriptionBox">
+    <div id="description" class="db_editable">{{=MARKMIN(node.description)}}</div>
     </div> <!-- end description -->
