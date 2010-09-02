@@ -1,6 +1,5 @@
 {{extend 'csi_node.html'}}
 
-
 {{if can_edit(node):}}    
     <script type="text/javascript">
     $(document).ready(function() {
@@ -57,7 +56,7 @@
     </div> <!-- end nodeTitle -->
     
     <div id="bigPic">
-          <img src="{{=node.picURL}}"  width="300px" />
+          <img src="{{=URL('default','download',args=node.picFile)}}" width="300px" />
     </div> <!-- end bigPic -->
      
     <div id="sideStats">

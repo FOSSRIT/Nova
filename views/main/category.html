@@ -22,9 +22,9 @@ No Nodes Here.
         <div class="nodePic">
             <a href="{{=URL('main','node',args=[x.url])}}" >
             
-            {{if x.picURL:}}
+            {{if x.picFile:}}
                 
-                <img src="{{=x.picURL}}" width="160px" height="160px" /></a>
+                <img src="{{=URL('default','download',args=x.picFile)}}" width="160px" height="160px" /></a>
             
             {{else:}}
             

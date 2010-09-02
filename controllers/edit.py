@@ -42,11 +42,10 @@ def take_picture():
             raise HTTP(403, "Not Authorized to edit this node")
             
         if request.vars.do_upload:
-            open(os.path.join(request.folder,'static','user_upload','%s.jpg' % node.id),'wb').write(request.body.read())
-            my_url = URL('static', 'user_upload/%s.jpg' % node.id)
-            node.update_record(picURL = my_url)
+            node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
+        
             response.view = "generic.load"
-            return dict(url=my_url)
+            return dict(url="uploaded")
 
     else:
         raise HTTP(404, 'node not found')
@@ -176,7 +175,8 @@ def node():
             form.vars.date=datetime.now()
              
             if form.accepts(request.vars):
-                response.flash = 'form accepted'
+                session.flash = 'form accepted'
+                redirect(URL('edit','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'
 
