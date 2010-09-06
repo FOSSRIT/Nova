@@ -54,32 +54,52 @@ def take_picture():
 
 @auth.requires_login()
 def in_place():
+    """
+    Allows updating of node information using an ajax style request
+    """
+    
+    # Find the node we are trying to update
     try:
         node = db(db.node.url == request.args[0]).select().first()
     except:
         raise HTTP(404, 'node not found')
+        
+    # Get the field we are trying to edit
     try:
-        if request.args[1].startswith("attr_"):
-            attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
-            if attr:
-                form = SQLFORM( db.nodeAttr, attr, showid = False,
-                                comments=False, fields=['value','weight'], labels={'value':""},
-                                _action = URL('edit','in_place', args=[node.url,request.args[1]]))
-                
-            else:
-                raise HTTP(404, "Attribute not found")
-                    
-        else:
-            form = SQLFORM( db.node, node, fields=[request.args[1]], labels={request.args[1]:""},
-                        comments=False, formstyle="divs" , showid = False,
-                        _action = URL('edit','in_place', args=[node.url,request.args[1]]) )
+        field_request = request.args[1]
     except:
         raise HTTP(404, "Field Not Found")
+        
+    # Check if requesting an attribute
+    if field_request.startswith("attr_"):
+        try:
+            attr = db(db.nodeAttr.id == int(field_request[5:])).select().first()
+        except:
+            raise HTTP(404, "Invalid attribute id requested")
+            
+        if attr:
+            form = SQLFORM( db.nodeAttr, attr, showid = False,
+                            comments=False, fields=['value','weight'], labels={'value':""},
+                            _action = URL('edit','in_place', args=[node.url,field_request]))
+        else:
+            raise HTTP(404, "Attribute not found")
+
+    # Check if trying to deal with picture
+    elif field_request == "picture":
+        response.view = "htmlblocks/take_picture.html"
+        return dict(node=node)
+        
+    # Else we should be using a db node field            
+    else:
+        form = SQLFORM( db.node, node, fields=[field_request], labels={field_request:""},
+                    comments=False, formstyle="divs" , showid = False,
+                    _action = URL('edit','in_place', args=[node.url,field_request]) )
+        
         
     response.view = "generic.load"
     if form.accepts(request.vars):
         # Get updated node information
-        if request.args[1].startswith("attr_"):
+        if field_request.startswith("attr_"):
             attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
             
             return dict(t=MARKMIN(attr.value))
