@@ -25,7 +25,7 @@
 
 <body>
 <div class="flash">{{=response.flash or ''}}</div>
-<div style="background: #999;">
+<div style="background: #999; text-align: left; padding: 5px;">
 {{if auth.is_logged_in():}}
 Hello
 <a href="{{=URL('main', 'nodeid', args=auth.user.home_node)}}">{{=get_home_node().name}}</a>. |
@@ -35,17 +35,19 @@ Hello
 <a href="{{=URL('default','user',args='login',vars={'_next':request.url})}}">Login</a>
 {{pass}}
 
-<form method="get" action="{{=URL('main','search')}}" style="display:inline">
+<form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;">
 Search: <input type="text" name="query">
 <input type="submit" value="Search">
 </form>
+
 {{if auth.has_membership("Site Admin"):}}
 <br>Admin Links: <a href="https://beta.innovation.rit.edu/admin">Admin</a> |
   <a href="https://beta.innovation.rit.edu/csi2/appadmin/index">DB Admin</a>
   {{if db(db.auth_user.in_beta==False).count():}}
-      <b><a href="{{=URL('appadmin', 'select', args='db', vars={'query': 'db.auth_user.in_beta==False'})}}">USERS ARE WAITING FOR BETA ACCESS</a></b>
+      <b><a href="https://beta.innovation.rit.edu/csi2/appadmin/select/db?query=db.auth_user.in_beta%3D%3DFalse">USERS ARE WAITING FOR BETA ACCESS</a></b>
   {{pass}}
 {{pass}}
+<br style="clear:both;" />
 </div>
     <div id="container">
         <div id="header">
