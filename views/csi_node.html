@@ -26,22 +26,11 @@
                   <li class="panelItem">
                   
                       <a href="{{=node_item['url']}}">
-                      
-                      {{if not node_item.picURL:}}
-                      
-                          <img src="http://news.softpedia.com/images/news2/Keep-Chrome-for-Mac-OS-X-Updated-with-Chromium-Updater-2.jpg" class="panelItemPic" /></a>
-                      
-                      {{else:}}
-                      
-                          <img src="{{=node_item.picURL}}" class="panelItemPic"  /> </a>                         
-                      
-                      {{pass}}
-                      
-                           <div class="panelItemName">
-                  
-                              <a href="{{=node_item['url']}}">{{=node_item['name']}}</a> 
-                              
-                          </div>
+                          <img src="{{=URL('default','download', args=node_item.picFile)}}" class="panelItemPic"  /></a>
+                                                
+                      <div class="panelItemName">
+                          <a href="{{=node_item['url']}}">{{=node_item['name']}}</a> 
+                      </div>
                   </li>
                   {{pass}}
                </ul>

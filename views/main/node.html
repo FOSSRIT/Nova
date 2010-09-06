@@ -61,18 +61,14 @@
      
     <div id="sideStats">
     
+    <ul style="list-style-type: none; margin: 0; padding: 0;">
     {{for x in node_attributes:}}
-        
-        <div class="statTitle">
-            {{=x.vocab.value}}
-        </div> <!-- end statTitle -->
-            
-        <div class="statValue">
-            <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div>
-        </div> <!-- end statValue -->
-        
+        <li>
+            <div class="statTitle">{{=x.vocab.value}}</div>
+            <div class="statValue"> <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div></div>
+        </li>
     {{pass}}
-    
+    </ul>
     </div> <!-- end sideStats -->
 
     <div id="descriptionBox">
