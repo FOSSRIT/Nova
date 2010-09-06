@@ -51,7 +51,8 @@ db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 db.define_table('nodeAttr',
     Field('nodeId', db.node, writable=False, readable=False),
     Field('vocab', db.vocab),
-    Field('value'),
+    Field('value', 'text'),
+    Field('weight', 'integer', default=0),
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))

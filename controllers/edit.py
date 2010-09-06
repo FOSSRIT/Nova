@@ -63,7 +63,7 @@ def in_place():
             attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
             if attr:
                 form = SQLFORM( db.nodeAttr, attr, showid = False,
-                                comments=False, fields=['value'], labels={'value':""},
+                                comments=False, fields=['value','weight'], labels={'value':""},
                                 _action = URL('edit','in_place', args=[node.url,request.args[1]]))
                 
             else:

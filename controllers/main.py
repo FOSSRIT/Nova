@@ -71,7 +71,7 @@ def node():
             current_node = current_node[0]
             
             # Get Node Attributes
-            attrs = db(db.nodeAttr.nodeId==current_node).select()
+            attrs = db(db.nodeAttr.nodeId==current_node).select(orderby=db.nodeAttr.weight)
         
             ## Grab nodes from Linked Table ##
             ######TODO: THIS IS VERY UGLY, combine these into one statement
