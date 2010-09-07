@@ -12,6 +12,32 @@ a{
     color: #fff;
 }
 
+#overlay{
+    /* must be initially hidden */
+    display:none;
+    
+    /* place overlay on top of other elements */
+    z-index:10000;
+    
+    /* styling */
+    color: #fff;
+    background-color:#333;
+    
+    width:500px;    
+    min-height:200px;
+    border:1px solid #666;
+    
+    /* CSS3 styling for latest browsers */
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
+    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+}
+
+
 #addyourself a {
     float:right;
     height:50px;
@@ -41,7 +67,7 @@ a{
     line-height: 0px;
 }
 
-#bigPic {
+#picture {
     width:300px;
     max-width:300px;
     max-height:400px;
