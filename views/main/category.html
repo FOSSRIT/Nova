@@ -44,9 +44,9 @@ No Nodes Here.
     </div> <!-- end nodeBox -->
     
     {{pass}}
-<br class="clearfloat"/>
 
 {{if total_pages > 1:}}
+<div class="pager">
   {{for pg in range(1,total_pages+1):}}
     {{if pg != page_num:}}
       <a href="{{=URL('main','category',args=[page,pg])}}">{{=pg}}</a>
@@ -54,4 +54,5 @@ No Nodes Here.
       {{=pg}}
     {{pass}}
   {{pass}}
+</div>
 {{pass}}

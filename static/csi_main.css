@@ -12,6 +12,20 @@ a{
     color: #fff;
 }
 
+.pager{
+    text-align: center;
+    border-radius: 16px; /* half of button size + padding */
+    width:30%;
+    height:auto;
+    background-color:#999;
+    
+    margin: 0 auto;
+    margin-top:20px;
+    margin-bottom:20px;
+    padding:10px;
+    clear: both;
+}
+
 #overlay{
     /* must be initially hidden */
     display:none;
