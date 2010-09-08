@@ -1,6 +1,6 @@
 {{extend 'csi_node.html'}}
 
-{{if can_edit(node):}}  
+{{if can_edit(node):}}
     <script type="text/javascript">
     $(document).ready(function() {
         $(".db_editable").each( function(){
@@ -40,24 +40,49 @@
                 div.append(close_link);
                 var form = $("#overlay form");
 
-                form.submit(function() {
-                    var inputs = [];
-                    $("#overlay form :input").each( function() {
-                        inputs.push(this.name + '=' + escape(this.value))
-                    });
-                  
-                  $.ajax({
-                      data: inputs.join('&'),
-                      type: 'post',
-                      url: $("#overlay form").attr('action'),
-                      success: function(r) {
-                          document.getElementById(div_loc).innerHTML=r;
-                          div.hide('slow');
-                          },
-                      error: function() { alert("Failed to submit"); },
-                   });
-                  return false;
+                // Test if we must fake it instead
+                var fakeit = false;
+                $("#overlay form :input").each( function() {
+                    if( this.type == "file" ){
+                        fakeit = true;
+                    }
                 });
+                
+                if( fakeit == true ){
+                    f_frame = document.createElement("iframe");
+                    f_frame.name = "__Fake_IT_Frame";
+                    f_frame.id = "__Fake_IT_Frame";
+                    f_frame.style.display = "none";
+                    f_frame.onload = function(){
+                        if( this.contentWindow.document.body.innerHTML != "" ){
+                            document.getElementById(div_loc).innerHTML=this.contentWindow.document.body.innerHTML;
+                            div.hide('slow');
+                        }
+                        };
+                    div.append(f_frame);
+
+                    form.attr('target',"__Fake_IT_Frame");
+                }else{
+                    form.submit(function() {
+                        var inputs = [];
+                        $("#overlay form :input").each( function() {
+                            inputs.push(this.name + '=' + escape(this.value));
+                        });
+                      
+                      $.ajax({
+                          data: inputs.join('&'),
+                          type: 'post',
+                          enctype: 'multipart/form-data',
+                          url: $("#overlay form").attr('action'),
+                          success: function(r) {
+                              document.getElementById(div_loc).innerHTML=r;
+                              div.hide('slow');
+                              },
+                          error: function() { alert("Failed to submit"); },
+                       });
+                      return false;
+                    });
+                }
             });
         }
     </script>
@@ -76,14 +101,13 @@
     </div> <!-- end nodeTitle -->
     
     
-    <div id="picFile" class="db_editable" title="Upload Picture File"></div>
-    <div id="picture" class="db_editable" title="Take Picture from webcam">
-          <img src="{{=URL('default','download',args=node.picFile)}}" width="300px" />
+    <div id="picture" class="db_editable">
+          <img src="{{=URL('default','download',args=node.picFile)}}" />
     </div> <!-- end bigPic -->
      
     <div id="sideStats">
     
-    <ul style="list-style-type: none; margin: 0; padding: 0;">
+    <ul style="list-style-type: none; margin: 0; padding: 0;" id="at_sort">
     {{for x in node_attributes:}}
         <li>
             <div class="statTitle">{{=x.vocab.value}}</div>

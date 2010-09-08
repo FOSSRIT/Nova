@@ -1,0 +1,9 @@
+You may Upload a file or take a picture with your webcam!<br/>
+{{=form}}
+{{include "htmlblocks/take_picture.html"}}
+<script type="text/javascript">
+function my_completion_handler(msg) {
+            document.getElementById('picture').innerHTML = msg;
+            $("#overlay").hide('slow');
+        }
+</script>

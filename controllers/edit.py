@@ -45,7 +45,7 @@ def take_picture():
             node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
         
             response.view = "generic.load"
-            return dict(url="uploaded")
+            return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
 
     else:
         raise HTTP(404, 'node not found')
@@ -86,8 +86,20 @@ def in_place():
 
     # Check if trying to deal with picture
     elif field_request == "picture":
-        response.view = "htmlblocks/take_picture.html"
-        return dict(node=node)
+        
+        
+        form = SQLFORM( db.node, node, fields=['picFile'], labels={'picFile':""},
+                    comments=False, formstyle="divs" , showid = False,
+                    _action = URL('edit','in_place', args=[node.url,'picture']) )
+                    
+        if form.accepts(request.vars):
+            response.view = "generic.load"
+            node = db(db.node.url == request.args[0]).select().first()
+            return dict(t=IMG(_src=URL('default','download',args=node.picFile)))
+            
+        else:
+            response.view = "htmlblocks/edit_pict_form.html"
+            return dict(node=node, form=form)
         
     # Else we should be using a db node field            
     else:

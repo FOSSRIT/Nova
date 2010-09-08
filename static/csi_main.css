@@ -90,6 +90,9 @@ a{
     float:left;
     margin-bottom:20px;
 }
+#picture img{
+    max-width:300px;
+}
 
 #container {
     width: 900px;
