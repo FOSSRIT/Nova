@@ -102,7 +102,11 @@
     
     
     <div id="picture" class="db_editable">
-          <img src="{{=URL('default','download',args=node.picFile)}}" />
+        {{if node.picFile:}}
+        <img src="{{=URL('default','download',args=node.picFile)}}" /></a>    
+        {{else:}}
+        <img src="{{=URL('static', 'images', args=['placeholder.png'])}}"/></a>
+        {{pass}}
     </div> <!-- end bigPic -->
      
     <div id="sideStats">

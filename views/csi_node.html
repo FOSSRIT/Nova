@@ -25,8 +25,12 @@
                   
                   <li class="panelItem">
                   
-                      <a href="{{=node_item['url']}}">
-                          <img src="{{=URL('default','download', args=node_item.picFile)}}" class="panelItemPic"  /></a>
+                      <a href="{{=node_item['url']}}" id="link_{{=node_item['id']}}" class="link_link">
+                          {{if node_item.picFile:}}
+                          <img src="{{=URL('default','download', args=node_item.picFile)}}" class="panelItemPic"  />
+                          {{else:}}
+                          <img src="{{=URL('static','images', args='placeholder.png')}}" class="panelItemPic"  />
+                          {{pass}}</a>
                                                 
                       <div class="panelItemName">
                           <a href="{{=node_item['url']}}">{{=node_item['name']}}</a> 
