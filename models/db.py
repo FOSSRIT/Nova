@@ -24,7 +24,8 @@ auth = Auth(globals(),db)                      # authentication/authorization
 auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
 
 # DISABLE EXTRA FEATURES
-auth.settings.actions_disabled=['register','change_password','request_reset_password','retrieve_username','verify_email','profile']
+# 
+auth.settings.actions_disabled=['register','request_reset_password','retrieve_username','verify_email','profile']
 #########################################################################
 ## DEFINE DATABASE
 #########################################################################
@@ -36,11 +37,12 @@ db.define_table('vocab', Field('value', 'string', unique=True))
 # Define Compound Tables
 db.define_table('node',
     Field('type', db.nodeType, writable=False, readable=False),
-    Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name"),
-    Field('url', unique=True, label="Page Url",
-                 comment="Customize the unique url of this node.  A unique alphanumeric id for the node."),
-    Field('picFile','upload', label="Picture"),
-    Field('description','text', label="Page Description", default=""),
+    Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name", comment="The Display Name of the Page"),
+    Field('url', unique=True, label="URL ID",
+                 comment="This is the ID of the page used in the url. Pick a simple and unique alphanumeric id for the node."),
+    Field('picFile','upload', label="Picture", comment="The display picture of the page."),
+    Field('description','text', label="Page Description", default="",
+          comment="This is the text displayed on the page. You may use MARKMIN syntax in this section."),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False))
@@ -50,9 +52,9 @@ db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
 db.define_table('nodeAttr',
     Field('nodeId', db.node, writable=False, readable=False),
-    Field('vocab', db.vocab),
-    Field('value', 'text'),
-    Field('weight', 'integer', default=0),
+    Field('vocab', db.vocab, label="Attribute Name", comment="Select the type of attribute you would like to use."),
+    Field('value', 'text', label="Attribute Text", comment="This is where you write the content of the attribute."),
+    Field('weight', 'integer', default=0, label="Display Weight", comment="This is the priority of the attribute, lighter values are higher on the page."),
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))
@@ -85,11 +87,12 @@ auth_table = db.define_table(
     Field('first_name', length=128, default=''),
     Field('last_name', length=128, default=''),
     Field('username', unique=True),
+    Field('email', length=512, default='', label=auth.messages.label_email),
     Field('password', 'password', length=512, readable=False, label='Password'),
     Field('registration_key', length=512, writable=False, readable=False, default=''),
     Field('registration_id', length=512, writable=False, readable=False, default=''),
     Field('home_node', db.node, writable=False, readable=False),
-    Field('in_beta', 'boolean', default=False))
+    Field('in_beta', 'boolean', default=False, writable=False, readable=False))
 
 auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 #auth_table.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -129,7 +132,8 @@ if auth.is_logged_in():
     # Make sure the user has a home node if not create one
     if not auth.user.home_node:
         from datetime import datetime
-        id = db.node.insert( type=1, name=auth.user.username, url=auth.user.username, date=datetime.now() )
+        id = db.node.insert( type=1, name=auth.user.username,
+                             url=auth.user.username, description="Here is your description." )
         db(auth_table.id == auth.user.id).update(home_node = id)
         auth.user.home_node = id
 
