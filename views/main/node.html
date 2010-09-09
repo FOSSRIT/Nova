@@ -3,6 +3,18 @@
 {{if can_edit(node):}}
     <script type="text/javascript">
     $(document).ready(function() {
+    
+        //Add New Attribute Link
+        new_attr_lnk = document.createElement("a");
+       
+        new_attr_lnk.setAttribute('href','#');
+        //new_attr_lnk.setAttribute('onclick', 'alert("TODO: ADD NEW ATTRIBUTE"); return false');
+        new_attr_lnk.setAttribute('onclick',
+            'edit_request("/csi2/edit/in_place/{{=node.url}}/new_attribute","at_sort"); return false;');
+        new_attr_lnk.setAttribute('id', 'add_attr_link');
+        new_attr_lnk.innerText = "Add Attribute";
+         $("#at_sort").prepend(new_attr_lnk);
+    
         $(".db_editable").each( function(){
             $(this).hover( function () {
                 var edit_image=document.createElement('img');
@@ -13,7 +25,6 @@
                 edit_link.setAttribute('onclick',
                         'edit_request("/csi2/edit/in_place/{{=node.url}}/' + this.id + '","'+this.id+'"); return false'); 
                 edit_link.setAttribute('style', 'float:left;');
-                edit_link.setAttribute('title', this.title)
                 edit_link.appendChild(edit_image);
                 var span = document.createElement('span');
                 span.setAttribute('style','position: absolute; z-index: 10000;');
@@ -100,7 +111,6 @@
         <div id="name" class="db_editable">{{=node.name}}</div>
     </div> <!-- end nodeTitle -->
     
-    
     <div id="picture" class="db_editable">
         {{if node.picFile:}}
         <img src="{{=URL('default','download',args=node.picFile)}}" /></a>    
@@ -109,17 +119,7 @@
         {{pass}}
     </div> <!-- end bigPic -->
      
-    <div id="sideStats">
-    
-    <ul style="list-style-type: none; margin: 0; padding: 0;" id="at_sort">
-    {{for x in node_attributes:}}
-        <li>
-            <div class="statTitle">{{=x.vocab.value}}</div>
-            <div class="statValue"> <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div></div>
-        </li>
-    {{pass}}
-    </ul>
-    </div> <!-- end sideStats -->
+    <div id="sideStats">{{include "htmlblocks/attributes.html"}}</div>
 
     <div id="descriptionBox">
     <div id="description" class="db_editable">{{=MARKMIN(node.description)}}</div>

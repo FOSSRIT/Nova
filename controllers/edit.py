@@ -87,7 +87,6 @@ def in_place():
     # Check if trying to deal with picture
     elif field_request == "picture":
         
-        
         form = SQLFORM( db.node, node, fields=['picFile'], labels={'picFile':""},
                     comments=False, formstyle="divs" , showid = False,
                     _action = URL('edit','in_place', args=[node.url,'picture']) )
@@ -100,6 +99,18 @@ def in_place():
         else:
             response.view = "htmlblocks/edit_pict_form.html"
             return dict(node=node, form=form)
+    
+    elif field_request == "new_attribute":
+        attribute_form = SQLFORM(db.nodeAttr,_action = URL('edit','in_place', args=[node.url,'new_attribute']))
+        attribute_form.vars.nodeId = node
+        
+        if attribute_form.accepts(request.vars):
+            response.view = "htmlblocks/attributes.html"
+            attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
+            return dict(node_attributes=attr)
+        else:
+            response.view = "generic.load"
+            return dict(form=attribute_form)
         
     # Else we should be using a db node field            
     else:
