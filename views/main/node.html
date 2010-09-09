@@ -8,12 +8,11 @@
         new_attr_lnk = document.createElement("a");
        
         new_attr_lnk.setAttribute('href','#');
-        //new_attr_lnk.setAttribute('onclick', 'alert("TODO: ADD NEW ATTRIBUTE"); return false');
         new_attr_lnk.setAttribute('onclick',
             'edit_request("/csi2/edit/in_place/{{=node.url}}/new_attribute","at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
         new_attr_lnk.innerText = "Add Attribute";
-         $("#at_sort").prepend(new_attr_lnk);
+         $("#sideStats").prepend(new_attr_lnk);
     
         $(".db_editable").each( function(){
             $(this).hover( function () {
