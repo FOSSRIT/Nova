@@ -175,7 +175,7 @@ def node():
                     db(db.nodeAttr.id==key[5:]).update(value=attr)
       
         # Process NODE SQL FORM
-        form = SQLFORM(db.node, node, deletable=node.type.public)
+        form = SQLFORM(db.node, node, deletable=node.type.public, showid = False)
         
         attribute_form = SQLFORM(db.nodeAttr)
         attribute_form.vars.nodeId = node

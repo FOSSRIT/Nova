@@ -1,6 +1,6 @@
 # coding: utf8
 from math import ceil
-MAX_PER_PAGE = 10
+MAX_PER_PAGE = 12
 
 def index(): return dict()
 def about(): return dict()    
@@ -43,7 +43,7 @@ def category():
             
         # Get rows that match category type
         typeId = db(db.nodeType.value==request.args[0]).select().first()
-        rows = db(db.node.type == typeId).select(limitby=((page - 1) * MAX_PER_PAGE, page * MAX_PER_PAGE))
+        rows = db(db.node.type == typeId).select(limitby=((page - 1) * MAX_PER_PAGE, page * MAX_PER_PAGE), orderby=~db.node.modified)
         pages = int(ceil(db(db.node.type == typeId).count()/float(MAX_PER_PAGE)))
                                   
         return dict(page=request.args[0], data=rows, total_pages=pages, page_num=page, category=typeId)
