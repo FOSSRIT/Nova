@@ -1,7 +1,7 @@
 <ul style="list-style-type: none; margin: 0; padding: 0;" id="at_sort">
     {{for x in node_attributes:}}
         <li><span>
-            <div class="statTitle">{{=x.vocab.value}}</div>
+            <div class="statTitle" id="attrdel_{{=x.id}}">{{=x.vocab.value}}</div>
             <div class="statValue"> <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div></div></span>
         </li>
     {{pass}}

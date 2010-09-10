@@ -84,6 +84,15 @@ def in_place():
         else:
             raise HTTP(404, "Attribute not found")
 
+    elif field_request.startswith("attrdel_"):
+        try:
+            db((db.nodeAttr.id == int(field_request[8:])) & (db.nodeAttr.nodeId == node.id)).delete()
+            response.view = "htmlblocks/attributes.html"
+            attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
+            return dict(node_attributes=attr)
+        except:
+            raise HTTP(404, "Attribute not found %s"%field_request[8:])
+
     # Check if trying to deal with picture
     elif field_request == "picture":
         

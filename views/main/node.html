@@ -2,7 +2,50 @@
 
 {{if can_edit(node):}}
     <script type="text/javascript">
+    
+    function add_del_attr(){
+        //Add Delete Links
+        $("#at_sort .statTitle").each( function(){
+            $(this).hover( function () {
+                var del_image=document.createElement('img');
+                del_image.src= "/csi2/static/images/delete.png";
+                del_image.alt="Delete";
+                del_attr_link = document.createElement("a");
+                del_attr_link.setAttribute('href', '#');
+                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/edit/in_place/{{=node.url}}/' +
+                                                       this.id + '","at_sort"); return false;');
+                del_attr_link.setAttribute('class', 'del_attr_link');
+                del_attr_link.appendChild(del_image);
+                $(this).prepend(del_attr_link);
+            }, function(){
+                $(this).find(".del_attr_link").remove();
+            });
+        });
+    }
+    
+    function add_edit_link( node ){
+        $(node).hover( function () {
+            var edit_image=document.createElement('img');
+            edit_image.src= "/csi2/static/images/edit.png";
+            edit_image.alt="Edit";
+            var edit_link = document.createElement("a");
+            edit_link.setAttribute('href','#');
+            edit_link.setAttribute('onclick',
+                    'edit_request("/csi2/edit/in_place/{{=node.url}}/' + node.id + '","' + node.id + '"); return false'); 
+            edit_link.setAttribute('style', 'float:left;');
+            edit_link.appendChild(edit_image);
+            var span = document.createElement('span');
+            span.setAttribute('style','position: absolute; z-index: 10000;');
+            span.appendChild(edit_link)
+            $(node).prepend(span);
+        }, function () {
+            $(node).find("span:first").remove();
+        });
+    }
+    
     $(document).ready(function() {
+    
+        add_del_attr();
     
         //Add New Attribute Link
         new_attr_lnk = document.createElement("a");
@@ -12,28 +55,26 @@
             'edit_request("/csi2/edit/in_place/{{=node.url}}/new_attribute","at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
         new_attr_lnk.innerText = "Add Attribute";
-         $("#sideStats").prepend(new_attr_lnk);
-    
-        $(".db_editable").each( function(){
-            $(this).hover( function () {
-                var edit_image=document.createElement('img');
-                edit_image.src= "/csi2/static/images/edit.png";
-                edit_image.alt="Edit";
-                var edit_link = document.createElement("a");
-                edit_link.setAttribute('href','#');
-                edit_link.setAttribute('onclick',
-                        'edit_request("/csi2/edit/in_place/{{=node.url}}/' + this.id + '","'+this.id+'"); return false'); 
-                edit_link.setAttribute('style', 'float:left;');
-                edit_link.appendChild(edit_image);
-                var span = document.createElement('span');
-                span.setAttribute('style','position: absolute; z-index: 10000;');
-                span.appendChild(edit_link)
-                $(this).prepend(span);
-            }, function () {
-                $(this).find("span:first").remove();
-            });
-        });
+        $("#sideStats").prepend(new_attr_lnk);
+         
+        // Edit Links
+        $(".db_editable").each( function(){ add_edit_link( this ) });
+            
     });
+
+        function delete_request(url, div_loc){
+            if( confirm('Are you sure you want to delete this feild?') ){
+                $.ajax({
+                    url: url,
+                    success: function(r) {
+                        document.getElementById(div_loc).innerHTML=r;
+                        add_del_attr();
+                        $("#at_sort .db_editable").each( function(){ add_edit_link( this ) });
+                    },
+                    error: function() { alert("Failed to submit"); },
+                });
+            }
+        }
 
         function edit_request(url, div_loc){
  
@@ -87,6 +128,10 @@
                           success: function(r) {
                               document.getElementById(div_loc).innerHTML=r;
                               div.hide('slow');
+                                  if( div_loc == "at_sort" ){
+                                      add_del_attr();
+                                      $("#at_sort .db_editable").each( function(){ add_edit_link( this ) });
+                                  }
                               },
                           error: function() { alert("Failed to submit"); },
                        });

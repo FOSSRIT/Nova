@@ -19,6 +19,12 @@ a{
     margin: 5px;
 }
 
+a.del_attr_link{
+    float: left;
+    position: absolute;
+    z-index: 10000;
+}
+
 .pager{
     text-align: center;
     border-radius: 16px; /* half of button size + padding */
