@@ -2,6 +2,24 @@
 
 {{if can_edit(node):}}
     <script type="text/javascript">
+    function add_del_links(){
+        $("a.link_link").each( function(){
+            $(this).hover( function () {
+                var del_image=document.createElement('img');
+                del_image.src= "/csi2/static/images/delete.png";
+                del_image.alt="Delete";
+                del_attr_link = document.createElement("a");
+                del_attr_link.setAttribute('href', '#');
+                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/edit/in_place/{{=node.url}}/unlink_' +
+                                                       this.id + '","sidebar_container", true); return false;');
+                del_attr_link.setAttribute('class', 'del_attr_link');
+                del_attr_link.appendChild(del_image);
+                $(this).prepend(del_attr_link);
+            }, function(){
+                $(this).find(".del_attr_link").remove();
+            });
+        });
+    }
     
     function add_del_attr(){
         //Add Delete Links
@@ -13,7 +31,7 @@
                 del_attr_link = document.createElement("a");
                 del_attr_link.setAttribute('href', '#');
                 del_attr_link.setAttribute('onclick', 'delete_request("/csi2/edit/in_place/{{=node.url}}/' +
-                                                       this.id + '","at_sort"); return false;');
+                                                       this.id + '","at_sort", false); return false;');
                 del_attr_link.setAttribute('class', 'del_attr_link');
                 del_attr_link.appendChild(del_image);
                 $(this).prepend(del_attr_link);
@@ -46,6 +64,7 @@
     $(document).ready(function() {
     
         add_del_attr();
+        add_del_links();
     
         //Add New Attribute Link
         new_attr_lnk = document.createElement("a");
@@ -62,13 +81,17 @@
             
     });
 
-        function delete_request(url, div_loc){
+        function delete_request(url, div_loc, lnk){
             if( confirm('Are you sure you want to delete this feild?') ){
                 $.ajax({
                     url: url,
                     success: function(r) {
                         document.getElementById(div_loc).innerHTML=r;
-                        add_del_attr();
+                        if( lnk == false){
+                            add_del_attr();
+                        }else{
+                            add_del_links();
+                        }
                         $("#at_sort .db_editable").each( function(){ add_edit_link( this ) });
                     },
                     error: function() { alert("Failed to submit"); },

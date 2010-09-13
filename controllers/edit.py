@@ -120,7 +120,19 @@ def in_place():
         else:
             response.view = "generic.load"
             return dict(form=attribute_form)
+    elif field_request.startswith("unlink_"):
+        try:
+            #url will come in as unlink_link_NUMBER
+            delid = int(field_request[12:])
+        except:
+            raise HTTP(404, 'invalid link id')
+            
+        link = db( (db.linkTable.nodeId == delid) | (db.linkTable.linkId == delid) ).select().first()
+        link.delete_record()
+        response.view = "htmlblocks/links.html"
+        return dict(node_list=get_node_links(node),)
         
+    
     # Else we should be using a db node field            
     else:
         form = SQLFORM( db.node, node, fields=[field_request], labels={field_request:""},

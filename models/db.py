@@ -150,3 +150,34 @@ def can_edit(node):
 def is_linked(node1, node2):
     return db((db.linkTable.nodeId == node1) & (db.linkTable.linkId == node2)).count() or \
            db((db.linkTable.nodeId == node2) & (db.linkTable.linkId == node1)).count()
+
+def get_node_links(current_node):
+    ## Grab nodes from Linked Table ##
+    ######TODO: THIS IS VERY UGLY, combine these into one statement
+    ######      so we don't need to do the rows lookup and dive directly
+    ######      into the formating statement
+    
+
+    # This loops through both sides of the link table
+    # adding each item to cat_dict which is a dictionary
+    # of categories that hold lists of nodes
+    cat_dict = {}
+    
+    #grab rows where nodeId == node.id
+    for row in db(db.linkTable.nodeId==current_node).select():
+    
+        # if the category has not been seen, add it to the dict with an empty list
+        if not cat_dict.has_key(row.linkId.type.value):
+            cat_dict[row.linkId.type.value] = []
+        
+        cat_dict[row.linkId.type.value].append(row.linkId)
+
+    #grab rows where linkId == node.id
+    for row in db(db.linkTable.linkId == current_node).select():
+    
+        # if the category has not been seen, add it to the dict with an empty list
+        if not cat_dict.has_key(row.nodeId.type.value):
+             cat_dict[row.nodeId.type.value] = []
+        cat_dict[row.nodeId.type.value].append(row.nodeId)
+        
+    return cat_dict
