@@ -180,14 +180,18 @@
     
     <div id="picture" class="db_editable">
         {{if node.picFile:}}
-        <img src="{{=URL('default','download',args=node.picFile)}}" /></a>    
+        <img src="{{=URL('default','download',args=node.picFile)}}" />
         {{else:}}
-        <img src="{{=URL('static', 'images', args=['placeholder.png'])}}"/></a>
+            {{if can_edit(node):}}
+                <img src="{{=URL('static', 'images', args=['placeholder_edit.png'])}}" />
+            {{else:}}
+                <img src="{{=URL('static', 'images', args=['placeholder.png'])}}"/>
+            {{pass}}
         {{pass}}
     </div> <!-- end bigPic -->
      
     <div id="sideStats">{{include "htmlblocks/attributes.html"}}</div>
 
     <div id="descriptionBox">
-    <div id="description" class="db_editable">{{=MARKMIN(node.description)}}</div>
+    <div id="description" class="db_editable">{{if node.description:}}{{=MARKMIN(node.description)}}{{else:}}No Description Yet :({{pass}}</div>
     </div> <!-- end description -->

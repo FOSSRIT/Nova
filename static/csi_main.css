@@ -9,7 +9,7 @@ body {
 }
 
 a{
-    color: #fff;
+    
 }
 
 #add_attr_link{
@@ -194,6 +194,13 @@ float:left;
     padding-bottom:20px;
 }
 
+#header_user_bar {
+    background-color:#000;
+    border-bottom: #666;
+    color:#FFF;
+}
+
+
 #mainContent, #onlyMainContent {
     
     margin: 20px 290px 0 10px;
@@ -349,13 +356,12 @@ float:left;
 }
 
 .panelItemPic {
-    width:30px;
-    height:30px;
+    width:40px;
+    height:40px;
     background-color:#999;
     float:left;
-    margin-top:5px;
-    margin-right:10px;
-    margin-left:10px;
+    margin-left:5px;
+    
 
 }
 
@@ -423,6 +429,9 @@ float:left;
 
 .statValue {
     margin-bottom:20px;
+    padding-left:25px;
+    font-size: 80%;
+    
 }
 
 #viewbar {
