@@ -2,7 +2,7 @@
     {{for x in node_attributes:}}
         <li><span>
             <div class="statTitle" id="attrdel_{{=x.id}}">{{=x.vocab.value}}</div>
-            <div class="statValue"> <div id="attr_{{=x.id}}" class="db_editable">{{=MARKMIN(x.value)}}</div></div></span>
+            <div class="statValue"><div id="attr_{{=x.id}}" class="db_attributes">{{=MARKMIN(x.value)}}</div></div></span>
         </li>
     {{pass}}
 </ul>

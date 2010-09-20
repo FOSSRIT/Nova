@@ -30,7 +30,7 @@
                 del_image.alt="Delete";
                 del_attr_link = document.createElement("a");
                 del_attr_link.setAttribute('href', '#');
-                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/edit/in_place/{{=node.url}}/' +
+                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/ajaxedit/deleteattribute/{{=node.url}}/' +
                                                        this.id + '","at_sort", false); return false;');
                 del_attr_link.setAttribute('class', 'del_attr_link');
                 del_attr_link.appendChild(del_image);
@@ -41,15 +41,20 @@
         });
     }
     
-    function add_edit_link( node ){
+    function add_edit_link( node, url_function ){
         $(node).hover( function () {
             var edit_image=document.createElement('img');
             edit_image.src= "/csi2/static/images/edit.png";
             edit_image.alt="Edit";
             var edit_link = document.createElement("a");
             edit_link.setAttribute('href','#');
-            edit_link.setAttribute('onclick',
+            if( url_function == "" ){
+                edit_link.setAttribute('onclick',
                     'edit_request("/csi2/edit/in_place/{{=node.url}}/' + node.id + '","' + node.id + '"); return false'); 
+            }else{
+                edit_link.setAttribute('onclick',
+                    'edit_request("/csi2/ajaxedit/' + url_function + '/{{=node.url}}/' + node.id + '","' + node.id + '"); return false');
+            }
             edit_link.setAttribute('style', 'float:left;');
             edit_link.appendChild(edit_image);
             var span = document.createElement('span');
@@ -77,7 +82,8 @@
         $("#sideStats").prepend(new_attr_lnk);
          
         // Edit Links
-        $(".db_editable").each( function(){ add_edit_link( this ) });
+        $(".db_editable").each( function(){ add_edit_link( this, "" ) });
+        $(".db_attributes").each( function(){ add_edit_link( this, "editattribute" ) });
             
     });
 
@@ -92,7 +98,8 @@
                         }else{
                             add_del_links();
                         }
-                        $("#at_sort .db_editable").each( function(){ add_edit_link( this ) });
+                        //Add back the edit links
+                        $(".db_attributes").each( function(){ add_edit_link( this ) });
                     },
                     error: function() { alert("Failed to submit"); },
                 });

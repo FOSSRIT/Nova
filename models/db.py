@@ -40,7 +40,7 @@ db.define_table('node',
     Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name", comment="The Display Name of the Page"),
     Field('url', unique=True, label="URL ID",
                  comment="This is the ID of the page used in the url. Pick a simple and unique alphanumeric id for the node."),
-    Field('picFile','upload', label="Picture", comment="The display picture of the page."),
+    Field('picFile','upload', label="Picture", comment="The display picture of the page.", autodelete=True,),
     Field('description','text', label="Page Description", default="",
           comment="This is the text displayed on the page. You may use MARKMIN syntax in this section."),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
@@ -182,3 +182,21 @@ def get_node_links(current_node):
         cat_dict[row.nodeId.type.value].append(row.nodeId)
         
     return cat_dict
+
+
+### EDIT HELPERS
+def get_node_or_404( node_url ):
+    node = db(db.node.url == node_url).select().first()
+    
+    if not node:
+        raise HTTP(404, 'node not found')
+    else:
+        return node
+        
+def get_attribute_or_404( node, attribute_id ):
+    attr = db( (db.nodeAttr.id == attribute_id) & (db.nodeAttr.nodeId == node) ).select().first()
+    
+    if not attr:
+        raise HTTP(404, 'attribute not found')
+    else:
+        return attr
