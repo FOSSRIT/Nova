@@ -70,31 +70,8 @@ def in_place():
     except:
         raise HTTP(404, "Field Not Found")
         
-    # Check if requesting an attribute
-    if field_request.startswith("attr_"):
-        try:
-            attr = db(db.nodeAttr.id == int(field_request[5:])).select().first()
-        except:
-            raise HTTP(404, "Invalid attribute id requested")
-            
-        if attr:
-            form = SQLFORM( db.nodeAttr, attr, showid = False,
-                            comments=False, fields=['value','weight'], labels={'value':""},
-                            _action = URL('edit','in_place', args=[node.url,field_request]))
-        else:
-            raise HTTP(404, "Attribute not found")
-
-    elif field_request.startswith("attrdel_"):
-        try:
-            db((db.nodeAttr.id == int(field_request[8:])) & (db.nodeAttr.nodeId == node.id)).delete()
-            response.view = "htmlblocks/attributes.html"
-            attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
-            return dict(node_attributes=attr)
-        except:
-            raise HTTP(404, "Attribute not found %s"%field_request[8:])
-
     # Check if trying to deal with picture
-    elif field_request == "picture":
+    if field_request == "picture":
         
         form = SQLFORM( db.node, node, fields=['picFile'], labels={'picFile':""},
                     comments=False, formstyle="divs" , showid = False,
@@ -142,14 +119,8 @@ def in_place():
         
     response.view = "generic.load"
     if form.accepts(request.vars):
-        # Get updated node information
-        if field_request.startswith("attr_"):
-            attr = db(db.nodeAttr.id == int(request.args[1][5:])).select().first()
-            
-            return dict(t=MARKMIN(attr.value))
-        else:
-            node = db(db.node.url == request.args[0]).select().first()
-            return dict(node=MARKMIN(node.get(request.args[1])))
+        node = db(db.node.url == request.args[0]).select().first()
+        return dict(node=MARKMIN(node.get(request.args[1])))
     else:
         return dict(form=form)
     
