@@ -195,7 +195,7 @@ float:left;
 }
 
 #header_user_bar {
-    background-color:#000;
+    background-color:#999;
     border-bottom: #666;
     color:#FFF;
 }
@@ -208,11 +208,14 @@ float:left;
     padding-right: 0px;
     padding-bottom: 20px;
     padding-left: 0px;
-    background:#666;
+    
     width:auto;
     float: none;
     text-align: left;
     height:auto;
+    
+    border-right:1px solid black;
+    border-left:1px solid black;
     
 }
 
@@ -224,7 +227,7 @@ float:left;
     width:90%;
     height:40px;
     margin:0 auto;
-    background:#666;
+    
     margin-top:10px;
     font-size:24px;
     clear:both;
@@ -289,7 +292,7 @@ float:left;
 .nodeTopLinks a  {
     margin-left:20px;
     position: relative;
-    margin-top:-42px;
+    margin-top:-22px;
     margin-bottom:10px;
     display:block;
     width:150px;
@@ -308,7 +311,7 @@ float:left;
 
 #nodeTitle {
     font-size:24px;
-    color:#FFF;
+    color:#000;
     margin-left:20px;
     clear:left;
 }
@@ -415,7 +418,7 @@ float:left;
 
 .statTitle, .statValue {
     width:200px;
-    height:20px;
+    
     margin: 0 auto;
     margin-top:10px;
 }
