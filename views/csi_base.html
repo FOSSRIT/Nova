@@ -9,7 +9,6 @@
 </head>
 
 <body>
-<div class="flash">{{=response.flash or ''}}</div>
 <div id="overlay"></div>
 <div id="header_user_bar">
 {{if auth.is_logged_in():}}
@@ -48,7 +47,7 @@ Search: <input type="text" name="query">
             (Our informational website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>) </p>
             {{pass}}
         </div> <!-- end header -->
-
+        
         <div id="navigation">
         <ul>
         {{for men_link in response.menu:}}
@@ -56,6 +55,8 @@ Search: <input type="text" name="query">
         {{pass}}
         </ul>
         </div> <!--end navigation -->
+        
+        <div class="flash">{{=response.flash or ''}}</div>
 
         {{include}}
 

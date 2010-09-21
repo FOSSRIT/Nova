@@ -2,6 +2,64 @@
 
 {{if can_edit(node):}}
     <script type="text/javascript">
+    var url_segment = '{{=node.url}}';
+    function reflash_edit_mode(){
+        exit_edit_mode();
+        enter_edit_mode(url_segment);
+    }
+    
+    function exit_edit_mode(){
+        $("#mode_a").show();
+        $("div.flash").hide();
+        $(".db_editable, .db_attributes").each(
+            function(){
+                $(this).css( "border", "");
+                $(this).unbind('mouseenter').unbind('mouseleave');
+            }
+        );
+        $("#add_attr_link").remove()
+    }
+    function enter_edit_mode(){
+        $("#mode_a").hide();
+        $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;'>Done Editing</a>");
+        $("div.flash").show();
+        
+        //Add New Attribute Link
+        new_attr_lnk = document.createElement("a");
+       
+        new_attr_lnk.setAttribute('href','#');
+        new_attr_lnk.setAttribute('onclick',
+            'edit_request("/csi2/ajaxedit/addattribute/" + url_segment,"at_sort"); return false;');
+        new_attr_lnk.setAttribute('id', 'add_attr_link');
+        new_attr_lnk.innerText = "Add Section";
+        $("#sideStats").prepend(new_attr_lnk);
+        
+        //
+        $(".db_editable, .db_attributes").each(
+            function(){
+                $(this).css( "border", "1px dashed #FFB3B3");
+                $(this).bind( 'mouseenter',
+                    function(){
+                        $(this).css( "border", "1px solid #FFB3B3");
+                        $(this).bind( 'click', function(){
+                            if(this.className == 'db_attributes'){
+                                edit_request("/csi2/ajaxedit/editattribute/" + url_segment + "/" + this.id, this.id);
+                            }else{
+                                alert('Coming Soon');
+                            }
+                            return false;
+                        });
+                    });
+                $(this).bind( 'mouseleave',
+                    function(){
+                        $(this).css( "border", "1px dashed #FFB3B3");
+                        $(this).unbind( 'click' );
+                    }
+                );
+            }
+        );
+    }
+    
     function add_del_links(){
         $("a.link_link").each( function(){
             $(this).hover( function () {
@@ -70,20 +128,9 @@
     
         add_del_attr();
         add_del_links();
-    
-        //Add New Attribute Link
-        new_attr_lnk = document.createElement("a");
-       
-        new_attr_lnk.setAttribute('href','#');
-        new_attr_lnk.setAttribute('onclick',
-            'edit_request("/csi2/edit/in_place/{{=node.url}}/new_attribute","at_sort"); return false;');
-        new_attr_lnk.setAttribute('id', 'add_attr_link');
-        new_attr_lnk.innerText = "Add Section";
-        $("#sideStats").prepend(new_attr_lnk);
          
         // Edit Links
         $(".db_editable").each( function(){ add_edit_link( this, "" ) });
-        $(".db_attributes").each( function(){ add_edit_link( this, "editattribute" ) });
             
     });
 
@@ -177,6 +224,7 @@
     <div class="nodeTopLinks">
         <a href="{{=URL('edit','node', args=[node.url])}}">Edit This Page</a>
         <a href="{{=URL('edit','link', args=node.url)}}"  >Link This Page</a>
+        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a">Edit Mode</a>
     </div>
 {{pass}}
 <br />

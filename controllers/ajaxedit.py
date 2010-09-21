@@ -56,3 +56,23 @@ def deleteattribute():
     response.view = "htmlblocks/attributes.html"
     attr_list = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
     return dict(node_attributes=attr_list)
+
+@auth.requires_login()
+def addattribute():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node's Attributes")
+        
+    attribute_form = SQLFORM(db.nodeAttr,_action = URL('ajaxedit','addattribute', args=[node.url]))
+    attribute_form.vars.nodeId = node
+        
+    if attribute_form.accepts(request.vars):
+        response.view = "htmlblocks/attributes.html"
+        attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
+        return dict(node_attributes=attr)
+    else:
+        response.view = "generic.load"
+        return dict(form=attribute_form)

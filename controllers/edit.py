@@ -86,17 +86,6 @@ def in_place():
             response.view = "htmlblocks/edit_pict_form.html"
             return dict(node=node, form=form)
     
-    elif field_request == "new_attribute":
-        attribute_form = SQLFORM(db.nodeAttr,_action = URL('edit','in_place', args=[node.url,'new_attribute']))
-        attribute_form.vars.nodeId = node
-        
-        if attribute_form.accepts(request.vars):
-            response.view = "htmlblocks/attributes.html"
-            attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
-            return dict(node_attributes=attr)
-        else:
-            response.view = "generic.load"
-            return dict(form=attribute_form)
     elif field_request.startswith("unlink_"):
         try:
             #url will come in as unlink_link_NUMBER
