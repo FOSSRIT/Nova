@@ -1,8 +1,11 @@
 {{extend 'csi_view.html'}}
 
+<h2>This Form is being Phased out</h2>
+Please try using the in place editing first.
+
 <div id="editform">
     {{if node:}}
-        <a href="{{=URL('main','node', args=node.url)}}" >Back to Node</a>.
+        <a href="{{=URL('main','node', args=node.url)}}" >Back to Page</a>.
     {{pass}}
     <fieldset>
         <legend>Edit Page</legend>
@@ -69,22 +72,22 @@
                 }
             </script>
             {{else:}}
-            Please create node first before trying to upload a picture.
+            Please create the page first before trying to upload a picture.
             {{pass}}
         </div>
     </fieldset>
 
     {{if attribute_form:}}
     <fieldset>
-        <legend>Add Attribute</legend>
+        <legend>Add Section</legend>
         {{=attribute_form}}
-        <a href="{{=URL('attribute_vocab', args=node.url)}}">Add New Attribute Vocab</a>.
+        <a href="{{=URL('attribute_vocab', args=node.url)}}">Add New Section Title</a>.
     </fieldset>
     {{pass}}
     
   {{if attr:}}
  <fieldset>
- <legend>Current Attributes</legend>
+ <legend>Current Sections</legend>
 
  <form method="post" action="{{=URL(args=node.url)}}">
  <br />Leave blank to remove<br /><br />

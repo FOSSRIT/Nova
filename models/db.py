@@ -37,9 +37,9 @@ db.define_table('vocab', Field('value', 'string', unique=True))
 # Define Compound Tables
 db.define_table('node',
     Field('type', db.nodeType, writable=False, readable=False),
-    Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name", comment="The Display Name of the Page"),
-    Field('url', unique=True, label="URL ID",
-                 comment="This is the ID of the page used in the url. Pick a simple and unique alphanumeric id for the node."),
+    Field('name', 'string', requires=IS_NOT_EMPTY(), label="Name", comment="The Name of the Page"),
+    Field('url', unique=True, label="String ID",
+                 comment="This is the ID of the page used in the url. Pick a simple and unique alphanumeric id for the page (Numbers, Letters, and Underscores are allowed)."),
     Field('picFile','upload', label="Picture", comment="The display picture of the page.", autodelete=True,),
     Field('description','text', label="Page Description", default="",
           comment="This is the text displayed on the page. You may use MARKMIN syntax in this section."),
@@ -52,9 +52,9 @@ db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
 db.define_table('nodeAttr',
     Field('nodeId', db.node, writable=False, readable=False),
-    Field('vocab', db.vocab, label="Attribute Name", comment="Select the type of attribute you would like to use."),
-    Field('value', 'text', label="Attribute Text", comment="This is where you write the content of the attribute."),
-    Field('weight', 'integer', default=0, label="Display Weight", comment="This is the priority of the attribute, lighter values are higher on the page."),
+    Field('vocab', db.vocab, label="Section Title", comment="Select the type of information you wish to display."),
+    Field('value', 'text', label="Section Text", comment="This is where you write the content of the attribute."),
+    Field('weight', 'integer', default=0, label="Display Weight", readable=False, writable=False),
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))

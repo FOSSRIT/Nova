@@ -78,7 +78,7 @@
         new_attr_lnk.setAttribute('onclick',
             'edit_request("/csi2/edit/in_place/{{=node.url}}/new_attribute","at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
-        new_attr_lnk.innerText = "Add Attribute";
+        new_attr_lnk.innerText = "Add Section";
         $("#sideStats").prepend(new_attr_lnk);
          
         // Edit Links
@@ -175,8 +175,8 @@
 
 {{if can_edit(node):}}
     <div class="nodeTopLinks">
-        <a href="{{=URL('edit','node', args=[node.url])}}">Edit Node</a>
-        <a href="{{=URL('edit','link', args=node.url)}}"  >Link Node</a>
+        <a href="{{=URL('edit','node', args=[node.url])}}">Edit This Page</a>
+        <a href="{{=URL('edit','link', args=node.url)}}"  >Link This Page</a>
     </div>
 {{pass}}
 <br />
