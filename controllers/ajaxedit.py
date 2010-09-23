@@ -18,8 +18,8 @@ def editattribute():
     attr = get_attribute_or_404(node, request.args(1)[5:] )
         
     form = SQLFORM( db.nodeAttr, attr, showid = False,
-                    comments=False, fields=['value','weight'],
-                    labels={'value':""},
+                    comments=False, fields=['value'],#,'weight'],
+                    labels={'value':""}, submit_button="Save",
                     _action = URL('ajaxedit','editattribute',
                     args=[node.url,request.args[1]]))
 
@@ -66,7 +66,7 @@ def addattribute():
     if not can_edit(node):
         raise HTTP(403, "Not allowed to edit this node's Attributes")
         
-    attribute_form = SQLFORM(db.nodeAttr,_action = URL('ajaxedit','addattribute', args=[node.url]))
+    attribute_form = SQLFORM(db.nodeAttr,submit_button="Save",_action = URL('ajaxedit','addattribute', args=[node.url]))
     attribute_form.vars.nodeId = node
         
     if attribute_form.accepts(request.vars):
@@ -76,3 +76,47 @@ def addattribute():
     else:
         response.view = "generic.load"
         return dict(form=attribute_form)
+
+@auth.requires_login()
+def editnode():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
+                    comments=False, formstyle="divs" , showid = False, submit_button="Save",
+                    _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
+                    
+    response.view = "generic.load"
+    if form.accepts(request.vars):
+        # Grab the new version of the node to populate data
+        node = db(db.node.url == request.args(0)).select().first()
+        return dict(node=MARKMIN(node.get(request.args(1))))
+    else:
+        return dict(form=form)
+        
+@auth.requires_login()
+def editphoto():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+        
+    form = SQLFORM( db.node, node, fields=['picFile'], labels={'picFile':""},
+                    comments=False, formstyle="divs" , showid = False,
+                    _action = URL('ajaxedit','editphoto', args=[node.url]) )
+                    
+    if form.accepts(request.vars):
+        response.view = "generic.load"
+        node = db(db.node.url == request.args(0)).select().first()
+        return dict(t=IMG(_src=URL('default','download',args=node.picFile)))
+            
+    else:
+        response.view = "htmlblocks/edit_pict_form.html"
+        return dict(node=node, form=form)

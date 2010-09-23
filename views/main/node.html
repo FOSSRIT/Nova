@@ -11,15 +11,26 @@
     function exit_edit_mode(){
         $("#mode_a").show();
         $("div.flash").hide();
-        $(".db_editable, .db_attributes").each(
+        $(".db_editable, .db_attributes, .db_photo_editable").each(
             function(){
                 $(this).css( "border", "");
                 $(this).unbind('mouseenter').unbind('mouseleave');
             }
         );
         $("#add_attr_link").remove()
+        
+        //TEMPORARY
+         $("a.link_link, #at_sort .statTitle").each( function(){
+             $(this).unbind('mouseenter').unbind('mouseleave');     
+         });
+         //TEMPORARY
     }
     function enter_edit_mode(){
+        //TEMPORARY
+        add_del_attr();
+        add_del_links();
+        //END TEMPORARY
+    
         $("#mode_a").hide();
         $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;'>Done Editing</a>");
         $("div.flash").show();
@@ -31,11 +42,11 @@
         new_attr_lnk.setAttribute('onclick',
             'edit_request("/csi2/ajaxedit/addattribute/" + url_segment,"at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
-        new_attr_lnk.innerText = "Add Section";
-        $("#sideStats").prepend(new_attr_lnk);
+        new_attr_lnk.innerText = "Add More";
+        $("#sideStats").append(new_attr_lnk);
         
         //
-        $(".db_editable, .db_attributes").each(
+        $(".db_editable, .db_attributes, .db_photo_editable").each(
             function(){
                 $(this).css( "border", "1px dashed #FFB3B3");
                 $(this).bind( 'mouseenter',
@@ -44,8 +55,10 @@
                         $(this).bind( 'click', function(){
                             if(this.className == 'db_attributes'){
                                 edit_request("/csi2/ajaxedit/editattribute/" + url_segment + "/" + this.id, this.id);
+                            }else if(this.className == 'db_photo_editable'){
+                                edit_request("/csi2/ajaxedit/editphoto/" + url_segment, this.id);
                             }else{
-                                alert('Coming Soon');
+                                edit_request("/csi2/ajaxedit/editnode/" + url_segment + "/" + this.id, this.id);
                             }
                             return false;
                         });
@@ -98,125 +111,87 @@
             });
         });
     }
-    
-    function add_edit_link( node, url_function ){
-        $(node).hover( function () {
-            var edit_image=document.createElement('img');
-            edit_image.src= "/csi2/static/images/edit.png";
-            edit_image.alt="Edit";
-            var edit_link = document.createElement("a");
-            edit_link.setAttribute('href','#');
-            if( url_function == "" ){
-                edit_link.setAttribute('onclick',
-                    'edit_request("/csi2/edit/in_place/{{=node.url}}/' + node.id + '","' + node.id + '"); return false'); 
-            }else{
-                edit_link.setAttribute('onclick',
-                    'edit_request("/csi2/ajaxedit/' + url_function + '/{{=node.url}}/' + node.id + '","' + node.id + '"); return false');
-            }
-            edit_link.setAttribute('style', 'float:left;');
-            edit_link.appendChild(edit_image);
-            var span = document.createElement('span');
-            span.setAttribute('style','position: absolute; z-index: 10000;');
-            span.appendChild(edit_link)
-            $(node).prepend(span);
-        }, function () {
-            $(node).find("span:first").remove();
-        });
-    }
-    
-    $(document).ready(function() {
-    
-        add_del_attr();
-        add_del_links();
-         
-        // Edit Links
-        $(".db_editable").each( function(){ add_edit_link( this, "" ) });
-            
-    });
 
-        function delete_request(url, div_loc, lnk){
-            if( confirm('Are you sure you want to delete this feild?') ){
-                $.ajax({
-                    url: url,
-                    success: function(r) {
-                        document.getElementById(div_loc).innerHTML=r;
-                        if( lnk == false){
-                            add_del_attr();
-                        }else{
-                            add_del_links();
-                        }
-                        //Add back the edit links
-                        $(".db_attributes").each( function(){ add_edit_link( this ) });
-                    },
-                    error: function() { alert("Failed to submit"); },
-                });
-            }
-        }
-
-        function edit_request(url, div_loc){
- 
-            var div = $("#overlay");
-            div.html('Loading...');
-            div.show('slow');
-            
-            close_link = document.createElement("a");
-            close_link.setAttribute('href','#');
-            close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
-            close_link.innerText="Close";
-            
-            div.load(url, function() {
-                div.append(close_link);
-                var form = $("#overlay form");
-
-                // Test if we must fake it instead
-                var fakeit = false;
-                $("#overlay form :input").each( function() {
-                    if( this.type == "file" ){
-                        fakeit = true;
+    function delete_request(url, div_loc, lnk){
+        if( confirm('Are you sure you want to delete this feild?') ){
+            $.ajax({
+                url: url,
+                success: function(r) {
+                    document.getElementById(div_loc).innerHTML=r;
+                    if( lnk == false){
+                        add_del_attr();
+                    }else{
+                        add_del_links();
                     }
-                });
-                
-                if( fakeit == true ){
-                    f_frame = document.createElement("iframe");
-                    f_frame.name = "__Fake_IT_Frame";
-                    f_frame.id = "__Fake_IT_Frame";
-                    f_frame.style.display = "none";
-                    f_frame.onload = function(){
-                        if( this.contentWindow.document.body.innerHTML != "" ){
-                            document.getElementById(div_loc).innerHTML=this.contentWindow.document.body.innerHTML;
-                            div.hide('slow');
-                        }
-                        };
-                    div.append(f_frame);
-
-                    form.attr('target',"__Fake_IT_Frame");
-                }else{
-                    form.submit(function() {
-                        var inputs = [];
-                        $("#overlay form :input").each( function() {
-                            inputs.push(this.name + '=' + escape(this.value));
-                        });
-                      
-                      $.ajax({
-                          data: inputs.join('&'),
-                          type: 'post',
-                          enctype: 'multipart/form-data',
-                          url: $("#overlay form").attr('action'),
-                          success: function(r) {
-                              document.getElementById(div_loc).innerHTML=r;
-                              div.hide('slow');
-                                  if( div_loc == "at_sort" ){
-                                      add_del_attr();
-                                      $("#at_sort .db_editable").each( function(){ add_edit_link( this ) });
-                                  }
-                              },
-                          error: function() { alert("Failed to submit"); },
-                       });
-                      return false;
-                    });
-                }
+                    //Add back the edit links
+                    $(".db_attributes").each( function(){ add_edit_link( this ) });
+                },
+                error: function() { alert("Failed to submit"); },
             });
         }
+    }
+
+    function edit_request(url, div_loc){
+
+        var div = $("#overlay");
+        div.html('Loading...');
+        div.show('slow');
+        
+        close_link = document.createElement("a");
+        close_link.setAttribute('href','#');
+        close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
+        close_link.innerText="Close";
+        
+        div.load(url, function() {
+            div.append(close_link);
+            var form = $("#overlay form");
+
+            // Test if we must fake it instead
+            var fakeit = false;
+            $("#overlay form :input").each( function() {
+                if( this.type == "file" ){
+                    fakeit = true;
+                }
+            });
+            
+            if( fakeit == true ){
+                f_frame = document.createElement("iframe");
+                f_frame.name = "__Fake_IT_Frame";
+                f_frame.id = "__Fake_IT_Frame";
+                f_frame.style.display = "none";
+                f_frame.onload = function(){
+                    if( this.contentWindow.document.body.innerHTML != "" ){
+                        document.getElementById(div_loc).innerHTML=this.contentWindow.document.body.innerHTML;
+                        div.hide('slow');
+                    }
+                    };
+                div.append(f_frame);
+
+                form.attr('target',"__Fake_IT_Frame");
+            }else{
+                form.submit(function() {
+                    var inputs = [];
+                    $("#overlay form :input").each( function() {
+                        inputs.push(this.name + '=' + escape(this.value));
+                    });
+                  
+                  $.ajax({
+                      data: inputs.join('&'),
+                      type: 'post',
+                      enctype: 'multipart/form-data',
+                      url: $("#overlay form").attr('action'),
+                      success: function(r) {
+                          document.getElementById(div_loc).innerHTML=r;
+                          div.hide('slow');
+                          reflash_edit_mode();
+                      },
+                      error: function() { alert("Failed to submit"); },
+                   });
+                  return false;
+                });
+            }
+        });
+    }
     </script>
 {{pass}}
 
@@ -233,7 +208,7 @@
         <div id="name" class="db_editable">{{=node.name}}</div>
     </div> <!-- end nodeTitle -->
     
-    <div id="picture" class="db_editable">
+    <div id="picture" class="db_photo_editable">
         {{if node.picFile:}}
         <img src="{{=URL('default','download',args=node.picFile)}}" />
         {{else:}}
