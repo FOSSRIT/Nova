@@ -52,6 +52,11 @@ def deleteattribute():
     attr = get_attribute_or_404(node, request.args(1)[8:] )
     db(db.nodeAttr.id==attr).delete()
     
+    # A small Cleanup Routine, check if attriubte is
+    # still in use, if not delete the attribute
+    if db(db.nodeAttr.vocab==attr.vocab).count() == 0:
+        db(db.vocab.id==attr.vocab.id).delete()
+    
     # Return html attribute list
     response.view = "htmlblocks/attributes.html"
     attr_list = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
