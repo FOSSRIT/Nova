@@ -85,7 +85,7 @@ def addattribute():
         attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
         return dict(node_attributes=attr)
     else:
-        attrlist = db(db.vocab.id>0).select()
+        attrlist = db(db.vocab.id>0).select(orderby=db.vocab.value)
     
         response.view = "htmlblocks/attribute_inplace_form.html"
         return dict(form=attribute_form,attrlist=attrlist)
