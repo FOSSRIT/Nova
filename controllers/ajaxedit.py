@@ -68,14 +68,22 @@ def addattribute():
         
     attribute_form = SQLFORM(db.nodeAttr,submit_button="Save",_action = URL('ajaxedit','addattribute', args=[node.url]))
     attribute_form.vars.nodeId = node
-        
+    
+    # If they entered custom text, it will have vocab as '' and the auto complete will not be empty
+    if( request.vars.vocab == '' and request.vars._autocomplete_value_aux != '' ):
+        # TODO Check content is valid
+        request.vars.vocab = db.vocab.insert(value=request.vars._autocomplete_value_aux)
+        attribute_form.vars.vocab = request.vars.vocab
+            
     if attribute_form.accepts(request.vars):
         response.view = "htmlblocks/attributes.html"
         attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
         return dict(node_attributes=attr)
     else:
-        response.view = "generic.load"
-        return dict(form=attribute_form)
+        attrlist = db(db.vocab.id>0).select()
+    
+        response.view = "htmlblocks/attribute_inplace_form.html"
+        return dict(form=attribute_form,attrlist=attrlist)
 
 @auth.requires_login()
 def editnode():

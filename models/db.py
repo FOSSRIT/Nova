@@ -61,6 +61,7 @@ db.define_table('nodeAttr',
     
 db.nodeAttr.vocab.requires = IS_IN_DB(db,db.vocab.id,'%(value)s')
 db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
+db.nodeAttr.vocab.widget = SQLFORM.widgets.autocomplete(request, db.vocab.value, id_field=db.vocab.id, limitby=(0,10), min_length=1)
 
 db.define_table('linkTable',
     Field('nodeId', db.node),

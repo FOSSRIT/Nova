@@ -10,7 +10,8 @@
     
     function exit_edit_mode(){
         $("#mode_a").show();
-        $("div.flash").hide();
+        $("div.flash").slideUp();
+        
         $(".db_editable, .db_attributes, .db_photo_editable").each(
             function(){
                 $(this).css( "border", "");
@@ -33,7 +34,7 @@
     
         $("#mode_a").hide();
         $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;'>Done Editing</a>");
-        $("div.flash").show();
+        $("div.flash").slideDown('slow');
         
         //Add New Attribute Link
         new_attr_lnk = document.createElement("a");
@@ -197,9 +198,8 @@
 
 {{if can_edit(node):}}
     <div class="nodeTopLinks">
-        <a href="{{=URL('edit','node', args=[node.url])}}">Edit This Page</a>
-        <a href="{{=URL('edit','link', args=node.url)}}"  >Link This Page</a>
         <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a">Edit Mode</a>
+        <a href="{{=URL('edit','link', args=node.url)}}"  >Link This Page</a>
     </div>
 {{pass}}
 <br />
