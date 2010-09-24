@@ -10,17 +10,18 @@
 
 <body>
 <div id="overlay"></div>
+<div id="header_bar">
 <div id="header_user_bar">
 {{if auth.is_logged_in():}}
 Hello
-<a href="{{=URL('main', 'nodeid', args=auth.user.home_node)}}">{{=get_home_node().name}}</a>. |
+<a href="{{=URL('main', 'nodeid', args=auth.user.home_node)}}">{{=get_home_node().name}}</a> |
 <a href="{{=URL('default','user',args='logout')}}">Logout</a>
 
 {{else:}}
-<a href="{{=URL('default','user',args='login',vars={'_next':request.url})}}" style="font-weight: bold; color: #FFF;">Login</a> &lt;------ CLICK HERE TO LOG IN
+<a href="{{=URL('default','user',args='login',vars={'_next':request.url})}}" >Login/Register</a>
 {{pass}}
 
-<form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;">
+<form method="get" action="{{=URL('main','search')}}" style="display:inline;" >
 Search: <input type="text" name="query">
 <input type="submit" value="Search">
 </form>
@@ -34,6 +35,7 @@ Search: <input type="text" name="query">
 {{pass}}
 <br style="clear:both;" />
 </div>
+</div> <!-- end header_bar -->
     <div id="container">
         <div id="header">
             {{if auth.is_logged_in():}}

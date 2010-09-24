@@ -50,7 +50,7 @@ a.del_attr_link{
     color: #fff;
     background-color:#333;
     
-    width:500px;    
+    width: 500px;
     min-height:200px;
     border:1px solid #666;
     
@@ -148,6 +148,11 @@ a.del_attr_link{
     clear:right;
 }
 
+.flash {
+    
+    font-size:26px;
+}
+
 #footer {
     margin: 0; /* zeroing the margins of the first element in the footer will avoid the possibility of margin collapse - a space between divs */
     padding: 10px 0; /* padding on this element will create space, just as the the margin would have, without the margin collapse issue */
@@ -195,9 +200,17 @@ float:left;
 }
 
 #header_user_bar {
-    background-color:#999;
+    
     border-bottom: #666;
     color:#FFF;
+    width:900px;
+    margin:0 auto;
+    text-align:right;
+   
+}
+
+#header_bar {
+    background-color:#999;
 }
 
 
@@ -232,7 +245,7 @@ float:left;
     font-size:24px;
     clear:both;
     vertical-align:middle;
-    font-family:tahoma
+    font-family: Arial, sans-serif;
 }
 
 #navigation ul {
