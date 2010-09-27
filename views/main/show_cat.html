@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+
+<script>
+$(document).ready(function(){
+    $.getJSON( 'http://beta.innovation.rit.edu/csi2/main/category_ajax/People',
+        function(data){
+          var i = 0;
+          $.each(data.rows, function(key,val){
+              if( i < 9 ){
+                  $("#TARGET").append( "<p><img src='/csi2/default/download/"+val.picFile+"'>" + val.name + "</p>" );
+              }else{
+                  $("#TARGET").append( "<p>" + val.name + "</p>" );
+              }
+              i++;
+          });
+        }
+    );
+});
+</script>
+
+<div id="TARGET"></div>
+
+{{=BEAUTIFY(response._vars)}}

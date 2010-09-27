@@ -27,6 +27,15 @@ def search():
 
     return dict(master=master)
 
+def show_cat():
+    return dict()
+    
+def category_ajax():
+    typeId = db(db.nodeType.value==request.args(0)).select().first()
+    rows = db(db.node.type == typeId).select(orderby=~db.node.modified)
+    response.view = "generic.json"
+    return dict(rows=rows)
+
 def category():
     """
     Shows a category of nodes
