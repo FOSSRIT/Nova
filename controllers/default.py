@@ -45,6 +45,10 @@ def download():
     allows downloading of uploaded files
     http://..../[app]/default/download/[filename]
     """
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = "max-age=3600"
     return response.download(request,db)
 
 
