@@ -17,6 +17,7 @@ a{
     display: block;
     text-align: right;
     margin: 5px;
+    background-color:#FF0;
 }
 
 a.del_attr_link{
@@ -47,8 +48,8 @@ a.del_attr_link{
     z-index:10000;
     
     /* styling */
-    color: #fff;
-    background-color:#333;
+    color: #000;
+    background-color:#FFF;
     
     width: 650px;
     min-height:200px;
@@ -112,7 +113,7 @@ a.del_attr_link{
     height: auto;
     margin: 0 auto;
     padding:0px;
-    margin-bottom:20px;
+    margin-bottom:100px;
 }
 
 #description {
@@ -160,8 +161,16 @@ a.del_attr_link{
     min-height: 200px;
     clear:both;
     background:#333
-    margin-top:20px;
+    margin-top:200px;
     background-color:#999;
+    position:relative;
+    border-top: 5px solid black;
+}
+
+#footerpic {
+    position:absolute;
+    bottom:208px;
+    
 }
 
 fieldset {
@@ -213,6 +222,9 @@ float:left;
     background-color:#999;
 }
 
+#_jpg_uploader {
+    background-color:#FFF;
+}
 
 #mainContent, #onlyMainContent {
     

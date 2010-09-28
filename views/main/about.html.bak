@@ -1,3 +1,0 @@
-{{extend 'csi_view.html'}}
-<h1>This is the main/about.html template</h1>
-{{=BEAUTIFY(response._vars)}}

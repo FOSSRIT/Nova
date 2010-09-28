@@ -15,6 +15,7 @@
         $(".db_editable, .db_attributes, .db_photo_editable").each(
             function(){
                 $(this).css( "border", "");
+                $(this).css( "background-color", "");
                 $(this).unbind('mouseenter').unbind('mouseleave');
             }
         );
@@ -33,7 +34,7 @@
         //END TEMPORARY
     
         $("#mode_a").hide();
-        $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;'>Done Editing</a>");
+        $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#FF0;'>Click to leave Edit mode</a>");
         $("div.flash").slideDown('slow');
         
         //Add New Attribute Link
@@ -49,10 +50,11 @@
         //
         $(".db_editable, .db_attributes, .db_photo_editable").each(
             function(){
-                $(this).css( "border", "1px dashed #FFB3B3");
+                $(this).css( "border", "6px dashed #FF0");
+                $(this).css( "background-color", "#FF0");
                 $(this).bind( 'mouseenter',
                     function(){
-                        $(this).css( "border", "1px solid #FFB3B3");
+                        $(this).css( "border", "6px solid #F60");
                         $(this).bind( 'click', function(){
                             if(this.className == 'db_attributes'){
                                 edit_request("/csi2/ajaxedit/editattribute/" + url_segment + "/" + this.id, this.id);
@@ -66,7 +68,7 @@
                     });
                 $(this).bind( 'mouseleave',
                     function(){
-                        $(this).css( "border", "1px dashed #FFB3B3");
+                        $(this).css( "border", "6px dashed #FF0");
                         $(this).unbind( 'click' );
                     }
                 );
