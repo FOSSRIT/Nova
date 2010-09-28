@@ -3,7 +3,11 @@
     
     <!-- Configure a few settings -->
     <script language="JavaScript">
-        webcam.set_api_url( '{{=URL('edit','take_picture', args=node.url, vars={"do_upload":True})}}' );
+        {{if node:}}
+            webcam.set_api_url( '{{=URL('edit','take_picture', args=node.url, vars={"do_upload":True})}}' );
+        {{else:}}
+            webcam.set_api_url( '{{=URL('edit','take_picture', vars={"do_upload":True})}}' );
+        {{pass}}
         webcam.set_swf_url( '{{=URL('static','jpegcam/webcam.swf')}}')
         webcam.set_shutter_sound( true, '{{=URL('static','jpegcam/shutter.mp3')}}')
         webcam.set_quality( 75 ); // JPEG quality (1 - 100)

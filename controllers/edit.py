@@ -30,27 +30,31 @@ def link_me():
 def take_picture():
     node = None
     if len(request.args):
-        try:
-            node = db(db.node.url == request.args[0]).select().first()
-        except:
-            raise HTTP(404, 'node not found')
+        node = db(db.node.url == request.args(0)).select().first()
 
-    if node:
-        # Make sure they are not trying to edit someone's node
-        # TODO ADD PERMISSION SYSTEM HERE
-        if node.type.public == False and node.id != auth.user.home_node:
-            raise HTTP(403, "Not Authorized to edit this node")
+        if node:
+            # Make sure they are not trying to edit someone's node
+            # TODO ADD PERMISSION SYSTEM HERE
+            if node.type.public == False and node.id != auth.user.home_node:
+                raise HTTP(403, "Not Authorized to edit this node")
+                
+            if request.vars.do_upload:
+                node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
             
-        if request.vars.do_upload:
-            node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
-        
-            response.view = "generic.load"
-            return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
-
+                response.view = "generic.load"
+                return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
+    
+            return dict(node=node)
+        else:
+            raise HTTP(404, 'node not found')
     else:
-        raise HTTP(404, 'node not found')
-
-    return dict(node=node)
+        #t = open("/tmp/test", "w")
+        #t.write( request.body.read() )
+        
+        #session.tmp_node_file = t.name
+        #response.view = "generic.load"
+        #return "File Uploaded"
+        raise HTTP(404, '')
 
 @auth.requires_login()
 def in_place():
@@ -176,9 +180,16 @@ def node():
         if form.accepts(request.vars):
             if form.vars.delete_this_record:
                 session.flash = 'Node Deleted'
+                
                 redirect(URL('main','index'))
             else:
                 session.flash = 'form accepted'
+                
+                #if session.tmp_node_file:
+                #    node = db(db.node.url == form.vars.url).select().first()
+                #    node.update_record(picFile=db.node.picFile.store(open(session.tmp_node_file, 'r').read(),'%s.jpg'% node.id))
+                #    del session.tmp_node_file
+                
                 redirect(URL('edit','node',args=form.vars.url))
         elif form.errors:
             response.flash = 'form has errors'
