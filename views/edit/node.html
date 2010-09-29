@@ -21,7 +21,8 @@
   });
 });
 </script>
-        <br>Got a webcam? <a href="#" id="slick-toggle">Click here to take take a snapshot</a><br>
+<div id="webcam_holder">
+        <br><br>Got a webcam? <a href="#" id="slick-toggle">Click here to take take a snapshot!</a><br>
         
         <div id="upload_results" style="background-color:#eee;"></div>
         <div id="slickbox">
@@ -41,8 +42,12 @@
                     document.getElementById('upload_results').innerHTML = "<b>Upload Complete</b>";
                     $('#slickbox').toggle(4000);
                 }
+                
+                
+                $("#webcam_holder").insertAfter("#node_picFile");
             </script>
       
+        </div>
         </div>
     </fieldset>
 
