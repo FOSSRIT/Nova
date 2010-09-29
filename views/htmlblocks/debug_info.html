@@ -1,0 +1,82 @@
+<style>
+#web2py {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 5%;
+    width: 35%;
+    background-color: #111111;
+    color: white;
+    overflow: none;
+    z-index: 100;
+}
+
+#web2py h1, h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 90%;
+}
+
+#web2py #w2p_environ {
+    position: absolute;
+    top: 50px;
+    left: 5px;
+    height: 100%;
+    width: 100%;
+    background-color: #111111;
+    color: white;
+}
+
+#web2py .data {
+    display: none;
+    overflow: auto;
+    position: relative;
+    height: 600px;
+    width: 100%;
+}
+</style>
+<div id="web2py">
+        <h1>Web2py Environment</h1>
+        <div id="w2p_environ">
+            <div id="w2p_request">
+                <h2>Request</h2>
+                <div class="data">
+                    {{=BEAUTIFY(request)}}
+                </div>
+            </div>
+
+            <div id="w2p_response">
+                <h2>Response</h2>
+                <div class="data">
+                    {{=BEAUTIFY(response)}}
+                </div>
+            </div>
+
+            <div id="w2p_session">
+                <h2>Session</h2>
+                <div class="data">
+                    {{=BEAUTIFY(session)}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+           web2py_height = "5"
+            jQuery("#web2py #w2p_environ").hide();
+            jQuery("#web2py .data").hide();
+            jQuery("#web2py h2").bind("click", function() {
+                jQuery("#web2py .data").slideUp();
+                jQuery(this).next().slideDown();
+            });
+            jQuery("#web2py h1").bind("click", function() {
+                if (web2py_height == "100"){
+                    web2py_height = "5"
+                }else{
+                    web2py_height = "100"
+                }
+                jQuery("#web2py").css({
+                    "height": web2py_height + "%",
+                });
+                jQuery("#web2py #w2p_environ").slideToggle();
+            });
+    </script>

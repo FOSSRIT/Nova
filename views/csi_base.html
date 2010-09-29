@@ -9,6 +9,7 @@
 </head>
 
 <body>
+{{if auth.user and auth.user.id == 1:}}{{include "htmlblocks/debug_info.html"}}{{pass}}
 <div id="overlay"></div>
 <div id="header_bar">
 <div id="header_user_bar">
