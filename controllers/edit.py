@@ -48,13 +48,12 @@ def take_picture():
         else:
             raise HTTP(404, 'node not found')
     else:
-        #t = open("/tmp/test", "w")
-        #t.write( request.body.read() )
+        t = open("/tmp/web2py_upload__%s" % auth.user.username, "w")
+        t.write( request.body.read() )
         
-        #session.tmp_node_file = t.name
-        #response.view = "generic.load"
-        #return "File Uploaded"
-        raise HTTP(404, '')
+        session.tmp_node_file = t.name
+        response.view = "generic.load"
+        return "File Uploaded"
 
 @auth.requires_login()
 def in_place():
@@ -185,11 +184,6 @@ def node():
             else:
                 session.flash = 'form accepted'
                 
-                #if session.tmp_node_file:
-                #    node = db(db.node.url == form.vars.url).select().first()
-                #    node.update_record(picFile=db.node.picFile.store(open(session.tmp_node_file, 'r').read(),'%s.jpg'% node.id))
-                #    del session.tmp_node_file
-                
                 redirect(URL('edit','node',args=form.vars.url))
         elif form.errors:
             response.flash = 'form has errors'
@@ -211,6 +205,15 @@ def node():
              
             if form.accepts(request.vars):
                 session.flash = 'form accepted'
+                if session.tmp_node_file:
+                    #TODO: CHECK IF UPLOADED INSTEAD
+                    node = db(db.node.url == form.vars.url).select().first()
+                    f = open(session.tmp_node_file, 'r')
+                    node.update_record(picFile=db.node.picFile.store(f,'%s.jpg'% node.id))
+                    f.close()
+                    del session.tmp_node_file
+                    os.unlink(f.name)
+                    
                 redirect(URL('edit','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'
