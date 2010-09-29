@@ -214,7 +214,7 @@ def node():
                     del session.tmp_node_file
                     os.unlink(f.name)
                     
-                redirect(URL('edit','node',args=form.vars.url))
+                redirect(URL('main','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'
 

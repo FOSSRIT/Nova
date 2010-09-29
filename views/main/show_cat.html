@@ -1,23 +1,51 @@
-{{extend 'layout.html'}}
+{{extend 'csi_view.html'}}
 
 <script>
+var nodes = Array();
+
+function display_nodes(filter){
+    $("#TARGET").empty()
+    var i = 0;
+    $.each(nodes, function(key,val){
+        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1){
+        if( i < 9 ){
+            var html_add = "\
+                <div class='nodeBox'>\
+                    <a href='/csi2/main/node/" + val.url + "'>\
+                        <div class='nodePic'>\
+                            <img src='" +
+                                ((val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                            "' width='160px'></div>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
+        
+            $("#TARGET").append( html_add );
+        }else{
+            var html_add = "\
+                <div class='nodeListing'>\
+                    <a href='/csi2/main/node/" + val.url + "'>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
+            $("#TARGET").append( html_add );
+        }
+        i++;
+        }
+    });
+}
+
 $(document).ready(function(){
     $.getJSON( 'http://beta.innovation.rit.edu/csi2/main/category_ajax/People',
         function(data){
-          var i = 0;
-          $.each(data.rows, function(key,val){
-              if( i < 9 ){
-                  $("#TARGET").append( "<p><img src='/csi2/default/download/"+val.picFile+"'>" + val.name + "</p>" );
-              }else{
-                  $("#TARGET").append( "<p>" + val.name + "</p>" );
-              }
-              i++;
-          });
+            nodes = data.rows;
+            display_nodes()
         }
     );
 });
 </script>
 
+<form>
+    <input type="text" name="search_filter" onkeyup="display_nodes(this.value);">
+</form>
 <div id="TARGET"></div>
-
-{{=BEAUTIFY(response._vars)}}
