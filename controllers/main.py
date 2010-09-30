@@ -33,8 +33,16 @@ def show_cat():
 def category_ajax():
     typeId = db(db.nodeType.value==request.args(0)).select().first()
     rows = db(db.node.type == typeId).select(orderby=~db.node.modified)
+    rows_array = []
+    for row in rows:
+        row_dict = {}
+        row_dict['name'] = row.name
+        row_dict['url'] = row.url
+        row_dict['picFile'] = row.picFile
+        #row_dict['description'] = row.description
+        rows_array.append(row_dict)
     response.view = "generic.json"
-    return dict(rows=rows)
+    return dict(rows=rows_array)
 
 def category():
     """

@@ -1,4 +1,7 @@
 {{extend 'csi_view.html'}}
+<script>
+var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/People';
+</script>
 
 <script>
 var nodes = Array();
@@ -7,7 +10,7 @@ function display_nodes(filter){
     $("#TARGET").empty()
     var i = 0;
     $.each(nodes, function(key,val){
-        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1){
+        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
         if( i < 9 ){
             var html_add = "\
                 <div class='nodeBox'>\
@@ -36,16 +39,22 @@ function display_nodes(filter){
 }
 
 $(document).ready(function(){
-    $.getJSON( 'http://beta.innovation.rit.edu/csi2/main/category_ajax/People',
+    $.getJSON( autoload_request_url,
         function(data){
             nodes = data.rows;
-            display_nodes()
+            display_nodes();
         }
     );
 });
 </script>
 
+<div id="viewbar"><h1 style="float:left; margin:20px; color:#FFF;">People</h1></div>
+<div style="float: right;">
 <form>
-    <input type="text" name="search_filter" onkeyup="display_nodes(this.value);">
+    Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
 </form>
-<div id="TARGET"></div>
+</div>
+<div id="TARGET" style="clear:both;">
+Loading Content...
+</div>
+<br style="clear:both;" />
