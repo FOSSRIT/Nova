@@ -9,50 +9,60 @@
          {{pass}}
         <br />
     </div> <!-- end viewbar -->
+<script>
+var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/{{=category.value}}';
+</script>
+<script>
+var nodes = Array();
 
-
-{{if len(data) == 0:}}
-No Nodes Here.
-{{if auth.is_logged_in() and category.public:}}<a href="{{=URL('edit', 'node', vars={'type':category.value})}}">Add your own!</a>{{pass}}
-{{pass}}
-
-
-{{for x in data:}}
-    <div class="nodeBox">
-        <div class="nodePic">
-            <a href="{{=URL('main','node',args=[x.url])}}" >
-            
-            {{if x.picFile:}}
-                
-                <img src="{{=URL('default','download',args=x.picFile)}}" width="160px" height="160px" /></a>
-            
-            {{else:}}
-            
-                <img src="{{=URL('static', 'images', args=['placeholder.png'])}}"  width="160px" height="160px"/></a>
-                
-            {{pass}}
+function display_nodes(filter){
+    $("#TARGET").empty()
+    var i = 0;
+    $.each(nodes, function(key,val){
+        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
+        if( i < 9 ){
+            var html_add = "\
+                <div class='nodeBox'>\
+                    <a href='/csi2/main/node/" + val.url + "'>\
+                        <div class='nodePic'>\
+                            <img src='" +
+                                ((val.picFile=="")?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                            "' width='160px'></div>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
         
-        </div> <!-- end nodePic -->
-        
-        <div class="nodeName">
-            
-            <a href="{{=URL('main', 'node', args=[x.url])}}">{{=x.name}}</a>
-            
-        </div> <!-- end nodeName -->
-        
-        
-    </div> <!-- end nodeBox -->
-    
-    {{pass}}
+            $("#TARGET").append( html_add );
+        }else{
+            var html_add = "\
+                <div class='nodeListing'>\
+                    <a href='/csi2/main/node/" + val.url + "'>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
+            $("#TARGET").append( html_add );
+        }
+        i++;
+        }
+    });
+}
 
-{{if total_pages > 1:}}
-<div class="pager">
-  {{for pg in range(1,total_pages+1):}}
-    {{if pg != page_num:}}
-      <a href="{{=URL('main','category',args=[page,pg])}}">{{=pg}}</a>
-    {{else:}}
-      {{=pg}}
-    {{pass}}
-  {{pass}}
+$(document).ready(function(){
+    $.getJSON( autoload_request_url,
+        function(data){
+            nodes = data.rows;
+            display_nodes();
+        }
+    );
+});
+</script>
+
+<div style="text-align: center;">
+<form>
+    Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
+</form>
 </div>
-{{pass}}
+<div id="TARGET" style="clear:both;">
+Loading Content...
+</div>
+<br style="clear:both;" />
