@@ -254,7 +254,7 @@ def link():
     nodeSet = []
     linkedSet = []
     
-    for row in db(db.node.id != node.id).select():
+    for row in db(db.node.id != node.id).select(orderby=db.node.name.lower()):
         # Filter out existing links
         if is_linked(node, row):
             linkedSet.append(row)

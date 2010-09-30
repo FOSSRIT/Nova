@@ -11,7 +11,7 @@
 
 <select name="linkNode">
   {{for x in nodeSet:}}
-    <option value="{{=x.id}}">{{=x.type.value}}: {{=x.name}}</option>
+    <option value="{{=x.id}}">{{=x.name}} ({{=x.type.value}})</option>
   {{pass}}
 </select><br />
 <input type="submit" value="Link" />
