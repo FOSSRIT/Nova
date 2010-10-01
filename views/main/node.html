@@ -34,7 +34,7 @@
         //END TEMPORARY
     
         $("#mode_a").hide();
-        $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#FF0;'>Click to leave Edit mode</a>");
+        $("div.flash").html("Page is in Edit Mode. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#FF0;'>Click to leave Edit mode</a>.<br>Hint: Most edit fields support <a href='http://beta.innovation.rit.edu/examples/static/markmin.html' target='_NEW'>Markmin Syntax</a>.");
         $("div.flash").slideDown('slow');
         
         //Add New Attribute Link
@@ -197,7 +197,7 @@
 {{if can_edit(node):}}
     <div class="nodeTopLinks">
         <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a">Edit Mode</a>
-        <a href="{{=URL('edit','link', args=node.url)}}"  >Link This Page</a>
+        <a href="{{=URL('edit','link', args=node.url)}}"  >Link/Unlink This Page</a>
     </div>
 {{pass}}
 <br />
