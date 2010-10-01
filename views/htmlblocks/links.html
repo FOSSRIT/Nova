@@ -17,11 +17,12 @@
                   <img src="{{=URL('default','download', args=node_item.picFile)}}" class="panelItemPic"  />
                   {{else:}}
                   <img src="{{=URL('static','images', args='placeholder.png')}}" class="panelItemPic"  />
-                  {{pass}}</a>
+                  {{pass}}
                                         
               <div class="panelItemName">
-                  <a href="{{=node_item['url']}}">{{=node_item['name']}}</a> 
+                  {{=node_item['name']}}
               </div>
+              </a>
           </li>
           {{pass}}
        </ul>
