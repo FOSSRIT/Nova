@@ -132,8 +132,13 @@ if auth.is_logged_in():
 
     # Make sure the user has a home node if not create one
     if not auth.user.home_node:
+        url = auth.user.username
+        
+        while db(db.node.url == url).count():
+            url = "%s_" % url
+            
         id = db.node.insert(
-             type=1, name=auth.user.username, url=auth.user.username,
+             type=1, name=auth.user.username, url=url,
              description="%s is a lovely person, but they have not had a chance to customize this." % str(auth.user.username) )
         db(auth_table.id == auth.user.id).update(home_node = id)
         auth.user.home_node = id
