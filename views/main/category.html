@@ -26,7 +26,7 @@ function display_nodes(filter){
                     <a href='/csi2/main/node/" + val.url + "'>\
                         <div class='nodePic'>\
                             <img src='" +
-                                ((val.picFile=="")?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                                ((val.picFile==""||val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
                             "' width='160px'></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
@@ -58,7 +58,7 @@ $(document).ready(function(){
 </script>
 
 <div style="text-align: center;">
-<form>
+<form onsubmit="return false;">
     Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
 </form>
 </div>
