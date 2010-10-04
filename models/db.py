@@ -15,17 +15,35 @@ else:                                         # else use a normal relational dat
 ##
 ## Get auth defined, tables will be added later on
 #########################################################################
-from gluon.tools import *
+from gluon.tools import Auth
 from gluon.contrib.login_methods.ldap_auth import ldap_auth
 
 auth = Auth(globals(),db)                      # authentication/authorization
 
+auth.messages.label_remember_me = "Stay Logged In (for 30 days)"
+
 # RIT Ldap
 auth.settings.login_methods.append(ldap_auth(server='ldap.rit.edu', base_dn='ou=people,dc=rit,dc=edu'))
 
+## Prepare Email System
+from gluon.tools import Mail
+mail=Mail()
+mail.settings.server = 'smtp.gmail.com:587'
+mail.settings.tls = True
+mail.settings.sender = 'fossrit@gmail.com'
+mail.settings.login = 'fossrit:1CvTS3sIwT4hNz9Fh805TIDCc'
+
+auth.settings.mailer = mail
+auth.settings.registration_requires_verification = True
+auth.settings.registration_requires_approval = False
+
+auth.messages.verify_email = 'Click on the link http://' + \
+    request.env.http_host + \
+    URL(r=request,c='default',f='user',args=['verify_email']) + \
+    '/%(key)s to verify your email'
+    
 # DISABLE EXTRA FEATURES
-# 
-auth.settings.actions_disabled=['register','request_reset_password','retrieve_username','verify_email','profile']
+auth.settings.actions_disabled=['profile']
 #########################################################################
 ## DEFINE DATABASE
 #########################################################################
@@ -119,6 +137,7 @@ auth.define_tables(username=True)                           # creates all needed
 
 ## - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)
 ## - crud actions
+from gluon.tools import Crud, Service
 crud = Crud(globals(),db)                      # for CRUD helpers using auth
 service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc, amfrpc
 crud.settings.auth = None                      # =auth to enforce authorization on crud
