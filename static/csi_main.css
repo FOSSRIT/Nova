@@ -200,7 +200,7 @@ float:left;
 
 
 #header {
-    background: #9999DD;
+    background: #ABF;
     width: 100%;
     height:50px;
     margin: 10 auto;
@@ -368,7 +368,7 @@ float:left;
 .panelItem {
     list-style-image:none;
     color:#666;
-    background-color:#999;
+    background-color:#DDD;
     display:block;
     width:230px;
     height:auto;
@@ -426,7 +426,7 @@ float:left;
 .sidebar_block {
     width:100%;
     margin:0 auto;
-    background-color:#666;
+    background-color:#ABF;
     margin-bottom: 10px;
     padding-bottom:10px;
     padding-top: 3px;
@@ -445,7 +445,7 @@ float:left;
     height:auto;
     margin-right:20px;
     margin-top:20px;
-    background-color:#999;
+    background-color:#ABF;
     margin-bottom:20px;
     
     

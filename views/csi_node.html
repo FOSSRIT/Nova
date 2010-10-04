@@ -1,13 +1,15 @@
 {{extend 'csi_base.html'}}
         <div id="sidebar">
-            <span style="float:left;"><h3>Links</h3></span>
+            <span style="float:left;"><h3>Links</h3>
+            <h6 class="nodeTopLinks"><a href="{{=URL('edit','link', args=node.url)}}" >Add or remove links</a></h6>
+            </span>
             
             <div class="nodeTopLinks">
                 {{if auth.is_logged_in() and node.id != auth.user.home_node:}}
                     {{if is_linked(node, get_home_node()):}}
-                        <a href="{{=URL('edit','link_me',args=['remove', node.url])}}">Unlink Me</a>
+                        <a href="{{=URL('edit','link_me',args=['remove', node.url])}}">Unlike (unlink me)</a>
                     {{else:}}
-                        <a href="{{=URL('edit','link_me',args=['add', node.url])}}">Link Me</a>
+                        <a href="{{=URL('edit','link_me',args=['add', node.url])}}">Like (link me)</a>
                     {{pass}}
                 {{pass}}
             </div>

@@ -2,7 +2,9 @@
 from math import ceil
 MAX_PER_PAGE = 12
 
-def index(): return dict()
+def index(): 
+    redirect(URL('main','node', args="csi"))
+    return dict()
 def about(): return dict()    
 
 def search():
