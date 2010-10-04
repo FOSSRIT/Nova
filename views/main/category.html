@@ -10,7 +10,11 @@
         <br />
     </div> <!-- end viewbar -->
 <script>
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+var autoload_request_url = 'https://beta.innovation.rit.edu/csi2/main/category_ajax/{{=category.value}}';
+{{else:}}
 var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/{{=category.value}}';
+{{pass}}
 </script>
 <script>
 var nodes = Array();
