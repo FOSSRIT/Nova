@@ -2,6 +2,17 @@
 <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
 
 {{if request.args(0) == 'login':}}
-<p>You may use your RIT DCE Login.</p>
-{{pass}}
+
+<div style="margin-left: 100px; float: left;">
+<div align=center><b>Returning or RIT User</b></div>
 {{=form}}
+</div>
+<div style="float: right; width: 250px; margin-right: 100px;">
+<div align=center><b>New User?</b></div>
+If you are an RIT Student or Factually, you may use your RIT DCE login.<br><br>
+Non-RIT Members need to register. <a href="{{=URL(args='register')}}">Click here to Register</a>.
+</div>
+<br style="clear: both;">
+{{else:}}
+{{=form}}
+{{pass}}

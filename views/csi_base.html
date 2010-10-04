@@ -30,9 +30,6 @@ Search: <input type="text" name="query">
 {{if auth.has_membership("Site Admin"):}}
 <br>Admin Links: <a href="https://beta.innovation.rit.edu/admin">Admin</a> |
   <a href="https://beta.innovation.rit.edu/csi2/appadmin/index">DB Admin</a>
-  {{if db(db.auth_user.in_beta==False).count():}}
-      <b><a href="https://beta.innovation.rit.edu/csi2/appadmin/select/db?query=db.auth_user.in_beta%3D%3DFalse">USERS ARE WAITING FOR BETA ACCESS</a></b>
-  {{pass}}
 {{pass}}
 <br style="clear:both;" />
 </div>
