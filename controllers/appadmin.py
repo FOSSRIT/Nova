@@ -27,7 +27,8 @@ except:
 
 if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme\
      in ['https', 'HTTPS']:
-    session.secure()
+    #session.secure()
+    pass
 elif (remote_addr not in hosts) and (remote_addr != "127.0.0.1"):
     raise HTTP(200, T('appadmin is disabled because insecure channel'))
 if not gluon.fileutils.check_credentials(request):
