@@ -193,12 +193,18 @@
             }
         });
     }
+    
+    $(document).ready( function(){
+    $("#container").bind("dblclick", function(){
+        reflash_edit_mode();
+        });
+    });
     </script>
 {{pass}}
 
 {{if can_edit(node):}}
     <div class="nodeTopLinks">
-        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a">Edit this page!</a>
+        <a href="#" style="background-color:#FF0"  onclick="enter_edit_mode(); return false;" id="mode_a">Edit this page!</a>
     </div>
 {{pass}}
 <br />
