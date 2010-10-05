@@ -133,3 +133,19 @@ def editphoto():
     else:
         response.view = "htmlblocks/edit_pict_form.html"
         return dict(node=node, form=form)
+
+@auth.requires_login()
+def link():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    node2 = get_node_or_404( request.args(1) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    if is_linked(node, node2):
+        raise HTTP(405, "Already Linked")
+        
+    db.linkTable.insert(nodeId=node, linkId=node2)
+    return HTTP(200, "Ok, link made")

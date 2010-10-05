@@ -242,10 +242,6 @@ def link():
         raise HTTP(404, "Node Not Found")
         
     # Apply Changes if link requested
-    if request.vars.linkNode:
-        db.linkTable.insert(nodeId=node, linkId=int(request.vars.linkNode), date=datetime.now())
-        response.flash = "Link Added"
-        
     if request.vars.unlinkNode:
         db((db.linkTable.nodeId == node) & (db.linkTable.linkId == int(request.vars.unlinkNode))).delete()
         db((db.linkTable.nodeId == int(request.vars.unlinkNode)) & (db.linkTable.linkId==node)).delete() 
@@ -262,7 +258,8 @@ def link():
         else:
             nodeSet.append(row)
 
-    return dict( node=node, nodeSet=nodeSet, linkedSet=linkedSet )
+    cats = db(db.nodeType.value!=None).select()
+    return dict( node=node, nodeSet=nodeSet, linkedSet=linkedSet, categories=cats )
 
 def category():
     return dict(message="hello from edit.py")

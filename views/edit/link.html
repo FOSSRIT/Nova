@@ -1,23 +1,6 @@
 {{extend 'csi_view.html'}}
 
-{{if node:}}
-<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.
-{{pass}}
-
-<fieldset>
-<legend>Add Links</legend>
-<form method="post" action="{{=URL(args=node.url)}}">
-<label for="linkNode">Link to:</label>
-
-<select name="linkNode">
-  {{for x in nodeSet:}}
-    <option value="{{=x.id}}">{{=x.name}} ({{=x.type.value}})</option>
-  {{pass}}
-</select><br />
-<input type="submit" value="Link" />
-
-</form>
-</fieldset>
+{{if node:}}<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.{{pass}}
 
 <fieldset>
 <legend>Remove Links</legend>
@@ -31,3 +14,77 @@
  <input type="submit" value="Remove Link" />
  </form>
 </fieldset>
+
+<h2>Add Links</h2>
+<script>
+function set_request_url( cat ){
+    {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+        var autoload_request_url = 'https://beta.innovation.rit.edu/csi2/main/category_ajax/' + cat;
+    {{else:}}
+        var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/' + cat;
+    {{pass}}
+    
+    $.getJSON( autoload_request_url,
+        function(data){
+            nodes = data.rows;
+            display_nodes();
+        }
+    );
+    }
+    
+function create_link( page ){
+    var url = "/csi2/ajaxedit/link/{{=node.url}}/" + page
+    $.ajax({
+        url: url,
+        success: function(){
+            alert("Linked");
+        },
+        error: function(){
+            alert("unable to link");
+        }
+        });
+}
+var nodes = Array();
+
+function display_nodes(filter){
+    $("#TARGET").empty()
+    var i = 0;
+    $.each(nodes, function(key,val){
+        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
+        if( i < 9 ){
+            var html_add = "\
+                <div class='nodeBox'>\
+                    <a href='#' onclick='create_link(\"" + val.url + "\")'>\
+                        <div class='nodePic'>\
+                            <img src='" +                                ((val.picFile==""||val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                            "' width='160px'></div>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
+        
+            $("#TARGET").append( html_add );
+        }else{
+            var html_add = "\
+                <div class='nodeListing'>\
+                    <a href='/csi2/main/node/" + val.url + "'>\
+                        <div class='nodeName'>" + val.name + "</div>\
+                    </a>\
+                 </div>";
+            $("#TARGET").append( html_add );
+        }
+        i++;
+        }
+    });
+}
+</script>
+{{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a>{{pass}}
+
+<div style="text-align: center;">
+<form onsubmit="return false;">
+    Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
+</form>
+</div>
+<div id="TARGET" style="clear:both;">
+Waiting for category selection
+</div>
+<br style="clear:both;" />
