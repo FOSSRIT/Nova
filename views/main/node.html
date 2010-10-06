@@ -20,13 +20,23 @@
 </script>
 {{if can_edit(node):}}
     <script type="text/javascript">
+    var in_edit_mode = false;
     var url_segment = '{{=node.url}}';
     function reflash_edit_mode(){
         exit_edit_mode();
         enter_edit_mode(url_segment);
     }
     
+    function toggle_edit_mode(){
+        if( in_edit_mode == true ){
+            exit_edit_mode();
+        }else{
+            enter_edit_mode();
+        }
+    }
+    
     function exit_edit_mode(){
+        in_edit_mode = false;
         $("#mode_a").show();
         $("div.flash").slideUp();
         
@@ -49,6 +59,7 @@
          enable_lightBox();
     }
     function enter_edit_mode(){
+        in_edit_mode = true;
         //TEMPORARY
         add_del_attr();
         add_del_links();
@@ -218,7 +229,7 @@
     
     $(document).ready( function(){
     $("#container").bind("dblclick", function(){
-        reflash_edit_mode();
+        toggle_edit_mode();
         });
     });
     </script>
