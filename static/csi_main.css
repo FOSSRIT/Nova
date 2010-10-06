@@ -73,7 +73,7 @@ a.del_attr_link{
     font-size:24px;
     margin-right:50px;
     margin-top:20px;
-    background-color: #666;
+    background-color: #FF0;
     border-radius: 16px; /* half of button size + padding */
     text-align: center;
     padding-top:10px;
@@ -127,7 +127,7 @@ a.del_attr_link{
     border-radius: 16px; /* half of button size + padding */
     width:90%;
     height:auto;
-    background-color:#999;
+    background-color:#EBEBEB;
     
     margin: 0 auto;
     margin-top:20px;
@@ -262,13 +262,43 @@ float:left;
 
 #navigation ul {
     list-style: none;
-    list-style-type: none;
     margin:5px;
 }
 
 #navigation li {
     display: inline;
+    position:relative;
 }
+
+#navigation li:hover ul li ul {
+    visibility:visible;
+}
+
+#navigation ul li ul {
+    position:absolute;
+    margin-top:10px;
+    display:block;
+    visibility:visible;
+    background-color:#000;
+    width:100%;
+    height:auto;
+    padding:0px;
+    visibility:hidden;
+    z-index:100;
+}
+
+#navigation ul li ul a {
+    color:#FFF;
+}
+#navigation:ul li ul li {
+    position:absolute;
+    background-color:#FFF;
+    bottom:0px;
+}
+
+
+
+
 
 #navigation li:before, #navigation li:after{
     content: "|";
@@ -381,10 +411,6 @@ float:left;
     
     
     
-}
-
-.panelItem:hover {
-    background-color:#333;
 }
 
 .panelItem a {

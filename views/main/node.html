@@ -1,5 +1,15 @@
 {{extend 'csi_node.html'}}
-
+<script>
+    $(function() {
+        $('#picture a').lightBox(
+            {"imageBtnClose":"/csi2/static/images/lightbox_btn_close.gif",
+             "imageBlank":"/csi2/static/images/lightbox_ico_blank.gif ",
+             "imageLoading":"/csi2/static/images/lightbox_ico_loading.gif",
+            }
+         );
+    });
+</script>
+</script>
 {{if can_edit(node):}}
     <script type="text/javascript">
     var url_segment = '{{=node.url}}';
@@ -215,7 +225,8 @@
     
     <div id="picture" class="db_photo_editable">
         {{if node.picFile:}}
-        <img src="{{=URL('default','download',args=node.picFile)}}" />
+        <a href="{{=URL('default','download',args=node.picFile)}}">
+        <img src="{{=URL('default','download',args=node.picFile)}}" /></a>
         {{else:}}
             {{if can_edit(node):}}
                 <img src="{{=URL('static', 'images', args=['placeholder_edit.gif'])}}" />

@@ -4,7 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>{{=response.title or request.application}}</title>
 <link href="{{=URL(request.application,'static','csi_main.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{=URL(request.application,'static','jquery.lightbox-0.5.css')}}" rel="stylesheet" type="text/css" media="screen" />
 {{include 'web2py_ajax.html'}}
+<script src="{{=URL(request.application,'static','jquery.lightbox-0.5.pack.js')}}" type="text/javascript"></script>
 {{include 'htmlblocks/google_analytics.html'}}
 </head>
 
