@@ -144,7 +144,7 @@ def node():
     if node:
         # Make sure they are not trying to edit someone's node
         # TODO ADD PERMISSION SYSTEM HERE
-        if node.type.public == False and node.id != auth.user.home_node:
+        if not can_edit(node):
             raise HTTP(403, "Not Authorized to edit this node")
     
         # Update all the attributes if they exist
