@@ -1,12 +1,20 @@
 {{extend 'csi_node.html'}}
 <script>
-    $(function() {
+    function enable_lightBox(){
         $('#picture a').lightBox(
             {"imageBtnClose":"/csi2/static/images/lightbox_btn_close.gif",
              "imageBlank":"/csi2/static/images/lightbox_ico_blank.gif ",
              "imageLoading":"/csi2/static/images/lightbox_ico_loading.gif",
             }
          );
+    }
+    
+    function disable_lightBox(){
+        $('#picture a').unbind()
+    }
+    
+    $(function() {
+        enable_lightBox();
     });
 </script>
 </script>
@@ -37,12 +45,16 @@
              $(this).unbind('mouseenter').unbind('mouseleave');     
          });
          //TEMPORARY
+         
+         enable_lightBox();
     }
     function enter_edit_mode(){
         //TEMPORARY
         add_del_attr();
         add_del_links();
         //END TEMPORARY
+    
+        disable_lightBox();
     
         $("#mode_a").hide();
         $("div.flash").html("You can edit anything in yellow. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#F99;'>Finish Editing</a>.<br>Hint: Most edit fields support <a href='http://beta.innovation.rit.edu/examples/static/markmin.html' target='_NEW'>Markmin Syntax</a>.");
