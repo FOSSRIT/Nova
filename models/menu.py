@@ -8,11 +8,14 @@ response.title = "Center for Student Innovation"
 ##########################################
 
 response.menu = [
-    [T('Home'),  URL(request.application,'main','index')],
-    [T('About'),  URL(request.application,'main','about')]
+    [T('Home'),  URL(request.application,'main','index'), []],
+    [T('About'),  URL(request.application,'main','about'), [
+       [T('Test'),  URL(request.application,'main','index'), []],
+    ]],
+    [T('Blog'), "http://innovation.rit.edu", []],
     ]
     
 #Dynamically add types to main menu
 menu_types = db(db.nodeType.value!=None).select()
 for mnu_item in menu_types:
-    response.menu.append([mnu_item.value, URL(request.application, 'main', 'category/%s' % mnu_item.value )])
+    response.menu.append([mnu_item.value, URL(request.application, 'main', 'category/%s' % mnu_item.value ),[]])
