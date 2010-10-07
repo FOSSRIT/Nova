@@ -35,6 +35,7 @@ def category_ajax():
     rows_array = []
     for row in rows:
         row_dict = {}
+        row_dict['id'] = row.id
         row_dict['name'] = row.name
         row_dict['url'] = row.url
         row_dict['picFile'] = row.picFile

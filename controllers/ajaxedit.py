@@ -149,3 +149,19 @@ def link():
         
     db.linkTable.insert(nodeId=node, linkId=node2)
     return HTTP(200, "Ok, link made")
+
+
+@auth.requires_login()
+def unlink():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    node2 = get_node_or_404( request.args(1) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    db((db.linkTable.nodeId == node) & (db.linkTable.linkId == node2)).delete()
+    db((db.linkTable.nodeId == node2) & (db.linkTable.linkId==node)).delete() 
+        
+    return HTTP(200, "Ok, link removed")

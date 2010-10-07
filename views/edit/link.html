@@ -2,21 +2,13 @@
 
 {{if node:}}<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.{{pass}}
 
-<fieldset>
-<legend>Remove Links</legend>
-<form method="post" action="{{=URL(args=node.url)}}">
-<label for="unlinkNode">Remove Link:</label>
-<select name="unlinkNode">
- {{for x in linkedSet:}}
-    <option value="{{=x.id}}">{{=x.type.value}}: {{=x.name}}</option>
- {{pass}}
- </select><br />
- <input type="submit" value="Remove Link" />
- </form>
-</fieldset>
-
-<h2>Add Links</h2>
+<h2>Add or Remove Links</h2>
 <script>
+var links = [
+{{for link in linkedSet:}}
+    {{=link.id}},
+{{pass}}
+    ];
 function set_request_url( cat ){
     {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
         var autoload_request_url = 'https://beta.innovation.rit.edu/csi2/main/category_ajax/' + cat;
@@ -32,12 +24,31 @@ function set_request_url( cat ){
     );
     }
     
-function create_link( page ){
+function delete_link( page, id ){
+    var url = "/csi2/ajaxedit/unlink/{{=node.url}}/" + page
+    $.ajax({
+        url: url,
+        success: function(){
+            var idx = links.indexOf(id); // Find the index
+            if(idx!=-1) links.splice(idx, 1);
+            display_nodes(filter_txt);
+            $("div.flash").html("Node Unlinked");
+            $("div.flash").slideDown('slow').delay(3000).slideUp('slow');
+        },
+        error: function(){
+            alert("unable to link");
+        }
+        });
+}
+function create_link( page, id ){
     var url = "/csi2/ajaxedit/link/{{=node.url}}/" + page
     $.ajax({
         url: url,
         success: function(){
-            alert("Linked");
+            links.push( id );
+            display_nodes(filter_txt);
+            $("div.flash").html("Node Linked");
+            $("div.flash").slideDown('slow').delay(3000).slideUp('slow');
         },
         error: function(){
             alert("unable to link");
@@ -45,16 +56,24 @@ function create_link( page ){
         });
 }
 var nodes = Array();
-
+var filter_txt="";
 function display_nodes(filter){
+    filter_txt = filter
     $("#TARGET").empty()
     var i = 0;
     $.each(nodes, function(key,val){
         if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
+        var style = "";
+        var action = 'create_link("' + val.url + '", ' + val.id + '); return false;';
+        if(links.indexOf(val.id) != -1 ){
+            var action = 'delete_link("' + val.url + '", ' + val.id + '); return false;';
+            style="background: green;";
+            
+        }
         if( i < 9 ){
             var html_add = "\
-                <div class='nodeBox'>\
-                    <a href='#' onclick='create_link(\"" + val.url + "\")'>\
+                <div class='nodeBox' style='"+style+"'>\
+                    <a href='#' onclick='" + action + "'>\
                         <div class='nodePic'>\
                             <img src='" +                                ((val.picFile==""||val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
                             "' width='160px'></div>\
@@ -65,8 +84,8 @@ function display_nodes(filter){
             $("#TARGET").append( html_add );
         }else{
             var html_add = "\
-                <div class='nodeListing'>\
-                    <a href='/csi2/main/node/" + val.url + "'>\
+                <div class='nodeListing' style='"+style+"'>\
+                     <a href='#' onclick='" + action + "'>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";
@@ -77,7 +96,7 @@ function display_nodes(filter){
     });
 }
 </script>
-{{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a>{{pass}}
+{{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a> {{pass}}
 
 <div style="text-align: center;">
 <form onsubmit="return false;">

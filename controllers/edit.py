@@ -236,10 +236,7 @@ def link():
     this function will get out of control in its current state.  A better
     way must be used then displaying all nodes and let them choose.
     """
-    try:
-        node = db(db.node.url == request.args[0]).select()[0]
-    except:
-        raise HTTP(404, "Node Not Found")
+    node = get_node_or_404(request.args(0))
         
     # Apply Changes if link requested
     if request.vars.unlinkNode:
@@ -254,12 +251,9 @@ def link():
         # Filter out existing links
         if is_linked(node, row):
             linkedSet.append(row)
-            
-        else:
-            nodeSet.append(row)
 
     cats = db(db.nodeType.value!=None).select()
-    return dict( node=node, nodeSet=nodeSet, linkedSet=linkedSet, categories=cats )
+    return dict( node=node, linkedSet=linkedSet, categories=cats )
 
 def category():
     return dict(message="hello from edit.py")
