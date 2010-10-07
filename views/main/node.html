@@ -78,7 +78,8 @@
         new_attr_lnk.setAttribute('onclick',
             'edit_request("/csi2/ajaxedit/addattribute/" + url_segment,"at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
-        new_attr_lnk.innerText = "Add More";
+        new_attr_lnk.appendChild(document.createTextNode("Add More"));
+
         $("#sideStats").append(new_attr_lnk);
         
         //
