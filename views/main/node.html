@@ -51,7 +51,7 @@
         $("#add_attr_link").remove()
         
         //TEMPORARY
-         $("a.link_link, #at_sort .statTitle").each( function(){
+         $("#at_sort .statTitle").each( function(){
              $(this).unbind('mouseenter').unbind('mouseleave');     
          });
          //TEMPORARY
@@ -62,7 +62,6 @@
         in_edit_mode = true;
         //TEMPORARY
         add_del_attr();
-        add_del_links();
         //END TEMPORARY
     
         disable_lightBox();
@@ -110,25 +109,6 @@
                 );
             }
         );
-    }
-    
-    function add_del_links(){
-        $("a.link_link").each( function(){
-            $(this).hover( function () {
-                var del_image=document.createElement('img');
-                del_image.src= "/csi2/static/images/delete.png";
-                del_image.alt="Delete";
-                del_attr_link = document.createElement("a");
-                del_attr_link.setAttribute('href', '#');
-                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/edit/in_place/{{=node.url}}/unlink_' +
-                                                       this.id + '","sidebar_container"); return false;');
-                del_attr_link.setAttribute('class', 'del_attr_link');
-                del_attr_link.appendChild(del_image);
-                $(this).prepend(del_attr_link);
-            }, function(){
-                $(this).find(".del_attr_link").remove();
-            });
-        });
     }
     
     function add_del_attr(){

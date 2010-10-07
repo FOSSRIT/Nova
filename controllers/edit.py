@@ -88,18 +88,6 @@ def in_place():
         else:
             response.view = "htmlblocks/edit_pict_form.html"
             return dict(node=node, form=form)
-    
-    elif field_request.startswith("unlink_"):
-        try:
-            #url will come in as unlink_link_NUMBER
-            delid = int(field_request[12:])
-        except:
-            raise HTTP(404, 'invalid link id')
-            
-        link = db( (db.linkTable.nodeId == delid) | (db.linkTable.linkId == delid) ).select().first()
-        link.delete_record()
-        response.view = "htmlblocks/links.html"
-        return dict(node_list=get_node_links(node),)
         
     
     # Else we should be using a db node field            
