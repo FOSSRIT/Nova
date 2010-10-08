@@ -1,7 +1,9 @@
 {{extend 'csi_base.html'}}
         <div id="sidebar">
             <span style="float:left;"><h3>Links</h3>
+            {{if can_edit(node):}}
             <h6 class="nodeTopLinks"><a href="{{=URL('edit','link', args=node.url)}}" >Add or remove links</a></h6>
+            {{pass}}
             </span>
             
             <div class="nodeTopLinks">
