@@ -37,10 +37,18 @@ auth.settings.mailer = mail
 auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
 
-auth.messages.verify_email = 'Click on the link http://' + \
-    request.env.http_host + \
-    URL(r=request,c='default',f='user',args=['verify_email']) + \
-    '/%(key)s to verify your email'
+auth.messages.verify_email = """Thanks for joining the innovation community at beta.innovation.rit.edu.
+
+Please click the following link to activate your new account.
+
+http://%s%s/%%(key)s
+
+Thanks again,
+
+The Innovation Team
+""" % ( request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']) )
+
+auth.settings.register_next = URL('user', args='login')
     
 # DISABLE EXTRA FEATURES
 auth.settings.actions_disabled=['profile']
