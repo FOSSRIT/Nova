@@ -51,11 +51,11 @@ Search: <input type="text" name="query">
         </div> <!-- end header -->
         
         <div id="navigation">
-        <ul>
+        <ul class="topnav">
         {{for men_link in response.menu:}}
             <li><a href="{{=men_link[1]}}">{{=men_link[0]}}</a>
             {{if len(men_link) == 3 and len(men_link[2]):}}
-            <ul>
+            <ul class="subnav">
             {{for sublink in men_link[2]:}}
             <li><a href="{{=sublink[1]}}">{{=sublink[0]}}</a>
             {{pass}}

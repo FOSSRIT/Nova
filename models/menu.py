@@ -8,11 +8,12 @@ response.title = "Center for Student Innovation"
 ##########################################
 
 response.menu = [
-    [T('Home'),  URL(request.application,'main','index'), []],
-    [T('About'),  URL(request.application,'main','about'), [
-       [T('Test'),  URL(request.application,'main','index'), []],
+    ['Home',  URL(request.application,'main','index'), []],
+    ['About',  URL(request.application,'main','about'), [
+       ['Courses',  "http://innovation.rit.edu/http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []],
+       ['Test2',  "#", []],
     ]],
-    [T('Blog'), "http://innovation.rit.edu", []],
+    ['Blog', "http://innovation.rit.edu", []],
     ]
     
 #Dynamically add types to main menu
