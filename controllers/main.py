@@ -1,10 +1,8 @@
 # coding: utf8
-from math import ceil
-MAX_PER_PAGE = 12
 
-def index(): 
+def index():
     redirect(URL('main','node', args="csi"))
-    return dict()
+    #return dict()
 def about(): return dict()    
 
 def search():
