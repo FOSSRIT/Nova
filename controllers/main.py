@@ -28,8 +28,11 @@ def search():
     return dict(master=master)
     
 def category_ajax():
-    typeId = db(db.nodeType.value==request.args(0)).select().first()
-    rows = db(db.node.type == typeId).select(orderby=~db.node.modified)
+    if request.args(0):
+        typeId = db(db.nodeType.value==request.args(0)).select().first()
+        rows = db(db.node.type == typeId).select(orderby=~db.node.modified)
+    else:
+        rows = db(db.node.id != 0).select(orderby=~db.node.modified, limitby=(0,21))
     rows_array = []
     for row in rows:
         row_dict = {}

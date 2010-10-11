@@ -95,15 +95,20 @@ function display_nodes(filter){
         }
     });
 }
+
+$(document).ready(function(){
+    // Grab 21 most resent modified nodes
+    set_request_url('');
+});
 </script>
-{{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a> {{pass}}
 
 <div style="text-align: center;">
+Clicking a page will add a link new link or remove an existing link.<br /> Existing links have a green frame.<br /><br />
+Select Category: 
+{{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a> {{pass}}
 <form onsubmit="return false;">
-    Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
+    Filter: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
 </form>
 </div>
-<div id="TARGET" style="clear:both;">
-Waiting for category selection
-</div>
+<div id="TARGET" style="clear:both;"><img src="{{=URL('static', 'images', 'lightbox_ico_loading.gif')}}">Loading Content...</div>
 <br style="clear:both;" />
