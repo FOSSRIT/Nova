@@ -57,8 +57,16 @@ auth.settings.actions_disabled=['profile']
 #########################################################################
 
 # Define Base Tales
-db.define_table('nodeType', Field('value', 'string'), Field('public', 'boolean'))
-db.define_table('vocab', Field('value', 'string', unique=True))
+db.define_table('vocab',
+    Field('value', 'string', unique=True),
+    format='%(value)s'
+    )
+db.define_table('nodeType',
+    Field('value', 'string'),
+    Field('public', 'boolean'),
+    Field('required_vocab', 'list:reference vocab'),
+    format='%(value)s'
+    )
 
 # Define Compound Tables
 db.define_table('node',
@@ -71,7 +79,9 @@ db.define_table('node',
           comment="This is the text displayed on the page. You may use MARKMIN syntax in this section."),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
-    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False))
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False),
+    format='%(name)s'
+    )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
 
@@ -83,7 +93,9 @@ db.define_table('nodeAttr',
     Field('weight', 'integer', default=0, label="Display Weight", readable=False, writable=False),
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
-    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False),
+    format='%(nodeId)s: %(vocab)s'
+    )
     
 db.nodeAttr.vocab.requires = IS_IN_DB(db,db.vocab.id,'%(value)s')
 db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
@@ -93,7 +105,9 @@ db.define_table('linkTable',
     Field('nodeId', db.node),
     Field('linkId', db.node),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
-    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False))
+    Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False),
+    format='%(nodeId)s -> %(linkId)s'
+    )
 
 db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
@@ -225,6 +239,10 @@ def get_node_links(current_node):
         
     return cat_dict
 
+def populate_node_with_required( node ):
+    for type in node.type.required_vocab:
+        db.nodeAttr.insert(nodeId=node.id, vocab=type, value="Change Me!")
+        
 
 ### EDIT HELPERS
 def get_node_or_404( node_url ):

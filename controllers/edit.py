@@ -202,6 +202,9 @@ def node():
                     del session.tmp_node_file
                     os.unlink(f.name)
                     
+                # Populate Node with required Attributes
+                populate_node_with_required(db(db.node.url == form.vars.url).select().first())
+                    
                 redirect(URL('main','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'
