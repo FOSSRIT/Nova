@@ -1,6 +1,6 @@
 {{extend 'csi_view.html'}}
 
-{{if node:}}<a href="{{=URL('main','node', args=node.url)}}">Back to Node</a>.{{pass}}
+{{if node:}}<a href="{{=URL('main','node', args=node.url)}}">Back to {{=node.name}}</a>.{{pass}}
 
 <h2>Add or Remove Links</h2>
 <script>
@@ -62,7 +62,7 @@ function display_nodes(filter){
     $("#TARGET").empty()
     var i = 0;
     $.each(nodes, function(key,val){
-        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
+        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 && val.id != {{=node.id}}){
         var style = "";
         var action = 'create_link("' + val.url + '", ' + val.id + '); return false;';
         if(links.indexOf(val.id) != -1 ){
@@ -110,5 +110,5 @@ Select Category:
     Filter: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
 </form>
 </div>
-<div id="TARGET" style="clear:both;"><img src="{{=URL('static', 'images', 'lightbox_ico_loading.gif')}}">Loading Content...</div>
+<div id="TARGET" style="clear:both;"><img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...</div>
 <br style="clear:both;" />

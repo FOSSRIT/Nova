@@ -147,6 +147,9 @@ def link():
     if is_linked(node, node2):
         raise HTTP(405, "Already Linked")
         
+    if node.id == node2.id:
+        raise HTTP(405, "Can't Link to Self")
+        
     db.linkTable.insert(nodeId=node, linkId=node2)
     return HTTP(200, "Ok, link made")
 
