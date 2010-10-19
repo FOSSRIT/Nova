@@ -63,6 +63,7 @@ a.del_attr_link{
     left: 50%;
     top: 50%;
     margin-left: -325px;
+    
 }
 
 
@@ -148,6 +149,7 @@ a.del_attr_link{
     margin-right:0px;
     clear:right;
 }
+
 
 .flash {
     
@@ -424,21 +426,26 @@ float:left;
 }
 
 .statTitle, .statValue {
-    width:200px;
+    width:190px;
     
     margin: 0 auto;
     margin-top:10px;
 }
 
 .statTitle {
+    width:90%;
     color:#FFF;
-    border-bottom-width: thin;
-    border-bottom-style: solid;
-    border-bottom-color: #000;
+    border-top-width: thin;
+    border-top-style: solid;
+    border-top-color: #000;
+    padding-left:10px;
+    margin-top:2px;
+    
 }
 
 .statValue {
-    margin-bottom:20px;
+    margin-bottom:2px;
+    margin-top:2px;
     padding-left:25px;
     font-size: 80%;
     
