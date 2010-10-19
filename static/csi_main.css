@@ -495,3 +495,9 @@ ul.topnav li a{
     text-align: left;
     z-index: 50;
  }
+
+@media print{
+  #header_bar, #navigation, .nodeTopLinks{
+      display: none;
+  }
+}
