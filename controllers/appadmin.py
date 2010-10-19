@@ -37,11 +37,11 @@ if not gluon.fileutils.check_credentials(request):
 ignore_rw = True
 response.view = 'appadmin.html'
 response.menu = [
-                 [T('Back To Index'), URL(request.application, 'main', 'index')],
-                 [T('design'), URL('admin', 'default', 'design', args=[request.application])],
-                 [T('db'), URL(r=request, f='index')],
-                 [T('state'), URL(r=request, f='state')],
-                 [T('cache'), URL(r=request, f='ccache')]]
+                 (T('Back To Index'), False, URL(request.application, 'main', 'index'), []),
+                 (T('design'), False, URL('admin', 'default', 'design', args=[request.application]), []),
+                 (T('db'), False, URL(r=request, f='index'), []),
+                 (T('state'), False, URL(r=request, f='state'), []),
+                 (T('cache'), False, URL(r=request, f='ccache'), [])]
 
 # ##########################################################
 # ## auxiliary functions

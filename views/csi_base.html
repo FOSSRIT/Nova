@@ -50,22 +50,7 @@ Search: <input type="text" name="query">
             {{pass}}
         </div> <!-- end header -->
         
-        <div id="navigation">
-        <ul class="topnav">
-        {{for men_link in response.menu:}}
-            <li><a href="{{=men_link[1]}}">{{=men_link[0]}}</a>
-            {{if len(men_link) == 3 and len(men_link[2]):}}
-            <ul class="subnav">
-            {{for sublink in men_link[2]:}}
-            <li><a href="{{=sublink[1]}}">{{=sublink[0]}}</a>
-            {{pass}}
-            </ul>
-            {{pass}}
-            </li>
-        {{pass}}
-        </ul>
-        </div> <!--end navigation -->
-        
+        <div id="navigation">{{=MENU(response.menu,_class='topnav')}}</div>
         <div class="flash">{{=response.flash or ''}}</div>
 
         {{include}}
