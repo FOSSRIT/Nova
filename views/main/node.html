@@ -232,7 +232,8 @@
 <br />
 
     <div id="nodeTitle">
-        <div id="name" class="db_editable">{{=node.name}}</div>
+        <div id="name" class="db_editable">{{=node.name}}
+            {{if node.url!="csi":}}({{=node.type.value_node}}){{pass}}</div>
     </div> <!-- end nodeTitle -->
     
     <div id="picture" class="db_photo_editable">

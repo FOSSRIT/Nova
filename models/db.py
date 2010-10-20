@@ -63,6 +63,7 @@ db.define_table('vocab',
     )
 db.define_table('nodeType',
     Field('value', 'string'),
+    Field('value_node', 'string'),
     Field('public', 'boolean'),
     Field('required_vocab', 'list:reference vocab'),
     format='%(value)s'
