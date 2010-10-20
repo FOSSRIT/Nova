@@ -96,6 +96,9 @@ def node():
         # No node was requested, Redirect to index of current controller
         redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))        
 
+def node_print():
+    return node()
+
 def addCat():
         
     return dict()
