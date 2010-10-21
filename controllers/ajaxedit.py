@@ -25,6 +25,7 @@ def editattribute():
 
     if form.accepts(request.vars, session):
         response.view = "generic.load"
+        db.syslog.insert(action="Edited Attribute", target=node.id, target2=attr.id)
         
         attr = db(db.nodeAttr.id == attr ).select().first()
         
@@ -51,6 +52,7 @@ def deleteattribute():
     # Get attribute we are trying to delete and delete it
     attr = get_attribute_or_404(node, request.args(1)[8:] )
     db(db.nodeAttr.id==attr).delete()
+    db.syslog.insert(action="Deleted Attribute", target=node.id, target2=attr.id)
     
     # A small Cleanup Routine, check if attriubte is
     # still in use, if not delete the attribute
@@ -80,9 +82,11 @@ def addattribute():
         request.vars.vocab = db.vocab.insert(value=request.vars._autocomplete_value_aux)
         attribute_form.vars.vocab = request.vars.vocab
             
-    if attribute_form.accepts(request.vars):
+    if attribute_form.accepts(request.vars, dbio=False):
+        a_id = db.nodeAttr.insert(**db.nodeAttr._filter_fields(attribute_form.vars))
         response.view = "htmlblocks/attributes.html"
         attr = db(db.nodeAttr.nodeId==node).select(orderby=db.nodeAttr.weight)
+        db.syslog.insert(action="Added Attribute", target=node.id, target2=a_id)
         return dict(node_attributes=attr)
     else:
         attrlist = db(db.vocab.id>0).select(orderby=db.vocab.value)
@@ -107,6 +111,7 @@ def editnode():
     if form.accepts(request.vars):
         # Grab the new version of the node to populate data
         node = db(db.node.url == request.args(0)).select().first()
+        db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
         return dict(node=MARKMIN(node.get(request.args(1))))
     else:
         return dict(form=form)
@@ -128,6 +133,7 @@ def editphoto():
     if form.accepts(request.vars):
         response.view = "generic.load"
         node = db(db.node.url == request.args(0)).select().first()
+        db.syslog.insert(action="Edited Page", target=node.id, target2="photo")
         return dict(t=IMG(_src=URL('default','download',args=node.picFile)))
             
     else:
@@ -151,6 +157,7 @@ def link():
         raise HTTP(405, "Can't Link to Self")
         
     db.linkTable.insert(nodeId=node, linkId=node2)
+    db.syslog.insert(action="Linked Page", target=node.id, target2=node2.id)
     return HTTP(200, "Ok, link made")
 
 
@@ -166,5 +173,6 @@ def unlink():
         
     db((db.linkTable.nodeId == node) & (db.linkTable.linkId == node2)).delete()
     db((db.linkTable.nodeId == node2) & (db.linkTable.linkId==node)).delete() 
+    db.syslog.insert(action="Unlinked Page", target=node.id, target2=node2.id)
         
     return HTTP(200, "Ok, link removed")

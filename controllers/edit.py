@@ -16,11 +16,13 @@ def link_me():
     if node and request.args[0]:
         if request.args[0] == "add":
             db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
+            db.syslog.insert(action="Linked Page", target=auth.user.home_node, target2=node.id)
             session.flash = "Link Added"
             redirect(URL('main','node',args=node.url))          
         elif request.args[0] == "remove":
             db((db.linkTable.nodeId == node) & (db.linkTable.linkId == auth.user.home_node)).delete()
             db((db.linkTable.nodeId == auth.user.home_node) & (db.linkTable.linkId==node)).delete()
+            db.syslog.insert(action="Unlinked Page", target=auth.user.home_node, target2=node.id)
             session.flash = "Link Removed"
             redirect(URL('main','node',args=node.url))
     else:
@@ -40,6 +42,7 @@ def take_picture():
                 
             if request.vars.do_upload:
                 node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
+                db.syslog.insert(action="Edited Page", target=node.id, target2="photo")
             
                 response.view = "generic.load"
                 return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
@@ -146,6 +149,7 @@ def node():
                 if attr == "":
                     vocab = db(db.nodeAttr.id == key[5:]).select()[0].vocab
                     db(db.nodeAttr.id==key[5:]).delete()
+                    db.syslog.insert(action="Deleted Attribute", target=node.id, target2=key[5:])
                         
                     # A small Cleanup Routine, check if attriubte is
                     # still in use, if not delete the attribue
@@ -167,10 +171,12 @@ def node():
         if form.accepts(request.vars):
             if form.vars.delete_this_record:
                 session.flash = 'Node Deleted'
+                db.syslog.insert(action="Deleted Page", target=node.id)
                 
                 redirect(URL('main','index'))
             else:
                 session.flash = 'form accepted'
+                db.syslog.insert(action="Edited Page", target=node.id)
                 
                 redirect(URL('edit','node',args=form.vars.url))
         elif form.errors:
@@ -204,7 +210,9 @@ def node():
                     
                 # Populate Node with required Attributes
                 populate_node_with_required(db(db.node.url == form.vars.url).select().first())
-                    
+                
+                db.syslog.insert(action="Added Page", target=db(db.node.url == form.vars.url).select().first().id)
+                
                 redirect(URL('main','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'

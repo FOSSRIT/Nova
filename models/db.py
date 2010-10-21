@@ -120,6 +120,23 @@ db.define_table('feedback',
     Field('user', 'integer', default=auth.user_id, writable=False, readable=False),
     Field('date', writable=False, readable=False, default=request.now))
 
+db.define_table('syslog',
+    Field('date', 'datetime', writable=False, readable=False, default=request.now),
+    Field('user','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False),
+    Field('action', requires=IS_IN_SET(
+            (
+                'Linked Page',
+                'Unlinked Page',
+                'Created Page',
+                'Deleted Page',
+                'Add Attribute',
+                'Edited Attribute',
+                'Deleted Attribute',
+            )
+        ) ),
+    Field('target', 'integer'),
+    Field('target2'),
+    )
 #########################################################################
 ## Authentication
 #########################################################################
