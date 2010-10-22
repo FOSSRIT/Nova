@@ -1,0 +1,7 @@
+{{extend 'csi_view.html'}}
+<h1>Recent Activity</h1>
+<ul>
+{{for entry in log:}}
+<li>{{=XML(log_to_string(entry))}}</li>
+{{pass}}
+</ul>

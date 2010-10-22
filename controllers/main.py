@@ -99,6 +99,10 @@ def node():
 def node_print():
     return node()
 
+def log():
+    
+    return dict(log=db(db.syslog.id>0).select(orderby=~db.syslog.id))
+
 def addCat():
         
     return dict()
