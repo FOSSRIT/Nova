@@ -13,8 +13,9 @@ response.menu = [
        ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
        ('Events', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
        ('Engage', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=230", []),
+          ('Fellows', False, "http://beta.innovation.rit.edu/csi2/main/node/Fellows", []),
     ])
-    ]
+]
     
 #Dynamically add types to main menu
 menu_types = db(db.nodeType.value!=None).select()
