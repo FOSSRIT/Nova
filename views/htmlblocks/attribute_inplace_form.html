@@ -1,12 +1,14 @@
 <table>
 <tr>
-<td style="overflow: auto; background-color: #888; font-size: 80%;">
+<td style="background-color: #888; font-size: 80%;">
 Previously used values:
+<div style="overflow-y: scroll; overflow-x: none; height: 400px;">
 <ul id="attr_autocomplete_list" style="text-align: left; list-style-type: none; padding: 0px;">
 {{for attr in attrlist:}}
 <li><a href="#" onclick="$('#nodeAttr_vocab').val('{{=attr.value}}');$('#_autocomplete_value_auto').val({{=attr.id}});">{{=attr.value}}</a></li>
 {{pass}}
 </ul>
+</div>
 Or Innovate your own!
 </td><td>
 {{=form}}
