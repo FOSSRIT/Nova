@@ -11,9 +11,9 @@
     </div> <!-- end viewbar -->
 <script>
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-var autoload_request_url = 'https://beta.innovation.rit.edu/csi2/main/category_ajax/{{=category.value}}';
+var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('main','category_ajax', args=category.value)}}';
 {{else:}}
-var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/{{=category.value}}';
+var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('main','category_ajax', args=category.value)}}';
 {{pass}}
 </script>
 <script>
@@ -27,10 +27,10 @@ function display_nodes(filter){
         if( i < 9 ){
             var html_add = "\
                 <div class='nodeBox'>\
-                    <a href='/csi2/main/node/" + val.url + "'>\
+                    <a href='{{=URL('main','node')}}/" + val.url + "'>\
                         <div class='nodePic'>\
                             <img src='" +
-                                ((val.picFile==""||val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                                ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder.png')}}":"{{=URL('default','download')}}/"+val.picFile) +
                             "' width='160px'></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
@@ -40,7 +40,7 @@ function display_nodes(filter){
         }else{
             var html_add = "\
                 <div class='nodeListing'>\
-                    <a href='/csi2/main/node/" + val.url + "'>\
+                    <a href='{{=URL('main','node')}}/" + val.url + "'>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";
@@ -67,6 +67,6 @@ $(document).ready(function(){
 </form>
 </div>
 <div id="TARGET" style="clear:both;">
-<img src="/csi2/static/images/lightbox_ico_loading.gif">Loading Content...
+<img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...
 </div>
 <br style="clear:both;" />

@@ -2,9 +2,9 @@
 <script>
     function enable_lightBox(){
         $('#picture a').lightBox(
-            {"imageBtnClose":"/csi2/static/images/lightbox_btn_close.gif",
-             "imageBlank":"/csi2/static/images/lightbox_ico_blank.gif ",
-             "imageLoading":"/csi2/static/images/lightbox_ico_loading.gif",
+            {"imageBtnClose":"{{=URL('static', 'images', args='lightbox_btn_close.gif')}}",
+             "imageBlank":"{{=URL('static', 'images', args='lightbox_ico_blank.gif')}}",
+             "imageLoading":"{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}",
             }
          );
     }
@@ -75,7 +75,7 @@
        
         new_attr_lnk.setAttribute('href','#');
         new_attr_lnk.setAttribute('onclick',
-            'edit_request("/csi2/ajaxedit/addattribute/" + url_segment,"at_sort"); return false;');
+            'edit_request("{{=URL('ajaxedit','addattribute')}}/" + url_segment,"at_sort"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
         new_attr_lnk.appendChild(document.createTextNode("Add More"));
 
@@ -92,11 +92,11 @@
                         $(this).css( "border", "6px solid #F60");
                         $(this).bind( 'click', function(){
                             if(this.className == 'db_attributes'){
-                                edit_request("/csi2/ajaxedit/editattribute/" + url_segment + "/" + this.id, this.id);
+                                edit_request("{{=URL('ajaxedit','editattribute')}}/" + url_segment + "/" + this.id, this.id);
                             }else if(this.className == 'db_photo_editable'){
-                                edit_request("/csi2/ajaxedit/editphoto/" + url_segment, this.id);
+                                edit_request("{{=URL('ajaxedit','editphoto')}}/" + url_segment, this.id);
                             }else{
-                                edit_request("/csi2/ajaxedit/editnode/" + url_segment + "/" + this.id, this.id);
+                                edit_request("{{=URL('ajaxedit','editnode')}}/" + url_segment + "/" + this.id, this.id);
                             }
                             return false;
                         });
@@ -116,11 +116,11 @@
         $("#at_sort .statTitle").each( function(){
             $(this).hover( function () {
                 var del_image=document.createElement('img');
-                del_image.src= "/csi2/static/images/delete.png";
+                del_image.src= "{{=URL('static', 'images', args='delete.png')}}";
                 del_image.alt="Delete";
                 del_attr_link = document.createElement("a");
                 del_attr_link.setAttribute('href', '#');
-                del_attr_link.setAttribute('onclick', 'delete_request("/csi2/ajaxedit/deleteattribute/{{=node.url}}/' +
+                del_attr_link.setAttribute('onclick', 'delete_request("{{=URL('ajaxedit','deleteattribute', args=node.url)}}/' +
                                                        this.id + '","at_sort"); return false;');
                 del_attr_link.setAttribute('class', 'del_attr_link');
                 del_attr_link.appendChild(del_image);

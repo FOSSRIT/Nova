@@ -31,7 +31,7 @@ Search: <input type="text" name="query">
 
 {{if auth.has_membership("Site Admin"):}}
 <br>Admin Links: <a href="https://beta.innovation.rit.edu/admin">Admin</a> |
-  <a href="https://beta.innovation.rit.edu/csi2/appadmin/index">DB Admin</a>
+  <a href="https://beta.innovation.rit.edu/{{=request.application}}/appadmin/index">DB Admin</a>
 {{pass}}
 <br style="clear:both;" />
 </div>

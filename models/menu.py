@@ -13,7 +13,7 @@ response.menu = [
        ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
        ('Events', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
        ('Engage', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=230", []),
-          ('Fellows', False, "http://beta.innovation.rit.edu/csi2/main/node/Fellows", []),
+          ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
     ])
 ]
     

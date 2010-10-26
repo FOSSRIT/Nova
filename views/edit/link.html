@@ -11,9 +11,9 @@ var links = [
     ];
 function set_request_url( cat ){
     {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-        var autoload_request_url = 'https://beta.innovation.rit.edu/csi2/main/category_ajax/' + cat;
+        var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('main','category_ajax')}}/' + cat;
     {{else:}}
-        var autoload_request_url = 'http://beta.innovation.rit.edu/csi2/main/category_ajax/' + cat;
+        var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('main','category_ajax')}}/' + cat;
     {{pass}}
     
     $.getJSON( autoload_request_url,
@@ -25,7 +25,7 @@ function set_request_url( cat ){
     }
     
 function delete_link( page, id ){
-    var url = "/csi2/ajaxedit/unlink/{{=node.url}}/" + page
+    var url = "{{=URL('main','category_ajax',args=['unlink', node.url])}}/" + page
     $.ajax({
         url: url,
         success: function(){
@@ -41,7 +41,7 @@ function delete_link( page, id ){
         });
 }
 function create_link( page, id ){
-    var url = "/csi2/ajaxedit/link/{{=node.url}}/" + page
+    var url = "{{=URL('main','category_ajax',args=['link', node.url])}}/" + page
     $.ajax({
         url: url,
         success: function(){
@@ -75,7 +75,8 @@ function display_nodes(filter){
                 <div class='nodeBox' style='"+style+"'>\
                     <a href='#' onclick='" + action + "'>\
                         <div class='nodePic'>\
-                            <img src='" +                                ((val.picFile==""||val.picFile==null)?"/csi2/static/images/placeholder.png":"/csi2/default/download/"+val.picFile) +
+                            <img src='" + 
+                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder.png')}}":"{{=URL('default','download')}}/"+val.picFile) +
                             "' width='160px'></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
