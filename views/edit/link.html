@@ -25,7 +25,7 @@ function set_request_url( cat ){
     }
     
 function delete_link( page, id ){
-    var url = "{{=URL('main','category_ajax',args=['unlink', node.url])}}/" + page
+    var url = "{{=URL('ajaxedit','unlink',args=node.url)}}/" + page
     $.ajax({
         url: url,
         success: function(){
@@ -41,7 +41,7 @@ function delete_link( page, id ){
         });
 }
 function create_link( page, id ){
-    var url = "{{=URL('main','category_ajax',args=['link', node.url])}}/" + page
+    var url = "{{=URL('ajaxedit','link', args=node.url)}}/" + page
     $.ajax({
         url: url,
         success: function(){
