@@ -7,6 +7,8 @@
                 <a href="{{=URL('edit', 'node', vars={'type':category.value})}}">Add your own!</a>
             </div> <!-- end addyourself -->
          {{pass}}
+        <br style="clear: both;"/>
+        {{if category.cat_header:}}<p>{{=XML(category.cat_header)}}</p>{{pass}}
         <br />
     </div> <!-- end viewbar -->
 <script>

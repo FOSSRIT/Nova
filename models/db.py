@@ -66,6 +66,7 @@ db.define_table('nodeType',
     Field('value_node', 'string'),
     Field('public', 'boolean'),
     Field('required_vocab', 'list:reference vocab'),
+    Field('cat_header','text'),
     format='%(value)s'
     )
 
