@@ -100,8 +100,15 @@ def node_print():
     return node()
 
 def log():
-    
-    return dict(log=db(db.syslog.id>0).select(orderby=~db.syslog.id))
+    page = 0
+    if request.args(0):
+        try:
+            page = int(request.args(0))
+        except:
+            pass
+            
+    record_start = 100 * page
+    return dict(log=db(db.syslog.id>0).select(orderby=~db.syslog.id, limitby=(record_start,record_start+100)),page=page)
 
 def addCat():
         

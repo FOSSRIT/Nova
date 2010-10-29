@@ -10,4 +10,7 @@
 <li>{{=XML(entry_value)}}</li>
 {{pass}}
 {{pass}}
+
+{{if page != 0:}}<a href="{{=URL(args=page-1)}}">Previous Page</a>{{pass}}
+{{if len(log) == 100:}}<a href="{{=URL(args=page+1)}}">Next Page</a>{{pass}}
 </ul>
