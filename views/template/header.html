@@ -1,0 +1,111 @@
+<style>
+    div.header{
+        text-align: left;
+        background: #600;
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+    
+    div.header h1{
+        float: left;
+        color: #fff;
+    }
+    
+    div.header div.login_form{
+        float: right;
+        width: 330px;
+        color: #fff;
+        text-align: right;
+    }
+    
+    div.login_right_form{
+        width: 150;
+        padding: 10px;
+        font-size: 70%
+    }
+    
+    div.login_left_form{
+        width: 150;
+        padding: 10px;
+    }
+    
+    div.login_form #auth_user_username, div.login_form #auth_user_password{
+        width: 100px;
+        font-size: 70%;
+        border: 1px solid #006;
+        background: #ffc;
+    }
+    
+    div.login_form #auth_user_username:hover, div.login_form #auth_user_password:hover{
+        border: 1px solid #f00;
+        background: #ff6;
+    }
+    
+    div.login_form label{
+        font-size: 70%;
+        display: block;
+        width: 90px;
+        float: left;
+        margin: 2px 4px 6px 4px;
+        text-align: right;
+    }
+    
+    div.login_form button{
+        border: 1px solid #006;
+        background: #ccf;
+        
+    }
+    
+    div.login_form button:hover {
+        border: 1px solid #f00;
+        background: #eef;
+    }
+    
+    div.login_form div.login_left_form{
+        float: left;
+    }
+    
+    div.login_form a{
+        color: #fff;
+    }
+    
+    
+</style>
+<div class="header">
+<h1>Center for Student Innovation</h1>
+
+    <div class="login_form">
+    {{if not auth.is_logged_in() and not request.function=='user':}}
+    {{form=auth.login(next=request.url)}}
+    
+        {{=form.custom.begin}}
+        
+        <div class="login_left_form">
+            <label for="auth_user_username">{{=form.custom.label.username}}</label> 
+            {{=form.custom.widget.username}}<br />
+            <label for="auth_user_password">{{=form.custom.label.password}}</label>
+            {{=form.custom.widget.password}}<br />
+
+        </div>
+        <div class="login_right_form">
+            <input type="checkbox" name="remember" id="auth_user_remember" class="checkbox" />Remember me
+            <input type="submit" value="Login" />
+            <a href="{{=URL('default','user',args='login', vars={'_next':request.url})}}">Signup</a>
+        </div>
+        {{=form.custom.end}}
+    {{elif auth.is_logged_in():}}
+    Hello {{=A(get_home_node().name, _href=URL('main', 'nodeid', args=auth.user.home_node))}} |
+    {{=A("Logout", _href=URL('default','user',args='logout'))}}<br />
+    
+    {{if auth.has_membership("Site Admin"):}}
+    <div>
+    Admin Links: {{=A("Admin", _href="https://%s/admin" % request.env.http_host)}} |
+                 {{=A("DB Admin", _href="https://%s%s" % (request.env.http_host, URL('appadmin','index')))}}
+    </div>
+{{pass}}
+    
+    {{pass}}
+    <br style="clear:both;">
+    </div>
+    <br style="clear:both;">
+</div>

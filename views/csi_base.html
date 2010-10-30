@@ -11,61 +11,25 @@
 </head>
 
 <body>
-{{if auth.user and auth.user.id == 1:}}{{include "htmlblocks/debug_info.html"}}{{pass}}
+{{if auth.user and auth.user.id == 1:}}{{#include "htmlblocks/debug_info.html"}}{{pass}}
+
+{{include "template/header.html"}}
+{{include "template/navigation.html"}}
 <div id="overlay"></div>
-<div id="header_bar">
-<div id="header_user_bar">
-{{if auth.is_logged_in():}}
-Hello
-<a href="{{=URL('main', 'nodeid', args=auth.user.home_node)}}">{{=get_home_node().name}}</a> |
-<a href="{{=URL('default','user',args='logout')}}">Logout</a>
-
-{{else:}}
-<a href="{{=URL('default','user',args='login',vars={'_next':request.url})}}" >Login/Register</a>
-{{pass}}
-
-<form method="get" action="{{=URL('main','search')}}" style="display:inline;" >
-Search: <input type="text" name="query">
-<input type="submit" value="Search">
-</form>
-
-{{if auth.has_membership("Site Admin"):}}
-<br>Admin Links: <a href="https://beta.innovation.rit.edu/admin">Admin</a> |
-  <a href="https://beta.innovation.rit.edu/{{=request.application}}/appadmin/index">DB Admin</a>
-{{pass}}
-<br style="clear:both;" />
-</div>
-</div> <!-- end header_bar -->
-    <div id="container">
-        <div id="header">
-            {{if auth.is_logged_in():}}
-            <p>Welcome to the Virtual Innovation Center!<br/>
-               Thank you for trying out our beta! Please send us your
-                <a href="{{=URL('edit','feedback')}}">feedback</a>!<br/>
-               (Our informational website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>)</p>
-            {{else:}}
-            <p>Welcome to the (beta) Virtual Innovation Center!<br/>
-            Make, join, and share groups, projects, and ideas!<br/>
-            (Our informational website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>) </p>
-            {{pass}}
-        </div> <!-- end header -->
-        
-        <div id="navigation">{{=MENU(response.menu,_class='topnav')}}</div>
+<br sytle="clear:both;">
+<style>
+    div.container {
+        padding-top: 20px;
+        margin-left: 15%;
+        margin-right: 15%;
+        margin-bottom: 90px;
+    }
+</style>
+    <div class="container">
         <div class="flash">{{=response.flash or ''}}</div>
-
         {{include}}
-
-        <br class="clearfloat" />
-
     </div><!-- end Container -->
     
-    
-    
-    <div id="footer">
-    
-    <div id="footerpic">
-        <img src="{{=URL('static', 'images', args=['footer.png'])}}" width="300px" />
-    </div>
-        </div> <!-- end footer -->
+{{include "template/footer.html" }}
 </body>
 </html>
