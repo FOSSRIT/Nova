@@ -13,6 +13,22 @@
         $('#picture a').unbind()
     }
     
+    function page_overlay(url){
+        var div = $("#overlay");
+        div.html('Loading...');
+        div.show('slow');
+        
+        close_link = document.createElement("a");
+        close_link.setAttribute('href','#');
+        close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
+        close_link.innerText="Close";
+        
+        div.load(url, function() {
+            div.append(close_link);
+        });
+            
+    }
+    
     $(function() {
         enable_lightBox();
     });
@@ -216,6 +232,7 @@
     </script>
 {{pass}}
 
+<div class="nodeTopLinks">
 {{if can_edit(node):}}
     {{if node.url==node.name and node.type==1:}}
     <script type="text/javascript">
@@ -225,12 +242,12 @@
         });
     </script>
     {{pass}}
-    <div class="nodeTopLinks">
+    
         <a href="#" style="background-color:#FF0"  onclick="enter_edit_mode(); return false;" id="mode_a">Edit this page!</a>
-    </div>
 {{pass}}
+        <a href="#" onclick="page_overlay('http://127.0.0.1:8000{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+    </div>
 <br />
-
     <div id="nodeTitle">
         <div id="name" class="db_editable">{{=node.name}}
             {{if node.url!="csi":}}({{=node.type.value_node}}){{pass}}</div>

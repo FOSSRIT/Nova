@@ -98,6 +98,21 @@ def node():
 
 def node_print():
     return node()
+    
+def node_activity():
+    current_node =  get_node_or_404(request.args(0))
+    # Grab Node History
+    activity = db( 
+                    # Target is always a page
+                    (db.syslog.target == current_node.id) | 
+                    ( # Grab Target2 if Link and unlink pages
+                      (
+                        (db.syslog.action == 'Linked Page') |
+                        (db.syslog.action == 'Unlinked Page')
+                      ) & (db.syslog.target2 == current_node.id)
+                    )
+                 ).select(db.syslog.string_cache)
+    return dict(activity=activity)
 
 def log():
     page = 0
