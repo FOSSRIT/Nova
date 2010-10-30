@@ -35,20 +35,23 @@ a.del_attr_link{
     
     /* styling */
     color: #000;
-    background-color:#FFF;
+    background-color:#FF0;
     
-    width: 650px;
-    min-height:200px;
+    width: auto;
+    height:auto;
+    
     border:1px solid #666;
     
     /* CSS3 styling for latest browsers */
     -moz-box-shadow:0 0 90px 5px #000;
     -webkit-box-shadow: 0 0 90px #000;
     
-    position: absolute;
+    position:fixed;
     left: 50%;
-    top: 50%;
-    margin-left: -325px;
+    top: 5%;
+    margin-left: -10%;
+    
+    padding:10px;
     
 }
 
@@ -183,6 +186,15 @@ float:left;
     background-color:#999;
 }
 
+#node_name {
+    width:250px;
+    
+}
+
+#node_description {
+    width:300px;
+    
+}
 .nodeListing{
     width: 180px;
     height:45px;
@@ -362,9 +374,13 @@ float:left;
     
 }
 
+#submit_record__row {
+    text-align:left;
+}
+
 #viewbar {
     width: 100%;
-    height:100px;
+    height:auto;
     background-color:#999;
     
 }
