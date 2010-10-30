@@ -245,7 +245,12 @@
     
         <a href="#" style="background-color:#FF0"  onclick="enter_edit_mode(); return false;" id="mode_a">Edit this page!</a>
 {{pass}}
-        <a href="#" onclick="page_overlay('http://127.0.0.1:8000{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+<a href="#" onclick="page_overlay('https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+{{else:}}
+<a href="#" onclick="page_overlay('http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+{{pass}}
     </div>
 <br />
     <div id="nodeTitle">
