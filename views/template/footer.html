@@ -18,8 +18,14 @@ div.footer_content{
     padding-right: 15%;
 }
 
+div.footer ul{
+    list-style: none;
+    padding: 5px;
+}
+
 div.footer a{
     color: #fff;
+    font-size: 70%;
 }
 
 #footerpic {
@@ -31,9 +37,17 @@ div.footer a{
 <div class="footer">
     <img src="{{=URL('static', 'images', args=['footer.png'])}}" width="300px" id="footerpic"/>
     <div class="footer_content">
+    <div style="float: left;">
     <ul>
         <li>{{=A("Activity Log", _href=URL('main','log'))}}</li>
         <li>{{=A("Submit Feedback", _href=URL('edit','feedback'))}}</li>
     </ul>
+    </div>
+    <div style="float: left;">
+    <ul>
+    <li>{{=A("RIT Home", _href="http://rit.edu")}}</li>
+    <li>{{=A("Innovation Center Home", _href="http://innovation.rit.edu")}}</li>
+    </ul>
+    </div>
     </div>
 </div>
