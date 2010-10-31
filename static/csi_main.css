@@ -159,13 +159,9 @@ float:left;
 }
 
 #mainContent, #onlyMainContent {
-    
     margin: 20px 290px 0 10px;
-    
-    width:auto;
     float: none;
     text-align: left;
-    height:auto;
     
     border-right:1px solid black;
     border-left:1px solid black;
