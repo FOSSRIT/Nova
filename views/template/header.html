@@ -78,7 +78,8 @@
     {{if not auth.is_logged_in() and not request.function=='user':}}
     {{form=auth.login(next=request.url)}}
     
-        {{=form.custom.begin}}
+        <form  action="{{=URL('default','user',args='login')}}" enctype="multipart/form-data" method="post">
+        {{###=form.custom.begin}}
         
         <div class="login_left_form">
             <label for="auth_user_username">{{=form.custom.label.username}}</label> 
