@@ -21,7 +21,7 @@
         close_link = document.createElement("a");
         close_link.setAttribute('href','#');
         close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
-        close_link.innerText="Close";
+        close_link.appendChild(document.createTextNode("Close"));
         
         div.load(url, function() {
             div.append(close_link);
@@ -171,7 +171,7 @@
         close_link = document.createElement("a");
         close_link.setAttribute('href','#');
         close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
-        close_link.innerText="Close";
+        close_link.appendChild(document.createTextNode("Close"));
         
         div.load(url, function() {
             div.append(close_link);
