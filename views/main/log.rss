@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+	<title>Site Activity</title>
+	<description>Site Activity Feed</description>
+	<link>{{="http://%s%s" % (request.env.http_host, URL('main','log', extension="") )}}</link>
+	<lastBuildDate>{{=request.now.strftime("%a, %d %b %Y %H:%M:%S GMT")}}</lastBuildDate>
+<atom:link href="{{="http://%s%s" % (request.env.http_host, URL('main','log', extension="rss") )}}" rel="self" type="application/rss+xml" />
+ 
+{{for item in log:}}
+	<item>
+		<title>{{=XML(item.string_cache, sanitize=True)}}</title>
+		<description>{{=XML(item.string_cache).flatten()}}</description>
+		<link>{{="http://%s%s" % (request.env.http_host, URL('main','nodeid',args=item.target, extension="") )}}</link>
+		<pubDate>{{=item.date.strftime("%a, %d %b %Y %H:%M:%S GMT")}}</pubDate>
+	</item>
+ {{pass}}
+</channel>
+</rss>

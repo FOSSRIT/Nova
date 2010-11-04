@@ -5,6 +5,8 @@
 <title>{{=response.title or request.application}}</title>
 {{if vars().has_key('node') and node:}}
 <link rel="alternate" type="application/atom+xml" title="Page Activity" href="{{=URL('main','node_activity',args=node.url, extension="rss")}}" /> 
+{{elif request.function == "log":}}
+<link rel="alternate" type="application/atom+xml" title="Page Activity" href="{{=URL('main','log', extension="rss")}}" /> 
 {{pass}}
 <link href="{{=URL(request.application,'static','csi_main.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{=URL(request.application,'static','jquery.lightbox-0.5.css')}}" rel="stylesheet" type="text/css" media="screen" />
