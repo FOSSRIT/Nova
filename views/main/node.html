@@ -261,7 +261,7 @@
     <div id="picture" class="db_photo_editable">
         {{if node.picFile:}}
         <a href="{{=URL('default','download',args=node.picFile)}}">
-        <img src="{{=URL('default','download',args=node.picFile)}}" /></a>
+        <img src="{{=URL('default','thumb',args=[300,300,node.picFile])}}" /></a>
         {{else:}}
             {{if can_edit(node):}}
                 <img src="{{=URL('static', 'images', args=['placeholder_edit.png'])}}" />
