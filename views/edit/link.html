@@ -76,8 +76,8 @@ function display_nodes(filter){
                     <a href='#' onclick='" + action + "'>\
                         <div class='nodePic'>\
                             <img src='" + 
-                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder.png')}}":"{{=URL('default','download')}}/"+val.picFile) +
-                            "' width='160px'></div>\
+                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumbnail')}}/"+val.picFile) +
+                            "></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";

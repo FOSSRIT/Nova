@@ -51,7 +51,61 @@ def download():
     response.headers['Cache-Control'] = "max-age=3600"
     return response.download(request,db)
 
+def thumbnail():
+    import os.path
+    import Image
+    
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = "max-age=3600"
+    
+    #request Path
+    request_sorce_path = os.path.join(request.folder, 'uploads', request.args(0))
+    request_path = os.path.join(request.folder, 'uploads','thumb', request.args(0))
+    #return dict(sorce=request_sorce_path, thumb=request_path)
+    if os.path.exists(request_path):
+        return response.stream(open(request_path, 'rb'))
+    
+    elif os.path.exists(request_sorce_path):
+        thumb = Image.open(request_sorce_path)
+        thumb.thumbnail((150,150), Image.ANTIALIAS)
+        try:
+            thumb.save(request_path)
+        except KeyError:
+            thumb.save(request_path, "JPEG")
+        
+        return response.stream(open(request_path, 'rb'))
+    else:
+        raise HTTP(404, "Image not found")
 
+def mini_thumb():
+    import os.path
+    import Image
+    
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = "max-age=3600"
+    
+    #request Path
+    request_sorce_path = os.path.join(request.folder, 'uploads', request.args(0))
+    request_path = os.path.join(request.folder, 'uploads','mini_thumb', request.args(0))
+    #return dict(sorce=request_sorce_path, thumb=request_path)
+    if os.path.exists(request_path):
+        return response.stream(open(request_path, 'rb'))
+    
+    elif os.path.exists(request_sorce_path):
+        thumb = Image.open(request_sorce_path)
+        thumb.thumbnail((40,40), Image.ANTIALIAS)
+        try:
+            thumb.save(request_path)
+        except KeyError:
+            thumb.save(request_path, "JPEG")
+        
+        return response.stream(open(request_path, 'rb'))
+    else:
+        raise HTTP(404, "Image not found")
 def call():
     """
     exposes services. for example:
