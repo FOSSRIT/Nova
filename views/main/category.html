@@ -26,29 +26,19 @@ function display_nodes(filter){
     var i = 0;
     $.each(nodes, function(key,val){
         if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
-        if( i < 9 ){
             var html_add = "\
                 <div class='nodeBox'>\
                     <a href='{{=URL('main','node')}}/" + val.url + "'>\
                         <div class='nodePic'>\
-                            <img src='" +
+                            <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" +
                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}//"+val.picFile) +"' /></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";
         
             $("#TARGET").append( html_add );
-        }else{
-            var html_add = "\
-                <div class='nodeListing'>\
-                    <a href='{{=URL('main','node')}}/" + val.url + "'>\
-                        <div class='nodeName'>" + val.name + "</div>\
-                    </a>\
-                 </div>";
-            $("#TARGET").append( html_add );
         }
-        i++;
-        }
+        imgOndemand();
     });
 }
 
