@@ -33,7 +33,6 @@ def user():
     # Lowercase before it gets processed by auth().
     if request.vars.username:
         request.vars.username = request.vars.username.lower()
-        response.flash = request
     if request.post_vars.username:
         request.post_vars.username = request.post_vars.username.lower()
 
