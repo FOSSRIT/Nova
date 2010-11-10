@@ -94,7 +94,7 @@ a.del_attr_link{
 }
 
 #picture {
-    width:300px;
+    width:auto;
     max-width:300px;
     max-height:400px;
     margin-left: 20px;
@@ -103,7 +103,7 @@ a.del_attr_link{
     margin-bottom:20px;
 }
 #picture img{
-    max-width:300px;
+    max-width:auto;
 }
 
 
@@ -189,7 +189,8 @@ float:left;
     margin-left:50px;
     margin-top:30px;
     float:left;
-    background-color:#999;
+    background-color:#CCC;
+    text-align: top;
 }
 
 #node_name {
@@ -215,7 +216,7 @@ float:left;
     height:150px;
     margin: 0 auto;
     margin-top:10px;
-    background-color:#CCC;
+    vertical-align: bottom;
     text-align: center;
 }
 
@@ -224,7 +225,6 @@ float:left;
     height:25px;
     margin: 0 auto;
     margin-top:10px;
-    background-color:#CCC;
     text-align: center;
     font-size: 90%;
 }
