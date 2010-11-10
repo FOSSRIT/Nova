@@ -209,9 +209,13 @@ def node():
                     os.unlink(f.name)
                     
                 # Populate Node with required Attributes
-                populate_node_with_required(db(db.node.url == form.vars.url).select().first())
+                node = db(db.node.url == form.vars.url).select().first()
+                populate_node_with_required(node)
                 
-                db.syslog.insert(action="Added Page", target=db(db.node.url == form.vars.url).select().first().id)
+                db.syslog.insert(action="Added Page", target=node.id)
+                
+                # Link user node to page
+                db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
                 
                 redirect(URL('main','node',args=form.vars.url))
             elif form.errors:
