@@ -13,48 +13,58 @@
     </div> <!-- end viewbar -->
 <script>
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('main','category_ajax', args=category.value)}}';
+var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('api','search.json')}}';
 {{else:}}
-var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('main','category_ajax', args=category.value)}}';
+var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','search.json')}}';
 {{pass}}
 </script>
 <script>
-var nodes = Array();
 
-function display_nodes(filter){
-    $("#TARGET").empty()
-    var i = 0;
-    $.each(nodes, function(key,val){
-        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 ){
+function pull_data(search, page, empty){
+    request = autoload_request_url + "?order=modified&sort=desc&category={{=category.value}}&page=" + page + "&search=" + escape(search)
+    $.getJSON(request,
+        function(data){
+            if( empty ){
+                $("#TARGET").empty();
+            }
+            $.each(data.nodes, function(key,val){
             var html_add = "\
                 <div class='nodeBox'>\
                     <a href='{{=URL('main','node')}}/" + val.url + "'>\
                         <div class='nodePic'>\
                             <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" +
-                                ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}//"+val.picFile) +"' /></div>\
+                                ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"' /></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";
         
             $("#TARGET").append( html_add );
-        }
+        });
         imgOndemand();
+        if( data.nodes.length == 50 ){
+            $("#TARGET").append( "<a href='#' id='MORE_LINK' style='clear: both; text-align: center;' onclick='pull_data(\"" + escape(search) + "\", " + (page + 1) + ", false); $(this).remove(); return false;'><br style='clear: both;'>More</a>");
+
+            $(window).bind("scroll.morelink", function(){
+                the_link = $("#MORE_LINK");
+                if( the_link.offset().top < _$w.height() + _$w.scrollTop() ){
+                    $(window).unbind('scroll.morelink');
+                    pull_data( search, page + 1, false );
+                    the_link.remove()
+                    
+                }
+            });
+        }
     });
 }
 
 $(document).ready(function(){
-    $.getJSON( autoload_request_url,
-        function(data){
-            nodes = data.rows;
-            display_nodes();
-        }
-    );
+    pull_data("", 1, true);
 });
 </script>
 
 <div style="text-align: center;">
 <form onsubmit="return false;">
-    Search: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
+    Search: <input type="text" name="search_filter" onkeyup="pull_data(this.value, 1, true);" />
 </form>
 </div>
 <div id="TARGET" style="clear:both;">

@@ -4,90 +4,105 @@
 
 <h2>Add or Remove Links</h2>
 <script>
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+proto = 'https://{{=request.env.http_host}}';
+{{else:}}
+proto = 'http://{{=request.env.http_host}}';
+{{pass}}
+
+autoload_request_url = "";
+gsearch ="";
+gpage =  "";
 var links = [
 {{for link in linkedSet:}}
     {{=link.id}},
 {{pass}}
     ];
+    
 function set_request_url( cat ){
-    {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-        var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('main','category_ajax')}}/' + cat;
-    {{else:}}
-        var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('main','category_ajax')}}/' + cat;
-    {{pass}}
+    autoload_request_url = proto + '{{=URL('api','search.json')}}/?category='+cat;
+    pull_data("", 1, true);
+}
     
-    $.getJSON( autoload_request_url,
-        function(data){
-            nodes = data.rows;
-            display_nodes();
-        }
-    );
-    }
-    
-function delete_link( page, id ){
-    var url = "{{=URL('ajaxedit','unlink',args=node.url)}}/" + page
+function delete_link( page, id, link){
+    var url = proto + "{{=URL('ajaxedit','unlink',args=node.url)}}/" + page
     $.ajax({
         url: url,
         success: function(){
             var idx = links.indexOf(id); // Find the index
             if(idx!=-1) links.splice(idx, 1);
-            display_nodes(filter_txt);
             $("div.flash").html("Node Unlinked");
             $("div.flash").slideDown('slow').delay(3000).slideUp('slow');
+            pull_data(gsearch, gpage, true);
         },
         error: function(){
-            alert("unable to link");
+            alert("unable to unlink");
         }
         });
 }
-function create_link( page, id ){
-    var url = "{{=URL('ajaxedit','link', args=node.url)}}/" + page
+function create_link( page, id, link ){
+    var url = proto + "{{=URL('ajaxedit','link', args=node.url)}}/" + page
     $.ajax({
         url: url,
         success: function(){
             links.push( id );
-            display_nodes(filter_txt);
             $("div.flash").html("Node Linked");
             $("div.flash").slideDown('slow').delay(3000).slideUp('slow');
+            pull_data(gsearch, gpage, true);
         },
         error: function(){
             alert("unable to link");
         }
         });
 }
-var nodes = Array();
-var filter_txt="";
-function display_nodes(filter){
-    filter_txt = filter
-    $("#TARGET").empty()
-    var i = 0;
-    $.each(nodes, function(key,val){
-        if( filter == null || val.name.toLowerCase().indexOf(filter.toLowerCase()) != -1 && val.id != {{=node.id}}){
-            var style = "";
-            var action = 'create_link("' + val.url + '", ' + val.id + '); return false;';
-            if(links.indexOf(val.id) != -1 ){
-                var action = 'delete_link("' + val.url + '", ' + val.id + '); return false;';
-                style="background: green;";
-                
+
+function pull_data(search, page, empty){
+    gsearch = search;
+    gpage = page;
+    request = autoload_request_url + "&order=modified&sort=desc&page=" + page + "&search=" + escape(search)
+    $.getJSON(request,
+        function(data){
+            if( empty ){
+                $("#TARGET").empty();
             }
-            var html_add = "\
+            $.each(data.nodes, function(key,val){
+             
+                var style = "";
+                var action = 'create_link("' + val.url + '", ' + val.id + ', this); return false;';
+                if(links.indexOf(val.id) != -1 ){
+                    var action = 'delete_link("' + val.url + '", ' + val.id + ', this); return false;';
+                    style="background: green;";    
+                }
+                var html_add = "\
                 <div class='nodeBox' style='"+style+"'>\
                     <a href='#' onclick='" + action + "'>\
                         <div class='nodePic'>\
                             <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" + 
-                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}//"+val.picFile) +"' /></div>\
+                                 ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"' /></div>\
                         <div class='nodeName'>" + val.name + "</div>\
                     </a>\
                  </div>";
         
             $("#TARGET").append( html_add );
+        });
         imgOndemand();
+        if( data.nodes.length == 50 ){
+            $("#TARGET").append( "<a href='#' id='MORE_LINK' style='clear: both; text-align: center;' onclick='pull_data(\"" + escape(search) + "\", " + (page + 1) + ", false); $(this).remove(); return false;'><br style='clear: both;'>More</a>");
+
+            $(window).bind("scroll.morelink", function(){
+                    the_link = $("#MORE_LINK");
+                    if( the_link.offset().top < _$w.height() + _$w.scrollTop() ){
+                        $(window).unbind('scroll.morelink');
+                        pull_data( search, page + 1, false );
+                        the_link.remove()
+                        
+                    }
+                });
         }
     });
 }
 
 $(document).ready(function(){
-    // Grab 21 most resent modified nodes
     set_request_url('');
 });
 </script>
@@ -97,7 +112,7 @@ Clicking a page will add a link new link or remove an existing link.<br /> Exist
 Select Category: 
 {{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a> {{pass}}
 <form onsubmit="return false;">
-    Filter: <input type="text" name="search_filter" onkeyup="display_nodes(this.value);" />
+    Filter: <input type="text" name="search_filter" onkeyup="pull_data(this.value, 1, true);" />
 </form>
 </div>
 <div id="TARGET" style="clear:both;"><img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...</div>
