@@ -19,11 +19,22 @@ var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','searc
 {{pass}}
 </script>
 <script>
-
+var pending_request = "";
 function pull_data(search, page, empty){
     request = autoload_request_url + "?order=modified&sort=desc&category={{=category.value}}&page=" + page + "&search=" + escape(search)
-    $.getJSON(request,
+    
+    if( pending_request ){
+        pending_request.abort();
+    }
+    
+    
+    $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Searching for " + search)
+    pending_request = $.getJSON(request,
         function(data){
+            if( !data ){
+                return;
+            }
+            $("#status").html('');
             if( empty ){
                 $("#TARGET").empty();
             }
@@ -66,6 +77,7 @@ $(document).ready(function(){
 <form onsubmit="return false;">
     Search: <input type="text" name="search_filter" onkeyup="pull_data(this.value, 1, true);" />
 </form>
+<div id="status"></div>
 </div>
 <div id="TARGET" style="clear:both;">
 <img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...

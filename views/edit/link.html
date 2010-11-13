@@ -56,12 +56,23 @@ function create_link( page, id, link ){
         });
 }
 
+var pending_request = "";
 function pull_data(search, page, empty){
     gsearch = search;
     gpage = page;
-    request = autoload_request_url + "&order=modified&sort=desc&page=" + page + "&search=" + escape(search)
-    $.getJSON(request,
+    request = autoload_request_url + "&order=modified&sort=desc&page=" + page + "&search=" + escape(search);
+    
+    if( pending_request ){
+        pending_request.abort();
+    }
+    $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Searching for " + search)
+    pending_request = $.getJSON(request,
         function(data){
+            if( !data ){
+                return;
+            }
+            $("#status").html('');
+
             if( empty ){
                 $("#TARGET").empty();
             }
@@ -114,6 +125,7 @@ Select Category:
 <form onsubmit="return false;">
     Filter: <input type="text" name="search_filter" onkeyup="pull_data(this.value, 1, true);" />
 </form>
+<div id="status"></div>
 </div>
 <div id="TARGET" style="clear:both;"><img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...</div>
 <br style="clear:both;" />
