@@ -134,7 +134,7 @@ def editphoto():
         response.view = "generic.load"
         node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2="photo")
-        return dict(t=IMG(_src=URL('default','download',args=node.picFile)))
+        return dict(t=IMG(_src=URL('default','thumb',args=[300,300,node.picFile])))
             
     else:
         response.view = "htmlblocks/edit_pict_form.html"
