@@ -6,13 +6,15 @@
     {{pass}}
     <fieldset>
         <legend>Edit Page</legend>
-         Note: Description and Attributes can use <a href="{{=URL('examples','static','markmin.html')}}">markmin syntax</a>.
         {{=form}}
         <script type="text/javascript">
         $(document).ready(function() {
  // hides the slickbox as soon as the DOM is ready
  // (a little sooner than page load)
   $('#slickbox').hide();
+
+ //shows wysiwyg editor
+ $("#node_description").wysiwyg();
  
  // toggles the slickbox on clicking the noted link  
   $('a#slick-toggle').click(function() {

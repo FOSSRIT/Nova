@@ -185,6 +185,10 @@
                 }
             });
             
+            //Load in wysiwyg if form element exists
+            $("#node_description").wysiwyg();
+            $("#nodeAttr_value").wysiwyg();
+            
             if( fakeit == true ){
                 f_frame = document.createElement("iframe");
                 f_frame.name = "__Fake_IT_Frame";
@@ -274,5 +278,5 @@
     <div id="sideStats">{{include "htmlblocks/attributes.html"}}</div>
 
     <div id="descriptionBox">
-    <div id="description" class="db_editable">{{if node.description:}}{{=MARKMIN(node.description)}}{{else:}}No Description Yet :({{pass}}</div>
+    <div id="description" class="db_editable">{{if node.description:}}{{=XML(node.description)}}{{else:}}No Description Yet :({{pass}}</div>
     </div> <!-- end description -->
