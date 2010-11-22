@@ -13,22 +13,6 @@
         $('#picture a').unbind()
     }
     
-    function page_overlay(url){
-        var div = $("#overlay");
-        div.html('Loading...');
-        div.show('slow');
-        
-        close_link = document.createElement("a");
-        close_link.setAttribute('href','#');
-        close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
-        close_link.appendChild(document.createTextNode("Close"));
-        
-        div.load(url, function() {
-            div.append(close_link);
-        });
-            
-    }
-    
     $(function() {
         enable_lightBox();
     });
@@ -163,31 +147,23 @@
     }
 
     function edit_request(url, div_loc){
-
-        var div = $("#overlay");
-        div.html('Loading...');
-        div.show('slow');
-        
-        close_link = document.createElement("a");
-        close_link.setAttribute('href','#');
-        close_link.setAttribute('onclick','$("#overlay").hide("slow"); return false');
-        close_link.appendChild(document.createTextNode("Close"));
+        show_overlay("Edit Page","Loading...");
+        var div = $("#overlay_body");
         
         div.load(url, function() {
-            div.append(close_link);
-            var form = $("#overlay form");
+            var form = $("#overlay_body form");
 
             // Test if we must fake it instead
             var fakeit = false;
-            $("#overlay form :input").each( function() {
+            $("#overlay_body form :input").each( function() {
                 if( this.type == "file" ){
                     fakeit = true;
                 }
             });
             
             //Load in wysiwyg if form element exists
-            $("#node_description").wysiwyg();
-            $("#nodeAttr_value").wysiwyg();
+            $("#node_description").width("98%").wysiwyg();
+            $("#nodeAttr_value").width("98%").wysiwyg();
             
             if( fakeit == true ){
                 f_frame = document.createElement("iframe");
@@ -206,7 +182,7 @@
             }else{
                 form.submit(function() {
                     var inputs = [];
-                    $("#overlay form :input").each( function() {
+                    $("#overlay_body form :input").each( function() {
                         inputs.push(this.name + '=' + escape(this.value));
                     });
                   
@@ -214,10 +190,10 @@
                       data: inputs.join('&'),
                       type: 'post',
                       enctype: 'multipart/form-data',
-                      url: $("#overlay form").attr('action'),
+                      url: $("#overlay_body form").attr('action'),
                       success: function(r) {
                           document.getElementById(div_loc).innerHTML=r;
-                          div.hide('slow');
+                          hide_overlay();
                           reflash_edit_mode();
                       },
                       error: function() { alert("Failed to submit"); },
@@ -251,9 +227,9 @@
 {{pass}}
 
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-<a href="#" onclick="page_overlay('https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;">View Page Activity</a>
 {{else:}}
-<a href="#" onclick="page_overlay('http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}');">View Page Activity</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;">View Page Activity</a>
 {{pass}}
     </div>
 <br />

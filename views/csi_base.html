@@ -19,6 +19,31 @@
 {{include "template/header.html"}}
 {{include "template/navigation.html"}}
 <div id="overlay"></div>
+
+<script>
+function show_overlay(title, content, url){
+    jQuery("#overlay_title").html(title);
+    jQuery("#overlay_body").html(content);
+    if(url!=null){
+        $.get(url, function(data) {
+            jQuery("#overlay_body").html(data);
+        });
+    }
+    jQuery("#overlay_holder").fadeIn();
+}
+
+function hide_overlay(){
+    jQuery("#overlay_holder").fadeOut();
+}
+</script>
+<div id="overlay_holder" style="display:none; text-align: left;">
+<div style="position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;z-index:1001;-moz-opacity:0.8;opacity:.80;opacity:0.8;"></div>
+<div style="position:fixed;top:15%;left:15%;width:70%;height:70%;padding:16px;border:2px solid black;background-color:white;opacity:1.0;z-index:1002;">
+<span style="font-weight:bold;" id="overlay_title">Title</span>
+<span style="float:right">[<a href="#" onclick="hide_overlay();return false;">close</a>]</span><hr/><div id="overlay_body" style="overflow-y: auto; overflow-x: hidden; height: 95%; width: 100%">content</div></div></div>
+
+
+
 <br sytle="clear:both;">
 <style>
     div.container {
