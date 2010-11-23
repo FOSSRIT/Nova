@@ -27,11 +27,11 @@ function toggle_print(item){
 <img src="{{=URL("static","images",args="footer.png")}}" width="150px;" style="float: left;">
 <div style="float: right; clear:right; font-size: 80%;">{{="http://" +  request.env.http_host + URL('main','node',args=node.url)}}</div>
 <img src="{{=URL('default','download',args=node.picFile)}}" width="400px"/><br />
-<div onclick="toggle_print(this)">{{=XML(node.description)}}</div>
+<div onclick="toggle_print(this)">{{=XML(node.description,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
 
 <table width="100%">
 {{for attr in node_attributes:}}
-    <tr onclick="toggle_print(this)"><td width="150px">{{=attr.vocab.value}}:</td><td>{{=XML(attr.value)}}</td></tr>
+    <tr onclick="toggle_print(this)"><td width="150px">{{=attr.vocab.value}}:</td><td>{{=XML(attr.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</td></tr>
 {{pass}}
 </table>
 </div>

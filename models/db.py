@@ -461,3 +461,40 @@ def post_tweet(msg):
         api.PostUpdate(msg)
     import thread
     thread.start_new_thread ( do_tweet, ( msg, ) )
+
+
+ALLOWED_HTML_TAGS = [
+    'a',
+    'b',
+    'blockquote',
+    'br/',
+    'i',
+    'li',
+    'ol',
+    'ul',
+    'u',
+    'p',
+    'cite',
+    'code',
+    'img/',
+    'table',
+    'tbody',
+    'tr',
+    'td',
+    'hr',
+    's',
+    'sub',
+    'sup',
+    'div',
+    'h1',
+    'h2',
+    'h3',
+ ] 
+
+ALLOWED_HTML_ATTR = {
+    'a': ['href', 'title', 'style'],
+    'img': ['src', 'alt', 'style'],
+    'blockquote': ['type', 'style'],
+    'p': ['style'],
+    'table': ['border', 'style']
+ }

@@ -29,7 +29,7 @@ def editattribute():
         
         attr = db(db.nodeAttr.id == attr ).select().first()
         
-        return dict(t=XML(attr.value))
+        return dict(t=XML(attr.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
 
     else:
         response.view = "generic.load"
@@ -112,7 +112,7 @@ def editnode():
         # Grab the new version of the node to populate data
         node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
-        return dict(node=XML(node.get(request.args(1))))
+        return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:
         return dict(form=form)
         

@@ -254,5 +254,6 @@
     <div id="sideStats">{{include "htmlblocks/attributes.html"}}</div>
 
     <div id="descriptionBox">
-    <div id="description" class="db_editable">{{if node.description:}}{{=XML(node.description)}}{{else:}}No Description Yet :({{pass}}</div>
+    <div id="description" class="db_editable">
+    {{if node.description:}}{{=XML(node.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}{{else:}}No Description Yet :({{pass}}</div>
     </div> <!-- end description -->
