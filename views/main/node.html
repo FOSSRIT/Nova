@@ -164,6 +164,9 @@
             //Load in wysiwyg if form element exists
             $("#node_description,#nodeAttr_value").width("98%").height($("#overlay_body").height()-80).wysiwyg({controls:{html: {visible: true}}});
             
+            //Stretch out elements that need to be
+            $("#node_name").width("98%");
+
             if( fakeit == true ){
                 f_frame = document.createElement("iframe");
                 f_frame.name = "__Fake_IT_Frame";
