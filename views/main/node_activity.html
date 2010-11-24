@@ -1,7 +1,7 @@
 <div id="page_activity">
 <h3>Page Activity</h3>
     {{for item in activity:}}
-      {{=XML(item.string_cache)}}<br />
+      {{=XML(item.string_cache, True, ['a'], ALLOWED_HTML_ATTR)}}<br />
     {{pass}}
     
 </div>

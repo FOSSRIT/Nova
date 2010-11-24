@@ -3,11 +3,11 @@
 <ul>
 {{for entry in log:}}
 {{if entry.string_cache:}}
-<li>{{=XML(entry.string_cache)}}</li>
+<li>{{=XML(entry.string_cache, True, ['a'], ALLOWED_HTML_ATTR)}}</li>
 {{else:}}
 {{entry_value = log_to_string(entry)}}
 {{entry.update_record(string_cache=entry_value)}}
-<li>{{=XML(entry_value)}}</li>
+<li>{{=XML(entry_value, True, ['a'], ALLOWED_HTML_ATTR)}}</li>
 {{pass}}
 {{pass}}
 
