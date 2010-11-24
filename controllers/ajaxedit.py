@@ -73,7 +73,7 @@ def addattribute():
     if not can_edit(node):
         raise HTTP(403, "Not allowed to edit this node's Attributes")
         
-    attribute_form = SQLFORM(db.nodeAttr,submit_button="Save",_action = URL('ajaxedit','addattribute', args=[node.url]))
+    attribute_form = SQLFORM(db.nodeAttr,submit_button="Save",_action = URL('ajaxedit','addattribute', args=[node.url]), comments=False)
     attribute_form.vars.nodeId = node
     
     # If they entered custom text, it will have vocab as '' and the auto complete will not be empty
