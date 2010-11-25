@@ -489,6 +489,13 @@ ALLOWED_HTML_TAGS = [
     'h1',
     'h2',
     'h3',
+    'span',
+    'font',
+    'strong',
+    #Flash Movies
+    'object',
+    'param',
+    'embed',
  ] 
 
 ALLOWED_HTML_ATTR = {
@@ -496,5 +503,12 @@ ALLOWED_HTML_ATTR = {
     'img': ['src', 'alt', 'style'],
     'blockquote': ['type', 'style'],
     'p': ['style'],
-    'table': ['border', 'style']
+    'table': ['border', 'style'],
+    'span': ['style'],
+    'div': ['style'],
+    'font': ['style', 'face'],
+    #Flash Movies
+    'object':['width','height'],
+    'param':['name','value'],
+    'embed':['src','type','allowscriptaccess','allowfullscreen','width','height'],
  }
