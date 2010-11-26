@@ -128,7 +128,8 @@ def log():
 @auth.requires_login()
 def watched():
     from datetime import datetime, timedelta
-    activity = db( 
+    if auth.user.watch_nodes:
+        activity = db( 
                     # Target is always a page
                     (db.syslog.target.belongs(auth.user.watch_nodes)) | 
                     ( # Grab Target2 if Link and unlink pages
@@ -138,5 +139,7 @@ def watched():
                       ) & (db.syslog.target2.belongs(auth.user.watch_nodes))
                     )
                  ).select(db.syslog.string_cache, db.syslog.date, limitby=(0,100), orderby=~db.syslog.id)
+    else:
+        activity = []
 
     return dict(watched=auth.user.watch_nodes, activity=activity)
