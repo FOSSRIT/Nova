@@ -3,7 +3,7 @@
 def index(): return dict(message="hello from cron.py")
 
 def send_watch_email():
-    if request.env.remote_addr != "127.0.0.1":
+    if request.env.remote_addr not in ["127.0.0.1","129.21.47.143"]:
         raise HTTP(401, 'unauthorized')
         
     #TODO Remove this
@@ -27,7 +27,8 @@ def send_watch_email():
             for change in activity:
                 email_message += XML(change.string_cache, True, ['a']).flatten() + "<br />"
             
-            mail.send(user.email, "Beta.innovation.rit.edu Watched Page Updates", "<html>%s</html>" % email_message)
+            if len(activity):
+                mail.send(user.email, "Beta.innovation.rit.edu Watched Page Updates", "<html>%s</html>" % email_message)
     
 def _username_to_email():
     for user in db(db.auth_user.email == "").select():
