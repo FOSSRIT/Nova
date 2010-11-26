@@ -321,6 +321,7 @@ auth_table = db.define_table(
     Field('registration_key', length=512, writable=False, readable=False, default=''),
     Field('registration_id', length=512, writable=False, readable=False, default=''),
     Field('home_node', db.node, writable=False, readable=False),
+    Field('watch_nodes', 'list:reference node', readable=False, writable=False),
     )
 
 auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)

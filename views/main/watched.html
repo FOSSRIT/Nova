@@ -1,0 +1,25 @@
+{{extend 'csi_view.html'}}
+<h1>Watched Pages</h1>
+{{if watched:}}
+<table border=1 width="100%">
+{{for node in watched:}}
+{{node_db = db(db.node.id == node).select(db.node.name, db.node.id, db.node.url, orderby=db.node.name).first()}}
+<tr><td>
+{{=A(node_db.name, _href=URL('node', args=node_db.url))}}
+</td><td width="100px">
+<div id="watch_{{=node_db.id}}">
+{{=A('Unwatch',_href=URL('ajaxedit','unwatch',args=node_db.url,vars={'cid':"watch_%d"%node_db.id}), cid="watch_%d"%node_db.id)}}
+</div>
+</td></tr>
+{{pass}}
+</table>
+
+<h1>Recent Activity</h1>
+<ul>
+{{for logentry in activity:}}
+<li>{{=XML(logentry.string_cache, True, ['a'])}}</li>
+{{pass}}
+</ul>
+{{else:}}
+You have no watched pages.
+{{pass}}

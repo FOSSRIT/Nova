@@ -125,16 +125,18 @@ def log():
     record_start = 100 * page
     return dict(log=db(db.syslog.id>0).select(orderby=~db.syslog.id, limitby=(record_start,record_start+100)),page=page)
 
-def addCat():
-        
-    return dict()
+@auth.requires_login()
+def watched():
+    from datetime import datetime, timedelta
+    activity = db( 
+                    # Target is always a page
+                    (db.syslog.target.belongs(auth.user.watch_nodes)) | 
+                    ( # Grab Target2 if Link and unlink pages
+                      (
+                        (db.syslog.action == 'Linked Page') |
+                        (db.syslog.action == 'Unlinked Page')
+                      ) & (db.syslog.target2.belongs(auth.user.watch_nodes))
+                    )
+                 ).select(db.syslog.string_cache, db.syslog.date, limitby=(0,100), orderby=~db.syslog.id)
 
-def display_form():
-   form = SQLFORM(db.node)
-   if form.accepts(request.vars, session):
-       response.flash = 'form accepted'
-   elif form.errors:
-       response.flash = 'form has errors'
-   else:
-       response.flash = 'please fill out the form'
-   return dict(form=form)
+    return dict(watched=auth.user.watch_nodes, activity=activity)

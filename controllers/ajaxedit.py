@@ -158,7 +158,7 @@ def link():
         
     db.linkTable.insert(nodeId=node, linkId=node2)
     db.syslog.insert(action="Linked Page", target=node.id, target2=node2.id)
-    return HTTP(200, "Ok, link made")
+    raise HTTP(200, "Ok, link made")
 
 
 @auth.requires_login()
@@ -175,4 +175,41 @@ def unlink():
     db((db.linkTable.nodeId == node2) & (db.linkTable.linkId==node)).delete() 
     db.syslog.insert(action="Unlinked Page", target=node.id, target2=node2.id)
         
-    return HTTP(200, "Ok, link removed")
+    raise HTTP(200, "Ok, link removed")
+
+@auth.requires_login()
+def watch():
+    node = get_node_or_404( request.args(0) )
+    the_cid = request.vars.cid or 'watch_link'
+    
+    # Check if None
+    if not auth.user.watch_nodes:
+        db(db.auth_user.id == auth.user.id).update(watch_nodes=[node.id])
+        session.auth.user.watch_nodes = [node.id]
+        
+        response.view = "generic.load"
+        return A('Unwatch',_href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
+        
+    elif node.id not in auth.user.watch_nodes:
+        db(db.auth_user.id == auth.user.id).update(watch_nodes=auth.user.watch_nodes + [node.id])
+        session.auth.user.watch_nodes = auth.user.watch_nodes + [node.id]
+        
+        response.view = "generic.load"
+        return A('Unwatch',_href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
+        
+    else:
+        raise HTTP(405, 'Already watched')
+    
+@auth.requires_login()
+def unwatch():
+    node = get_node_or_404( request.args(0) )
+    the_cid = request.vars.cid or 'watch_link'
+    
+    if node.id in auth.user.watch_nodes:
+        auth.user.watch_nodes.remove(node.id)
+        db(db.auth_user.id == auth.user.id).update(watch_nodes=auth.user.watch_nodes)
+        session.auth.user.watch_nodes = auth.user.watch_nodes
+        response.view = "generic.load"
+        return A('Watch',_href=URL('ajaxedit','watch',args=node.url), cid=the_cid)
+    else:
+        raise HTTP(405, 'Not watched')

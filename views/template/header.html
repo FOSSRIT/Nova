@@ -97,6 +97,7 @@
         {{=form.custom.end}}
     {{elif auth.is_logged_in():}}
     Hello {{=A(get_home_node().name, _href=URL('main', 'nodeid', args=auth.user.home_node))}} |
+    {{=A('Watched Pages', _href=URL('main','watched'))}} |
     {{=A("Logout", _href=URL('default','user',args='logout'))}}<br />
     
     {{if auth.has_membership("Site Admin"):}}

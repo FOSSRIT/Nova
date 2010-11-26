@@ -233,6 +233,18 @@
 {{else:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;">View Page Activity</a>
 {{pass}}
+
+{{if auth.is_logged_in():}}
+    {{if auth.user.watch_nodes and node.id in auth.user.watch_nodes:}}
+        <div id='watch_link'>
+            {{=A('Unwatch',_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
+        </div>
+    {{else:}}
+        <div id='watch_link'>
+            {{=A('Watch',_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
+        </div>
+    {{pass}}
+{{pass}}
     </div>
 <br />
     <div id="nodeTitle">
