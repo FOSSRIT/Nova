@@ -3,7 +3,7 @@
 def index():
     redirect(URL('main','node', args="csi"))
     #return dict()
-def about(): return dict()    
+def about(): return dict()
 
 def search():
     """
@@ -14,19 +14,19 @@ def search():
     if request.vars.query:
         # Search node names and descriptions
         results = db( (db.node.description.contains(request.vars.query)) | (db.node.name.contains(request.vars.query))).select()
-        
+
         # Search attributes
         results2 = db(db.nodeAttr.value.contains(request.vars.query)).select(db.nodeAttr.nodeId)
-        
+
         # Combine lists into one list of nodes
         for result in results:
             master.append(result)
-            
+
         for result in results2:
             master.append(result.nodeId)
 
     return dict(master=master)
-    
+
 def category_ajax():
     if request.args(0):
         typeId = db(db.nodeType.value==request.args(0)).select().first()
@@ -53,10 +53,10 @@ def category():
     """
     # Check for category name
     if len(request.args):
-        
+
         # Get row that matches category type
         typeId = db(db.nodeType.value==request.args[0]).select().first()
-                                  
+
         return dict(category=typeId)
     else:
         # No category requested
@@ -73,20 +73,20 @@ def nodeid():
 def node():
     # Check if the supplied a node request
     if len(request.args):
-    
+
         # Search for the node
         current_node = db(db.node.url==request.args[0]).select()
-                
+
         # Check if we got a node
         if len(current_node):
             current_node = current_node[0]
-            
+
             # Get Node Attributes
             attrs = db(db.nodeAttr.nodeId==current_node).select(orderby=db.nodeAttr.weight)
-        
+
             # Grab nodes from Linked Table ##
             cat_dict = get_node_links(current_node)
-                    
+
             return dict(node=current_node, node_attributes=attrs, node_list=cat_dict)
 
         else:
@@ -98,7 +98,7 @@ def node():
 
 def node_print():
     return node()
-    
+
 def node_activity():
     current_node =  get_node_or_404(request.args(0))
     # Grab Node History
@@ -121,7 +121,7 @@ def log():
             page = int(request.args(0))
         except:
             pass
-            
+
     record_start = 100 * page
     return dict(log=db(db.syslog.id>0).select(orderby=~db.syslog.id, limitby=(record_start,record_start+100)),page=page)
 
