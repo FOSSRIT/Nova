@@ -213,3 +213,18 @@ def unwatch():
         return A('Watch',_href=URL('ajaxedit','watch',args=node.url), cid=the_cid)
     else:
         raise HTTP(405, 'Not watched')
+
+@auth.requires_login()
+def watchemail():
+    if request.args(0) == "True":
+        auth.user.email_watch = True
+        db(db.auth_user.id == auth.user.id).update(email_watch=True)
+        session.auth.user.email_watch = True
+        response.view = "generic.load"
+        return "Daily Email Enabled, " + A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), cid='watch_email').xml()
+    else:
+        auth.user.email_watch = False
+        db(db.auth_user.id == auth.user.id).update(email_watch=False)
+        session.auth.user.email_watch = False
+        response.view = "generic.load"
+        return "Daily Email Disabled, " + A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), cid='watch_email').xml()

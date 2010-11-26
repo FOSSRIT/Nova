@@ -9,7 +9,7 @@ def send_watch_email():
     #TODO Remove this
     _username_to_email()
     from datetime import datetime, timedelta
-    for user in db(db.auth_user.id > 0).select(db.auth_user.email, db.auth_user.watch_nodes):
+    for user in db((db.auth_user.id > 0) & (db.auth_user.email_watch == True)).select(db.auth_user.email, db.auth_user.watch_nodes):
         if user.watch_nodes and len(user.watch_nodes):
             activity = db( 
                         # Target is always a page

@@ -1,4 +1,11 @@
 {{extend 'csi_view.html'}}
+<div id="watch_email">
+{{if auth.user.email_watch:}}
+    Daily Email Enabled, {{=A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), cid='watch_email')}}
+{{else:}}
+    Daily Email Disabled, {{=A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), cid='watch_email')}}
+{{pass}}
+</div>
 <h1>Watched Pages</h1>
 {{if watched:}}
 <table border=1 width="100%">
