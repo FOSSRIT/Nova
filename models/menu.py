@@ -14,7 +14,8 @@ response.menu = [
        ('Events', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
        ('Engage', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=230", []),
           ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
-    ])
+    ]),
+    ('Tags', False, URL(request.application,'main','tags'), []),
 ]
     
 #Dynamically add types to main menu
