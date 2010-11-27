@@ -510,5 +510,5 @@ ALLOWED_HTML_ATTR = {
     #Flash Movies
     'object':['width','height'],
     'param':['name','value'],
-    'embed':['src','type','allowscriptaccess','allowfullscreen','width','height'],
+    'embed':['src','type','allowscriptaccess','allowfullscreen','width','height','wmode'],
  }
