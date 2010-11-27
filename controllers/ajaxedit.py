@@ -182,18 +182,7 @@ def watch():
     node = get_node_or_404( request.args(0) )
     the_cid = request.vars.cid or 'watch_link'
     
-    # Check if None
-    if not auth.user.watch_nodes:
-        db(db.auth_user.id == auth.user.id).update(watch_nodes=[node.id])
-        session.auth.user.watch_nodes = [node.id]
-        
-        response.view = "generic.load"
-        return A('Unwatch',_href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
-        
-    elif node.id not in auth.user.watch_nodes:
-        db(db.auth_user.id == auth.user.id).update(watch_nodes=auth.user.watch_nodes + [node.id])
-        session.auth.user.watch_nodes = auth.user.watch_nodes + [node.id]
-        
+    if add_rem_watch(node, True):
         response.view = "generic.load"
         return A('Unwatch',_href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
         
@@ -205,10 +194,7 @@ def unwatch():
     node = get_node_or_404( request.args(0) )
     the_cid = request.vars.cid or 'watch_link'
     
-    if node.id in auth.user.watch_nodes:
-        auth.user.watch_nodes.remove(node.id)
-        db(db.auth_user.id == auth.user.id).update(watch_nodes=auth.user.watch_nodes)
-        session.auth.user.watch_nodes = auth.user.watch_nodes
+    if add_rem_watch(node, False):
         response.view = "generic.load"
         return A('Watch',_href=URL('ajaxedit','watch',args=node.url), cid=the_cid)
     else:

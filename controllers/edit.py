@@ -217,6 +217,9 @@ def node():
                 # Link user node to page
                 db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
                 
+                # Set Watch Node
+                add_rem_watch(node, True)
+                
                 redirect(URL('main','node',args=form.vars.url))
             elif form.errors:
                 response.flash = 'form has errors'
