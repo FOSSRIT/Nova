@@ -143,3 +143,24 @@ def watched():
         activity = []
 
     return dict(watched=auth.user.watch_nodes, activity=activity)
+
+def tags():
+    if request.args(0):
+        return dict(tag=request.args(0))    
+    else:
+        # Builds dict of key to frequency
+        tagcount = {}
+        for row in db(db.node.tags != []).select(db.node.tags):
+            for tag in row.tags:
+                tagcount[tag] = tagcount.get(tag, 0) + 1
+        
+        # Make a sorted list of tuples key, frequency by frequency
+        import operator
+        sorted_x = sorted(tagcount.iteritems(), key=operator.itemgetter(1))
+        sorted_x.reverse()
+        
+        # Make html output
+        ret = UL(_class='comma-separated')
+        [ret.append(A("%s (%d)" % (tag, count), _href=URL('main','tags', args=tag))) for tag,count in sorted_x]
+        
+        return dict(tagcount=ret)

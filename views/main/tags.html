@@ -1,0 +1,9 @@
+{{extend 'csi_view.html'}}
+{{if vars().has_key('tagcount'):}}
+    <h1>Tags</h1>
+    {{=tagcount}}
+{{else:}}
+    <h1>Pages taged with <i>{{=tag}}</i></h1>
+    {{search_mode="tag=%s" % tag}}
+    {{include "htmlblocks/search.html"}}
+{{pass}}

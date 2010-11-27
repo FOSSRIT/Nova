@@ -112,7 +112,10 @@ def editnode():
         # Grab the new version of the node to populate data
         node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
-        return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
+        if request.args(1) == 'tags':
+            return tags_2_html(node.tags)
+        else:
+            return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:
         return dict(form=form)
         

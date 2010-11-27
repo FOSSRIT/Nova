@@ -17,6 +17,7 @@ def search():
         sort       desc (otherwise asc)
         search     search string
         category   Category name to filter by
+        tag        tag filter
         
     """
     # Determine Page Information
@@ -57,6 +58,13 @@ def search():
             search = search & (db.node.type == typeId)
         else:
             search = (db.node.type == typeId)
+            
+    # Tag Criteria
+    if request.vars.tag and len(request.vars.tag):
+        if search:
+            search = search & (db.node.tags.contains(request.vars.tag))
+        else:
+            search = (db.node.tags.contains(request.vars.tag))
 
     # If no criteria, then select everything
     if not search:

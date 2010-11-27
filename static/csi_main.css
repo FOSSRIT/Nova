@@ -347,6 +347,16 @@ img{
     border: none;
 }
 
+/* Styling for a comma separated list of values from a ul */
+/* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */
+ul.comma-separated { display: inline; list-style: none; margin: 0; padding: 0; }
+ul.comma-separated li { display: inline; }
+ul.comma-separated li:first-child:before { content:""; }
+ul.comma-separated li:before { content: ", "; white-space: pre;}
+ul.comma-separated li:last-child:before { content:" and "; white-space: pre;}
+ul.comma-separated li:last-child:after { content: "."; }
+
+
 @media print{
   #header_bar, #navigation, .nodeTopLinks{
       display: none;
