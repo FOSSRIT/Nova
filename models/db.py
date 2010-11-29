@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*- 
 
-# Twitter Password Information
-consumer_key='PASSWORD_REMOVED_FROM_GIT',
-consumer_secret='PASSWORD_REMOVED_FROM_GIT',
-access_token_key='PASSWORD_REMOVED_FROM_GIT',
-access_token_secret='PASSWORD_REMOVED_FROM_GIT'
-
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
 #########################################################################
@@ -215,8 +209,6 @@ def log_str_auto_compute(record):
 
     msg = log_to_string(DictObj(record))
 
-    #Post log to tweet (remove html):
-    post_tweet(TAG(msg).flatten())
     return msg
 
 
@@ -449,20 +441,6 @@ def get_attribute_or_404( node, attribute_id ):
         raise HTTP(404, 'attribute not found')
     else:
         return attr
-
-def post_tweet(msg):
-
-    def do_tweet(the_msg):
-        import twitter
-        api = twitter.Api(consumer_key=consumer_key,
-                      consumer_secret=consumer_secret,
-                      access_token_key=access_token_key,
-                      access_token_secret=access_token_secret
-                     )
-        api.PostUpdate(msg)
-    import thread
-    thread.start_new_thread ( do_tweet, ( msg, ) )
-
 
 ALLOWED_HTML_TAGS = [
     'a',
