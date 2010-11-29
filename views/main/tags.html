@@ -3,7 +3,7 @@
     <h1>Tags</h1>
     {{=tagcount}}
 {{else:}}
-    <h1>Pages taged with <i>{{=tag}}</i></h1>
+    <h1>Pages tagged with <i>{{=tag}}</i></h1>
     {{search_mode="tag=%s" % tag}}
     {{include "htmlblocks/search.html"}}
 {{pass}}
