@@ -23,12 +23,12 @@ def send_watch_email():
                         (db.syslog.date > datetime.now()-timedelta(days=1))
     
                      ).select(db.syslog.string_cache, db.syslog.date, limitby=(0,100), orderby=~db.syslog.id)
-            email_message="""You have requested to be notified of updates on beta.innovation.rit.edu.<br><br>Resent Changes:<br>"""
+            email_message="""You have requested to be notified of updates on beta.innovation.rit.edu.<br><br>Recent Changes:<br>"""
             for change in activity:
                 email_message += XML(change.string_cache, True, ['a']).flatten() + "<br />"
             
             if len(activity):
-                mail.send(user.email, "Beta.innovation.rit.edu Watched Page Updates", "<html>%s</html>" % email_message)
+                mail.send(user.email, "Beta.innovation.rit.edu Watched Page Updates", "<html><head><base href='http://beta.innovation.rit.edu'></head><body>%s</body></html>" % email_message)
     
 def _username_to_email():
     for user in db(db.auth_user.email == "").select():
