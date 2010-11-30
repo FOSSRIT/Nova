@@ -184,7 +184,7 @@ def log_to_string(entry, links=True):
         }
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
-            entry.date,
+            entry.date.strftime("%d/%m/%y %I:%M %p"),
             URL('main','node',args=home_node.url),
             home_node.name,
             switch[entry.action](entry)
