@@ -45,7 +45,7 @@
                 $(this).css( "border", "");
                 $(this).css( "background-color", "");
                 $(this).css( "cursor", "");
-                $(this).unbind('mouseenter').unbind('mouseleave');
+                $(this).unbind('click').unbind('mouseenter').unbind('mouseleave');
             }
         );
         $("#add_attr_link").remove()
@@ -87,10 +87,7 @@
                 $(this).css( "border", "6px dashed #FF0");
                 $(this).css( "background-color", "#FF0");
                 $(this).css( "cursor", "pointer");
-                $(this).bind( 'mouseenter',
-                    function(){
-                        $(this).css( "border", "6px solid #F60");
-                        $(this).bind( 'click', function(){
+                $(this).bind( 'click', function(){
                             if(this.className == 'db_attributes'){
                                 edit_request("{{=URL('ajaxedit','editattribute')}}/" + url_segment + "/" + this.id, this.id);
                             }else if(this.className == 'db_photo_editable'){
@@ -100,11 +97,13 @@
                             }
                             return false;
                         });
+                $(this).bind( 'mouseenter',
+                    function(){
+                        $(this).css( "border", "6px solid #F60");
                     });
                 $(this).bind( 'mouseleave',
                     function(){
                         $(this).css( "border", "6px dashed #FF0");
-                        $(this).unbind( 'click' );
                     }
                 );
             }
