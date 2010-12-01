@@ -104,7 +104,7 @@ def editnode():
         raise HTTP(403, "Not allowed to edit this node")
         
     form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
-                    comments=(request.args(1)=="tags"), formstyle="divs" , showid = False, submit_button="Save",
+                    comments=(request.args(1) in ["tags",'feeds']), formstyle="divs" , showid = False, submit_button="Save",
                     _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
                     
     response.view = "generic.load"
@@ -112,8 +112,10 @@ def editnode():
         # Grab the new version of the node to populate data
         node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
-        if request.args(1) == 'tags':
+        if request.args(1) =='tags':
             return tags_2_html(node.tags)
+        elif request.args(1) == 'feeds':
+            return "Feed Updated.  Data may be cached, check back in an hour for updated data."
         else:
             return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:

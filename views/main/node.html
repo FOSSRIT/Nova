@@ -272,5 +272,22 @@
     {{if node.description:}}{{=XML(node.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}{{else:}}No Description Yet :({{pass}}</div>
     </div> <!-- end description -->
 
+    {{if node.tags and len(node.tags):}}
     <h3>Tags</h3>
     <div id="tags" class="db_editable">{{=tags_2_html(node.tags)}}</div>
+    {{elif can_edit(node):}}
+    <h3>Tags</h3>
+    <div id="tags" class="db_editable">No tags found.</div>
+    {{pass}}
+    
+    {{if node.feeds and len(node.feeds):}}
+    <h3>Feed</h3>
+    <div id="feeds" class="db_editable">
+    {{=LOAD('main','feed', args=node.url, ajax=True)}}
+    </div>
+    {{elif can_edit(node):}}
+    <h3>Feed</h3>
+    <div id="feeds" class="db_editable">
+    No Feeds Found
+    </div>
+    {{pass}}

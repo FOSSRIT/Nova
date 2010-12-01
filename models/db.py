@@ -10,6 +10,9 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
 else:                                         # else use a normal relational database
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 
+###########
+DATE_FORMAT = "%d/%m/%y %I:%M %p"
+
 #########################################################################
 ## Prepare Auth
 ##
@@ -184,7 +187,7 @@ def log_to_string(entry, links=True):
         }
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
-            entry.date.strftime("%d/%m/%y %I:%M %p"),
+            entry.date.strftime(DATE_FORMAT),
             URL('main','node',args=home_node.url),
             home_node.name,
             switch[entry.action](entry)
@@ -243,6 +246,7 @@ db.define_table('node',
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False),
     Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
+    Field('feeds', 'list:string', label="External Feeds", comment="A list of RSS feeds related to the page.  One feed per box, press enter to add more boxes."),
     format='%(name)s'
     )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]

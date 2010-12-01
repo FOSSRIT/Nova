@@ -164,3 +164,32 @@ def tags():
         [ret.append(A("%s (%d)" % (tag, count), _href=URL('main','tags', args=tag))) for tag,count in sorted_x]
         
         return dict(tagcount=ret)
+
+
+@cache(request.env.path_info,time_expire=60*60,cache_model=cache.disk)
+def feed():
+    node = get_node_or_404(request.args(0))
+    import gluon.contrib.feedparser as feedparser
+    
+    description = "Feed sources: %s"% (", ".join( node.feeds or [] ))
+    entries = []
+    
+    for feed in (node.feeds or []):
+        data = feedparser.parse(feed)
+        try:
+            entries += [dict(title = entry.title,
+              link = entry.link,
+              description = entry.description,
+              created_on = entry.updated_parsed) for entry in data.entries]
+        except:
+            entries += [dict(title="ERROR IN %s" % feed,
+              link = "",
+              description = "Error reading feed",
+              created_on = request.now)]
+        
+        entries = sorted(entries, key=lambda entry: entry['created_on'], reverse=True)
+    return dict(title=node.name,
+                link = URL('main', 'node', args=node.url),
+                description = description,
+                created_on = request.now,
+                entries = entries)

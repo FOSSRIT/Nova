@@ -1,0 +1,14 @@
+{{if not request.ajax:}}
+{{#extend 'csi_view.html'}}
+<h1>{{=title}}</h1>
+<div>{{=description}}</div>
+{{pass}}
+
+{{import time}}
+{{for entry in entries:}}
+<div>
+<div>{{=A(entry['title'], _href=entry['link'])}}</div>
+<div>{{=time.strftime(DATE_FORMAT, entry['created_on'])}}</div>
+<div>{{=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+</div>
+{{pass}}
