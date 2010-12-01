@@ -5,10 +5,11 @@
 {{pass}}
 
 {{import time}}
+<ul>
 {{for entry in entries:}}
-<div>
-<div>{{=A(entry['title'], _href=entry['link'])}}</div>
-<div>{{=time.strftime(DATE_FORMAT, entry['created_on'])}}</div>
-<div>{{=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
-</div>
+<li>{{=time.strftime(DATE_FORMAT, entry['created_on'])}} |
+    {{=A(entry['title'], _href=entry['link'])}}</li>
+{{#=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
+</li>
 {{pass}}
+</ul>
