@@ -104,7 +104,7 @@ def editnode():
         raise HTTP(403, "Not allowed to edit this node")
         
     form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
-                    comments=False, formstyle="divs" , showid = False, submit_button="Save",
+                    comments=(request.args(1)=="tags"), formstyle="divs" , showid = False, submit_button="Save",
                     _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
                     
     response.view = "generic.load"

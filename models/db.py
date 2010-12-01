@@ -242,7 +242,7 @@ db.define_table('node',
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False),
-    Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node.Press enter in the text box to add another keyword"),
+    Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
     format='%(name)s'
     )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
