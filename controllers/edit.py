@@ -7,49 +7,37 @@ def index(): return dict(message="hello from edit.py")
 
 @auth.requires_login()
 def link_me():
-    node = None
-    try:
-        node = db(db.node.url == request.args[1]).select().first()
-    except:
-        raise HTTP(404, 'node not found')
+    node = get_node_or_404( request.args(1) )
     
-    if node and request.args[0]:
-        if request.args[0] == "add":
-            db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
-            db.syslog.insert(action="Linked Page", target=auth.user.home_node, target2=node.id)
-            session.flash = "Link Added"
-            redirect(URL('main','node',args=node.url))          
-        elif request.args[0] == "remove":
+    if request.args(0) == "add":
+        db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
+        db.syslog.insert(action="Linked Page", target=auth.user.home_node, target2=node.id)
+        session.flash = "Link Added"
+        redirect(URL('main','node',args=node.url))          
+    elif request.args(0) == "remove":
             db((db.linkTable.nodeId == node) & (db.linkTable.linkId == auth.user.home_node)).delete()
             db((db.linkTable.nodeId == auth.user.home_node) & (db.linkTable.linkId==node)).delete()
             db.syslog.insert(action="Unlinked Page", target=auth.user.home_node, target2=node.id)
             session.flash = "Link Removed"
             redirect(URL('main','node',args=node.url))
     else:
-        raise HTTP(404, 'Could not process request')
+        raise HTTP(405, 'Could not process request')
 
 @auth.requires_login()
 def take_picture():
-    node = None
-    if len(request.args):
-        node = db(db.node.url == request.args(0)).select().first()
+    node = get_node_or_404( request.args(1) )
 
-        if node:
-            # Make sure they are not trying to edit someone's node
-            # TODO ADD PERMISSION SYSTEM HERE
-            if node.type.public == False and node.id != auth.user.home_node:
-                raise HTTP(403, "Not Authorized to edit this node")
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
                 
-            if request.vars.do_upload:
-                node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
-                db.syslog.insert(action="Edited Page", target=node.id, target2="photo")
+    if request.vars.do_upload:
+        node.update_record(picFile=db.node.picFile.store(request.body,'%s.jpg'% node.id))
+        db.syslog.insert(action="Edited Page", target=node.id, target2="photo")
             
-                response.view = "generic.load"
-                return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
+        response.view = "generic.load"
+        return dict(url=IMG(_src=URL('default','download',args=node.picFile)))
     
-            return dict(node=node)
-        else:
-            raise HTTP(404, 'node not found')
     else:
         t = open("/tmp/web2py_upload__%s" % auth.user.username, "w")
         t.write( request.body.read() )
@@ -57,55 +45,6 @@ def take_picture():
         session.tmp_node_file = t.name
         response.view = "generic.load"
         return "File Uploaded"
-
-@auth.requires_login()
-def in_place():
-    """
-    Allows updating of node information using an ajax style request
-    """
-    
-    # Find the node we are trying to update
-    try:
-        node = db(db.node.url == request.args[0]).select().first()
-    except:
-        raise HTTP(404, 'node not found')
-        
-    # Get the field we are trying to edit
-    try:
-        field_request = request.args[1]
-    except:
-        raise HTTP(404, "Field Not Found")
-        
-    # Check if trying to deal with picture
-    if field_request == "picture":
-        
-        form = SQLFORM( db.node, node, fields=['picFile'], labels={'picFile':""},
-                    comments=False, formstyle="divs" , showid = False,
-                    _action = URL('edit','in_place', args=[node.url,'picture']) )
-                    
-        if form.accepts(request.vars):
-            response.view = "generic.load"
-            node = db(db.node.url == request.args[0]).select().first()
-            return dict(t=IMG(_src=URL('default','download',args=node.picFile)))
-            
-        else:
-            response.view = "htmlblocks/edit_pict_form.html"
-            return dict(node=node, form=form)
-        
-    
-    # Else we should be using a db node field            
-    else:
-        form = SQLFORM( db.node, node, fields=[field_request], labels={field_request:""},
-                    comments=False, formstyle="divs" , showid = False,
-                    _action = URL('edit','in_place', args=[node.url,field_request]) )
-        
-        
-    response.view = "generic.load"
-    if form.accepts(request.vars):
-        node = db(db.node.url == request.args[0]).select().first()
-        return dict(node=MARKMIN(node.get(request.args[1])))
-    else:
-        return dict(form=form)
     
     
 
