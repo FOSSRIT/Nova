@@ -111,7 +111,7 @@ def node_activity():
                         (db.syslog.action == 'Unlinked Page')
                       ) & (db.syslog.target2 == current_node.id)
                     )
-                 ).select(db.syslog.string_cache, db.syslog.date)
+                 ).select(db.syslog.string_cache, db.syslog.date, orderby=~db.syslog.id)
     return dict(activity=activity,node=current_node)
 
 def log():
