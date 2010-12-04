@@ -387,6 +387,8 @@ def get_home_node():
 def can_edit(node):
     if auth.is_logged_in() and (node.type.public or node.id == auth.user.home_node):
         return True
+    elif auth.has_membership("Site Admin"):
+        return True
     return False
 
 def is_linked(node1, node2):
