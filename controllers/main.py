@@ -181,15 +181,33 @@ def feed():
               link = entry.link,
               description = entry.description,
               created_on = entry.updated_parsed) for entry in data.entries]
+              
         except:
             entries += [dict(title="ERROR IN %s" % feed,
               link = "",
               description = "Error reading feed",
               created_on = request.now)]
-        
-        entries = sorted(entries, key=lambda entry: entry['created_on'], reverse=True)
+    
+    local_entries = db(db.blog.nodeId == node.id).select()
+    entries += [dict(title = entry.title,
+              link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
+              description = entry.body,
+              created_on = entry.date.timetuple()) for entry in local_entries]
+    
+    entries = sorted(entries, key=lambda entry: entry['created_on'], reverse=True)
+    
     return dict(title=node.name,
-                link = URL('main', 'node', args=node.url),
+                link = URL('main', 'blog', args=node.url),
                 description = description,
                 created_on = request.now,
                 entries = entries)
+
+def blog():
+    node = get_node_or_404(request.args(0))
+    
+    if request.args(1):
+        entries = db( (db.blog.nodeId == node.id) & (db.blog.id == request.args(1) ) ).select(orderby=~db.blog.id)
+    else:
+        entries = db(db.blog.nodeId == node.id).select(orderby=~db.blog.id)
+    
+    return dict(entries=entries, node=node)#, form=form)

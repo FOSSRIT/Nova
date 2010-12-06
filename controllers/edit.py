@@ -216,6 +216,21 @@ def attribute_vocab():
     return dict(vocab_form=vocab_form)
 
 @auth.requires_login()
+def blog():
+    node = get_node_or_404(request.args(0))
+    
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node's Blog")
+    
+    form = SQLFORM(db.blog)
+    form.vars.nodeId = node
+    
+    if form.accepts(request.vars):
+        session.flash = "Blog entry posted"
+        redirect( URL('main','blog',args=node.url) )
+    return dict(form=form,node=node)
+
+@auth.requires_login()
 def feedback():
     """
     Display and saves from feedback from

@@ -280,6 +280,15 @@ db.linkTable.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 # TODO, ADD MORE CHECKS that prevent multiple records
 
+db.define_table('blog',
+    Field('nodeId', db.node, writable=False, readable=False),
+    Field('title', 'string'),
+    Field('body', 'text'),
+    Field('date', 'datetime', writable=False, readable=False, default=request.now),
+    Field('author','integer', default=auth.user_id, writable=False, readable=False),
+    format='%(nodeId)s: Post: %(title)s'
+    )
+    
 
 db.define_table('feedback',
     Field('user_input', 'text'),

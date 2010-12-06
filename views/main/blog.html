@@ -1,0 +1,31 @@
+{{extend 'csi_view.html'}}
+<h1>{{=node.name}}'s Blog</h1>
+
+<div class="nodeTopLinks">
+{{=A('Back to %s' % node.name, _href=URL('main','node',args=node.url))}}
+{{if can_edit(node):}}
+{{=A('New Entry', _href=URL('edit','blog',args=node.url))}}
+{{pass}}
+</a>
+</div><br />
+<style>
+    div.blog_title{
+        font-weight: bold;
+    }
+    div.blog{
+        padding: 10px;
+    }
+    div.blog_body{
+        padding: 10px;
+    }
+</style>
+{{for entry in entries:}}
+<div class="blog">
+<div class="blog_title">{{=A(entry.title, _href=URL('main','blog',args=[node.url, entry.id]))}}</div>
+<div class="blog_date">{{=entry.date.strftime(DATE_FORMAT)}}</div>
+<div class="blog_body">{{=XML(entry.body, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+</div>
+{{pass}}
+{{if request.args(1):}}
+{{=A('View All Posts', _href=URL('main','blog',args=node.url))}}
+{{pass}}

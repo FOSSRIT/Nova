@@ -1,0 +1,11 @@
+{{extend 'csi_view.html'}}
+<script>
+$(document).ready( function(){
+    $("form table").width("100%");
+    $("#blog_title").width("90%");
+    $("#blog_body").width("98%").wysiwyg( {controls: { html: {visible: true} } });
+});
+</script>
+<div class="nodeTopLinks">{{=A("Back to Blog", _href=URL('main', 'blog', args=node.url))}}</div><br/>
+<h1>Add New Entry to {{=node.name}}</h1>
+{{=form}}

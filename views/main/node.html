@@ -279,14 +279,9 @@
     <div id="tags" class="db_editable">No tags found.</div>
     {{pass}}
     
-    {{if node.feeds and len(node.feeds):}}
+
     <h3>Feed</h3>
+    {{=A("View Internal Blog", _href=URL('main','blog',args=node.url))}}
     <div id="feeds" class="db_editable">
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
     </div>
-    {{elif can_edit(node):}}
-    <h3>Feed</h3>
-    <div id="feeds" class="db_editable">
-    No Feeds Found
-    </div>
-    {{pass}}
