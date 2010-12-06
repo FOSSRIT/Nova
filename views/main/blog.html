@@ -19,10 +19,13 @@
         padding: 10px;
     }
 </style>
+{{canedit = can_edit(node)}}
 {{for entry in entries:}}
 <div class="blog">
 <div class="blog_title">{{=A(entry.title, _href=URL('main','blog',args=[node.url, entry.id]))}}</div>
-<div class="blog_date">{{=entry.date.strftime(DATE_FORMAT)}}</div>
+<div class="blog_date">{{=entry.date.strftime(DATE_FORMAT)}}
+{{if canedit:}}{{=A("Edit/Delete Post", _href=URL('edit','blog',args=[node.url, entry.id]))}}{{pass}}
+</div>
 <div class="blog_body">{{=XML(entry.body, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
 </div>
 {{pass}}
