@@ -210,4 +210,16 @@ def blog():
     else:
         entries = db(db.blog.nodeId == node.id).select(orderby=~db.blog.id)
     
-    return dict(entries=entries, node=node)#, form=form)
+    return dict(entries=entries, node=node)
+
+@auth.requires_login()
+@auth.requires_membership("Site Admin")
+def email():
+    node = get_node_or_404(request.args(0))
+    links = get_node_links( node )
+    
+    emails = []
+    for link in links['People']:
+        emails.append( db(db.auth_user.home_node == link.id).select().first().email)
+    
+    return dict(emails=emails, node=node)

@@ -243,6 +243,14 @@
             {{=A('Watch',_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
         </div>
     {{pass}}
+    {{if auth.has_membership("Site Admin"):}}
+    {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;">Email Linked  People</a>
+{{else:}}
+<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;">Email Linked  People</a>
+{{pass}}
+    
+    {{pass}}
 {{pass}}
     </div>
 <br />
