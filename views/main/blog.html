@@ -21,8 +21,10 @@
 </style>
 {{canedit = can_edit(node)}}
 {{for entry in entries:}}
+{{author_node = get_home_from_user(entry.author)}}
 <div class="blog">
-<div class="blog_title">{{=A(entry.title, _href=URL('main','blog',args=[node.url, entry.id]))}}</div>
+<div class="blog_title">{{=A(entry.title, _href=URL('main','blog',args=[node.url, entry.id]))}} by
+{{=A(author_node.name, _href=URL('main','node',args=author_node.id))}}</div>
 <div class="blog_date">{{=entry.date.strftime(DATE_FORMAT)}}
 {{if canedit:}}{{=A("Edit/Delete Post", _href=URL('edit','blog',args=[node.url, entry.id]))}}{{pass}}
 </div>

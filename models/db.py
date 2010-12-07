@@ -393,6 +393,10 @@ def get_home_node():
     if auth.user.home_node:
         return db(db.node.id == auth.user.home_node).select().first()
         
+def get_home_from_user(userid):
+    user = db(db.auth_user.id == userid).select().first()
+    return db(db.node.id == user.home_node).select().first()
+        
 def can_edit(node):
     if auth.is_logged_in() and (node.type.public or node.id == auth.user.home_node):
         return True
