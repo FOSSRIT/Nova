@@ -11,7 +11,7 @@ else:                                         # else use a normal relational dat
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 
 ###########
-DATE_FORMAT = "%d/%m/%y %I:%M %p"
+DATE_FORMAT = "%m/%d/%y %I:%M %p"
 
 #########################################################################
 ## Prepare Auth
