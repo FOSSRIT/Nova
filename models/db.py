@@ -494,6 +494,7 @@ ALLOWED_HTML_TAGS = [
     'object',
     'param',
     'embed',
+    'meta',
  ] 
 
 ALLOWED_HTML_ATTR = {
@@ -509,4 +510,5 @@ ALLOWED_HTML_ATTR = {
     'object':['width','height'],
     'param':['name','value'],
     'embed':['src','type','allowscriptaccess','allowfullscreen','width','height','wmode'],
+    'meta':['charset'],
  }
