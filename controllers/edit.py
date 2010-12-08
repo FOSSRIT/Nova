@@ -226,8 +226,22 @@ def blog():
     form = SQLFORM(db.blog, blog_entry, deletable=True)
     form.vars.nodeId = node
     
-    if form.accepts(request.vars):
-        session.flash = "Blog entry posted"
+    if form.accepts(request.vars, dbio=False):
+        if blog_entry:
+            if form.vars.get('delete_this_record'):
+                db.syslog.insert(action="Deleted Blog Entry", target=node.id, target2=blog_entry.id)
+                session.flash = "Blog entry deleted"
+                db(db.blog.id==blog_entry.id).delete()
+            else:
+                blog_entry.update_record(**db.blog._filter_fields(form.vars))
+                db.syslog.insert(action="Edited Blog Entry", target=node.id, target2=blog_entry.id)
+                session.flash = "Blog entry edited"
+        else:
+            a_id = db.blog.insert(**db.blog._filter_fields(form.vars))
+            db.syslog.insert(action="Added Blog Entry", target=node.id, target2=a_id)
+            session.flash = "Blog entry posted"
+        
+           
         redirect( URL('main','blog',args=node.url) )
     return dict(form=form,node=node)
 
