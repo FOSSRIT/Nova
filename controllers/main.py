@@ -13,19 +13,16 @@ def search():
     master = []
     if request.vars.query:
         # Search node names and descriptions
-        results = db( (db.node.description.contains(request.vars.query)) | (db.node.name.contains(request.vars.query))).select()
+        results = db(
+                    (db.node.description.contains(request.vars.query)) |
+                    (db.node.name.contains(request.vars.query)) |
+                    (
+                         (db.node.id == db.nodeAttr.nodeId) &
+                         (db.nodeAttr.value.contains(request.vars.query))
+                     )
+                    ).select(db.node.id, db.node.name, db.node.url, groupby=db.node.id)
 
-        # Search attributes
-        results2 = db(db.nodeAttr.value.contains(request.vars.query)).select(db.nodeAttr.nodeId)
-
-        # Combine lists into one list of nodes
-        for result in results:
-            master.append(result)
-
-        for result in results2:
-            master.append(result.nodeId)
-
-    return dict(master=master)
+    return dict(master=results)
 
 def category_ajax():
     if request.args(0):
