@@ -499,7 +499,7 @@ ALLOWED_HTML_TAGS = [
 
 ALLOWED_HTML_ATTR = {
     'a': ['href', 'title', 'style'],
-    'img': ['src', 'alt', 'style'],
+    'img': ['src', 'alt', 'style','width','height'],
     'blockquote': ['type', 'style'],
     'p': ['style'],
     'table': ['border', 'style'],
