@@ -227,6 +227,7 @@ def blog():
     form.vars.nodeId = node
     
     if form.accepts(request.vars, dbio=False):
+        node.update_record(modified=request.now)
         if blog_entry:
             if form.vars.get('delete_this_record'):
                 db.syslog.insert(action="Deleted Blog Entry", target=node.id, target2=blog_entry.id)
