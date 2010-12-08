@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*- 
 
+if request.vars.username:
+        request.vars.username = request.vars.username.lower()
+if request.post_vars.username:
+        request.post_vars.username = request.post_vars.username.lower()
+
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
 #########################################################################
