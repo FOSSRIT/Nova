@@ -162,28 +162,31 @@ def tags():
         
         return dict(tagcount=ret)
 
+def _get_feed(feed):
+    import gluon.contrib.feedparser as feedparser
+    data = feedparser.parse(feed)
+    try:
+        return [dict(title = entry.title,
+        link = entry.link,
+        description = entry.description,
+        created_on = entry.updated_parsed) for entry in data.entries]
 
-@cache(request.env.path_info,time_expire=60*60,cache_model=cache.disk)
+    except:
+        return [dict(title="ERROR IN %s" % feed,
+        link = "",
+        description = "Error reading feed",
+        created_on = request.now)]
+
+    return entries
+
 def feed():
     node = get_node_or_404(request.args(0))
-    import gluon.contrib.feedparser as feedparser
     
     description = "Feed sources: %s"% (", ".join( node.feeds or [] ))
     entries = []
     
     for feed in (node.feeds or []):
-        data = feedparser.parse(feed)
-        try:
-            entries += [dict(title = entry.title,
-              link = entry.link,
-              description = entry.description,
-              created_on = entry.updated_parsed) for entry in data.entries]
-              
-        except:
-            entries += [dict(title="ERROR IN %s" % feed,
-              link = "",
-              description = "Error reading feed",
-              created_on = request.now)]
+        entries += cache.disk(feed, lambda: _get_feed(feed),time_expire=60*60)
     
     local_entries = db(db.blog.nodeId == node.id).select()
     entries += [dict(title = entry.title,

@@ -115,7 +115,7 @@ def editnode():
         if request.args(1) =='tags':
             return tags_2_html(node.tags)
         elif request.args(1) == 'feeds':
-            return "Feed Updated.  Data may be cached, check back in an hour for updated data."
+            return LOAD('main','feed',args=[node.url,], ajax=False)
         else:
             return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:
