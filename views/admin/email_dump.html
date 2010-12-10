@@ -1,0 +1,3 @@
+{{extend 'csi_view.html'}}
+<h1>Email Dump</h1>
+{{=", ".join([x['email'] for x in emails])}}
