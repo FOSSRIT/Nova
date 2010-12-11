@@ -326,6 +326,7 @@ ALLOWED_HTML_TAGS = [
     'param',
     'embed',
     'meta',
+    'wbr',
  ] 
 
 ALLOWED_HTML_ATTR = {
