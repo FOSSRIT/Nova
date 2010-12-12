@@ -174,7 +174,8 @@
                 f_frame.onload = function(){
                     if( this.contentWindow.document.body.innerHTML != "" ){
                         document.getElementById(div_loc).innerHTML=this.contentWindow.document.body.innerHTML;
-                        div.hide('slow');
+                        hide_overlay();
+                        reflash_edit_mode();
                     }
                     };
                 div.append(f_frame);
