@@ -1,6 +1,7 @@
 {{extend 'csi_view.html'}}
 
     <div id="viewbar">
+{{if category:}}
         <h1 style="float:left; margin:20px; color:#FFF;">{{=category.value}}</h1>
         {{if auth.is_logged_in() and category.public:}}
             <div id="addyourself">
@@ -9,8 +10,13 @@
          {{pass}}
         <br style="clear: both;"/>
         {{if category.cat_header:}}<p>{{=XML(category.cat_header)}}</p>{{pass}}
+        {{=A("Search all categories.", _href=URL(args='All'))}}
         <br />
-    </div> <!-- end viewbar -->
-
 {{search_mode="category=%s" % category.value}}
+{{else:}}
+{{search_mode=""}}
+        <h1 style="float:left; margin:20px; color:#FFF;">Search All</h1>
+        <br style="clear: both;"/>
+{{pass}}
+    </div> <!-- end viewbar -->
 {{include "htmlblocks/search.html"}}
