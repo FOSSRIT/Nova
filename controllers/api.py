@@ -42,13 +42,16 @@ def search():
     search = None
     # Search Criteria
     if request.vars.search and len(request.vars.search):
-        search = (db.node.description.contains(request.vars.search)) |\
-                     (db.node.name.contains(request.vars.search)) |\
-                     (db.node.url.contains(request.vars.search)) |\
-                     (
-                         (db.node.id == db.nodeAttr.nodeId) &\
+        search = (db.node.description.contains(request.vars.search)) | \
+                 (db.node.name.contains(request.vars.search)) | \
+                 (db.node.url.contains(request.vars.search))
+                 
+        # Should we search the attributes table (slow)
+        if request.vars.fulltext:
+            search = search | (
+                         (db.node.id == db.nodeAttr.nodeId) & \
                          (db.nodeAttr.value.contains(request.vars.search))
-                     )
+                      )
     
     # Category Criteria
     if request.vars.category and len(request.vars.category):

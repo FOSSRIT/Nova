@@ -7,22 +7,9 @@ def about(): return dict()
 
 def search():
     """
-    A Very basic search system, searches node desc, name and attributes for nodes.
-    Doesn't have ranking or duplicate removing at this time.
+    Search is just a static page that will allow the api to return results.
     """
-    master = []
-    if request.vars.query:
-        # Search node names and descriptions
-        results = db(
-                    (db.node.description.contains(request.vars.query)) |
-                    (db.node.name.contains(request.vars.query)) |
-                    (
-                         (db.node.id == db.nodeAttr.nodeId) &
-                         (db.nodeAttr.value.contains(request.vars.query))
-                     )
-                    ).select(db.node.id, db.node.name, db.node.url, groupby=db.node.id)
-
-    return dict(master=results)
+    return dict()
 
 def category_ajax():
     if request.args(0):

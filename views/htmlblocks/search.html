@@ -7,15 +7,20 @@ var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','searc
 </script>
 <script>
 var pending_request = "";
-function pull_data(search, page, empty){
-    request = autoload_request_url + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search)
+function pull_data(search, page, empty, full){
+    request = autoload_request_url + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
+    
     
     if( pending_request ){
         pending_request.abort();
     }
     
-    
-    $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Searching " + search)
+    if( full ){
+        $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Preforming Full Search " + search)
+        request += "&fulltext=true";
+    }else{
+        $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Searching " + search)
+    }
     pending_request = $.getJSON(request,
         function(data){
             if( !data ){
@@ -40,7 +45,7 @@ function pull_data(search, page, empty){
         });
         imgOndemand();
         if( data.nodes.length == 50 ){
-            $("#TARGET").append( "<a href='#' id='MORE_LINK' style='clear: both; text-align: center;' onclick='pull_data(\"" + escape(search) + "\", " + (page + 1) + ", false); $(this).remove(); return false;'><br style='clear: both;'>More</a>");
+            $("#TARGET").append( "<a href='#' id='MORE_LINK' style='clear: both; text-align: center;' onclick='pull_data(\"" + escape(search) + "\", " + (page + 1) + ", false, " + full + "); $(this).remove(); return false;'><br style='clear: both;'>More</a>");
 
             $(window).bind("scroll.morelink", function(){
                 the_link = $("#MORE_LINK");
@@ -56,22 +61,27 @@ function pull_data(search, page, empty){
 }
 
 $(document).ready(function(){
-    pull_data("", 1, true);
+    pull_data($('#search_filter').val(), 1, true, false);
 });
 </script>
 
+{{if not "initial_search" in globals():}}
+   {{initial_search = ""}}
+{{pass}}
+
 <div style="text-align: center;">
 <form onsubmit="return false;">
-    Search: <input type="text" name="search_filter" id="search_filter" onkeyup="pull_data(this.value, 1, true);" />
-    <select name="order" id="order" onchange="pull_data($('#search_filter').val(), 1, true);">
+    Search: <input type="text" name="search_filter" id="search_filter" onkeyup="pull_data(this.value, 1, true, false);" value="{{=initial_search}}"/>
+    <select name="order" id="order" onchange="pull_data($('#search_filter').val(), 1, true, false);">
     <option value="name">Node Title</option>
     <option value="date">Creation Date</option>
     <option value="modified" selected="selected">Last Updated</option>
     </select>
-    <select name="sort" id="sort" onchange="pull_data($('#search_filter').val(), 1, true);">
+    <select name="sort" id="sort" onchange="pull_data($('#search_filter').val(), 1, true, false);">
     <option value="asce">Ascending</option>
     <option value="desc" selected="selected">Descending</option>
     </select>
+    <input type="button" value="Full Text Search" onclick="pull_data($('#search_filter').val(), 1, true, true);">
 </form>
 <div id="status"></div>
 </div>

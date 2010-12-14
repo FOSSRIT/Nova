@@ -10,12 +10,11 @@
          {{pass}}
         <br style="clear: both;"/>
         {{if category.cat_header:}}<p>{{=XML(category.cat_header)}}</p>{{pass}}
-        {{=A("Search all categories.", _href=URL(args='All'))}}
         <br />
 {{search_mode="category=%s" % category.value}}
 {{else:}}
 {{search_mode=""}}
-        <h1 style="float:left; margin:20px; color:#FFF;">Search All</h1>
+        <h1 style="float:left; margin:20px; color:#FFF;">All Categories</h1>
         <br style="clear: both;"/>
 {{pass}}
     </div> <!-- end viewbar -->
