@@ -7,7 +7,7 @@
 {{import time}}
 <ul>
 {{for entry in entries:}}
-<li>{{=time.strftime(DATE_FORMAT, entry['created_on'])}} |
+<li>{{=entry['created_on'].strftime(DATE_FORMAT)}} |
     {{=A(entry['title'], _href=entry['link'])}}</li>
 {{#=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
 </li>

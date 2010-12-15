@@ -151,12 +151,14 @@ def tags():
 
 def _get_feed(feed):
     import gluon.contrib.feedparser as feedparser
+    import datetime
     data = feedparser.parse(feed)
     try:
         return [dict(title = entry.title,
-        link = entry.link,
-        description = entry.description,
-        created_on = entry.updated_parsed) for entry in data.entries]
+           link = entry.link,
+           description = entry.description,
+           #author = "" if not hasattr(entry, "author_detail") else entry.author_detail.name, 
+           created_on = datetime.datetime(*entry.updated_parsed[:6])) for entry in data.entries]
 
     except:
         return [dict(title="ERROR IN %s" % feed,
@@ -174,12 +176,13 @@ def feed():
     
     for feed in (node.feeds or []):
         entries += cache.disk(feed, lambda: _get_feed(feed),time_expire=60*60)
-    
+
     local_entries = db(db.blog.nodeId == node.id).select()
     entries += [dict(title = entry.title,
               link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
               description = entry.body,
-              created_on = entry.date.timetuple()) for entry in local_entries]
+              #author = get_home_from_user(entry.author).name,
+              created_on = entry.date) for entry in local_entries]
     
     entries = sorted(entries, key=lambda entry: entry['created_on'], reverse=True)
     
