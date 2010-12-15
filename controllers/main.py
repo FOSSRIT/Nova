@@ -187,7 +187,7 @@ def feed():
     entries = sorted(entries, key=lambda entry: entry['created_on'], reverse=True)
     
     return dict(title=node.name,
-                link = URL('main', 'blog', args=node.url),
+                link = URL('main', 'node', args=node.url),
                 description = description,
                 created_on = request.now,
                 entries = entries)
@@ -196,11 +196,23 @@ def blog():
     node = get_node_or_404(request.args(0))
     
     if request.args(1):
-        entries = db( (db.blog.nodeId == node.id) & (db.blog.id == request.args(1) ) ).select(orderby=~db.blog.id)
+        rows = db( (db.blog.nodeId == node.id) & (db.blog.id == request.args(1) ) ).select(orderby=~db.blog.id)
     else:
-        entries = db(db.blog.nodeId == node.id).select(orderby=~db.blog.id)
+        rows = db(db.blog.nodeId == node.id).select(orderby=~db.blog.id)
+        
+    entries = [dict(title = entry.title,
+              id = entry.id,
+              link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
+              description = entry.body,
+              author = entry.author,
+              created_on = entry.date) for entry in rows]
     
-    return dict(entries=entries, node=node)
+    return dict(
+            title=node.name,
+            link = URL('main', 'blog', args=node.url),
+            description = "%s's blog" % node.name,
+            created_on = request.now,
+            entries=entries, node=node)
 
 @auth.requires_login()
 @auth.requires_membership("Site Admin")
