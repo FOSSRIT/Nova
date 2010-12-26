@@ -16,7 +16,7 @@ function pull_data(search, page, empty, full){
     }
     
     if( full ){
-        $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Preforming Full Search " + search)
+        $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Performing Full Search " + search)
         request += "&fulltext=true";
     }else{
         $("#status").html("<img src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}'>Searching " + search)
