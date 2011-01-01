@@ -129,7 +129,7 @@ $(document).ready(function(){
 </script>
 
 <div style="text-align: center;">
-Clicking a page will add a link new link or remove an existing link.<br /> Existing links have a green frame.<br /><br />
+Clicking a page will add a new link or remove an existing link.<br /> Existing links have a green frame.<br /><br />
 Select Category: 
 {{for category in categories:}}<a href="#" onclick="set_request_url( '{{=category.value}}' );">{{=category.value}}</a> {{pass}}
 <form onsubmit="return false;">
