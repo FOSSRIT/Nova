@@ -6,8 +6,32 @@ var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','searc
 {{pass}}
 </script>
 <script>
+
+gsearch ="";
+gpage =  "";
+gfull = false;
+
+{{if "search_functions" in globals():}}
+{{=XML(search_functions)}}
+{{else:}}
+function click_action( url, node_id, link_element ){
+    return true;
+}
+
+function is_highlighted( url, node_id ){
+    return false;
+}
+
+function is_visible( url, node_id ){
+    return true;
+}
+{{pass}}
+
 var pending_request = "";
 function pull_data(search, page, empty, full){
+    gsearch = search;
+    gpage = page;
+    gfull = full
     request = autoload_request_url + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
     
     
@@ -31,17 +55,25 @@ function pull_data(search, page, empty, full){
                 $("#TARGET").empty();
             }
             $.each(data.nodes, function(key,val){
-            var html_add = "\
-                <div class='nodeBox'>\
-                    <a href='{{=URL('main','node')}}/" + val.url + "'>\
-                        <div class='nodePic'>\
-                            <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" +
-                                ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"' /></div>\
-                        <div class='nodeName'>" + val.name + "</div>\
-                    </a>\
-                 </div>";
-        
-            $("#TARGET").append( html_add );
+            
+            if( is_visible( val.url, val.id ) ){
+                style = "";
+                if( is_highlighted( val.url, val.id ) ){
+                    style = "background: green";
+                }
+                var html_add = "\
+                    <div class='nodeBox' style='" + style + "'>\
+                        <a href='{{=URL('main','node')}}/"+val.url+"' \
+                           onclick='javascript:return click_action(\"" + val.url + "\", " + val.id + ", this);'>\
+                            <div class='nodePic'>\
+                                <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" +
+                                    ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"' /></div>\
+                            <div class='nodeName'>" + val.name + "</div>\
+                        </a>\
+                     </div>";
+            
+                $("#TARGET").append( html_add );
+            }
         });
         imgOndemand();
         if( data.nodes.length == 50 ){

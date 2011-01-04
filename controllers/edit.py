@@ -197,8 +197,7 @@ def link():
         if is_linked(node, row):
             linkedSet.append(row)
 
-    cats = db(db.nodeType.value!=None).select()
-    return dict( node=node, linkedSet=linkedSet, categories=cats )
+    return dict( node=node, linkedSet=linkedSet)
 
 def category():
     return dict(message="hello from edit.py")
