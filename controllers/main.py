@@ -154,7 +154,7 @@ def _get_feed(feed):
     import datetime
     data = feedparser.parse(feed)
     try:
-        return [dict(title = entry.title,
+        return [dict(title = "[%s] %s" %(data.feed.title, entry.title),
            link = entry.link,
            description = entry.description,
            #author = "" if not hasattr(entry, "author_detail") else entry.author_detail.name, 
@@ -176,9 +176,9 @@ def feed():
     
     for feed in (node.feeds or []):
         entries += cache.disk(feed, lambda: _get_feed(feed),time_expire=60*60)
-
+        
     local_entries = db(db.blog.nodeId == node.id).select()
-    entries += [dict(title = entry.title,
+    entries += [dict(title = "[%s] %s" %(node.url, entry.title),
               link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
               description = entry.body,
               #author = get_home_from_user(entry.author).name,
