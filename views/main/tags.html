@@ -1,9 +1,26 @@
 {{extend 'csi_view.html'}}
+<div id="viewbar"> 
 {{if vars().has_key('tagcount'):}}
-    <h1>Tags</h1>
+    <h1 style="float:left; margin:20px; color:#FFF;">Tags</h1>
+    {{if auth.is_logged_in():}}
+    <div id="addyourself">
+        {{=A("Batch Tag", _href=URL('edit','batch_tag'))}}
+        </div>
+    {{pass}}
+     <br style="clear: both;"/> 
+    </div>
     {{=tagcount}}
 {{else:}}
-    <h1>Pages tagged with <i>{{=tag}}</i></h1>
+    <h1 style="float:left; margin:20px; color:#FFF;">Pages tagged with <i>{{=tag}}</i></h1>
+    
+    {{if auth.is_logged_in():}}
+    <div id="addyourself">
+        {{=A("Batch Tag", _href=URL('edit','batch_tag', args=tag))}}
+        </div>
+    {{pass}}
+    <br style="clear: both;"/> 
+    </div>
+    
     {{search_mode="tag=%s" % tag}}
     {{include "htmlblocks/search.html"}}
 {{pass}}

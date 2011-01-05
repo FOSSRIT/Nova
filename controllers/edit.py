@@ -201,7 +201,11 @@ def link():
 
 def category():
     return dict(message="hello from edit.py")
-
+    
+@auth.requires_login()
+def batch_tag():
+    return dict()
+    
 @auth.requires_login()
 def attribute_vocab():
     """

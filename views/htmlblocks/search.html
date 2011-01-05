@@ -7,6 +7,7 @@ var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','searc
 </script>
 <script>
 
+dataArr = Array();
 gsearch ="";
 gpage =  "";
 gfull = false;
@@ -26,6 +27,7 @@ function is_visible( url, node_id ){
     return true;
 }
 {{pass}}
+
 
 var pending_request = "";
 function pull_data(search, page, empty, full){
@@ -56,6 +58,7 @@ function pull_data(search, page, empty, full){
             }
             $.each(data.nodes, function(key,val){
             
+            dataArr[val.id] = val;
             if( is_visible( val.url, val.id ) ){
                 style = "";
                 if( is_highlighted( val.url, val.id ) ){

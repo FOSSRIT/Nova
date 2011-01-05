@@ -73,4 +73,4 @@ def search():
     if not search:
         search = (db.node.id>0) 
 
-    return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )
+    return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, db.node.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )

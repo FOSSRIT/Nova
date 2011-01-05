@@ -1,0 +1,50 @@
+{{extend 'csi_view.html'}}
+{{search_mode=""}}
+<script>
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+proto = 'https://{{=request.env.http_host}}';
+{{else:}}
+proto = 'http://{{=request.env.http_host}}';
+{{pass}}
+
+</script>
+{{search_functions="""
+function click_action( url, node_id, link_element ){
+    var url = proto + '""" + URL('ajaxedit','tag_toggle') + """/' + url + '?tag=' + escape($('#tag_input').val());
+        $.ajax({
+        url: url,
+        success: function(){
+            $('div.flash').html('Tag Change Applied');
+            $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
+            //pull_data(gsearch, gpage, true, gfull);
+            if($(link_element).parent().css('background') == ""){
+                $(link_element).parent().css('background', 'green');
+            }else{
+                $(link_element).parent().css('background', '');
+            }
+        },
+        error: function(){
+            alert('Unable to Change Tag, You may not have permissions to edit that page');
+        }
+    });
+    
+    return false;
+}
+
+function is_highlighted( url, node_id ){
+    try{
+    return dataArr[node_id].tags.indexOf($('#tag_input').val()) != -1;
+    }catch(e){}
+    
+  
+}
+
+function is_visible( url, node_id ){
+    return true;
+}
+"""}}
+
+<h2>Add Tags</h2>
+Tag: <input type="text" name="tag_input" id="tag_input"
+            onkeyup="pull_data($('#search_filter').val(), 1, true, false)" value="{{=request.args(0) or ''}}"><br>
+{{include "htmlblocks/search.html"}}

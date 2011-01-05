@@ -219,3 +219,22 @@ def watchemail():
         session.auth.user.email_watch = False
         response.view = "generic.load"
         return "Daily Email Disabled, " + A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), cid='watch_email').xml()
+
+@auth.requires_login()
+def tag_toggle():
+    node = get_node_or_404( request.args(0) )
+    
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    if node.tags == None:
+        node.tags = []
+    if request.vars.tag in node.tags:
+        node.tags.remove(request.vars.tag)
+        node.update_record(tags=node.tags)
+        db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+        raise HTTP(200, 'Tag Removed')
+    else:
+        node.update_record(tags=node.tags+[request.vars.tag])
+        db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+        raise HTTP(200, 'Tag Added')
