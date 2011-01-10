@@ -141,13 +141,13 @@ def tags():
                 tagcount[tag] = tagcount.get(tag, 0) + 1
         
         # Make a sorted list of tuples key, frequency by frequency
-        #import operator
-        #sorted_x = sorted(tagcount.iteritems(), key=operator.itemgetter(1))
+        import operator
+        sorted_x = sorted(tagcount.iteritems(), key=operator.itemgetter(0))
         #sorted_x.reverse()
         
         # Make html output
         ret = UL(_class='comma-separated')
-        for tag, count in tagcount.iteritems():
+        for tag, count in sorted_x:
             if count / 10.0 < 1:
                 size = count / 10.0 + 1
             elif count / 10.0 > 3:
