@@ -226,7 +226,7 @@ def blog():
         raise HTTP(403, "Not allowed to edit this node's Blog")
     
     blog_entry = db( (db.blog.nodeId == node.id) & (db.blog.id == request.args(1) )).select().first()
-    form = SQLFORM(db.blog, blog_entry, deletable=True)
+    form = SQLFORM(db.blog, blog_entry, deletable=True, formstyle="table2cols")
     form.vars.nodeId = node
     
     if form.accepts(request.vars, dbio=False):

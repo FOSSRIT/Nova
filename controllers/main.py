@@ -133,19 +133,30 @@ def tags():
         return dict(tag=request.args(0))    
     else:
         # Builds dict of key to frequency
+        total_tags = 0
         tagcount = {}
         for row in db(db.node.tags != []).select(db.node.tags):
             for tag in row.tags:
+                total_tags += 1
                 tagcount[tag] = tagcount.get(tag, 0) + 1
         
         # Make a sorted list of tuples key, frequency by frequency
-        import operator
-        sorted_x = sorted(tagcount.iteritems(), key=operator.itemgetter(1))
-        sorted_x.reverse()
+        #import operator
+        #sorted_x = sorted(tagcount.iteritems(), key=operator.itemgetter(1))
+        #sorted_x.reverse()
         
         # Make html output
         ret = UL(_class='comma-separated')
-        [ret.append(A("%s (%d)" % (tag, count), _href=URL('main','tags', args=tag))) for tag,count in sorted_x]
+        for tag, count in tagcount.iteritems():
+            if count / 10.0 < 1:
+                size = count / 10.0 + 1
+            elif count / 10.0 > 3:
+                size = 3
+            else:
+                size = count / 10.0
+            
+            ret.append( A("%s (%d)" % (tag, count), _href=URL('main','tags', args=tag),
+                _style="font-size: " + str( size )+ "em;") )
         
         return dict(tagcount=ret)
 
@@ -205,6 +216,7 @@ def blog():
               link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
               description = entry.body,
               author = entry.author,
+              tags = entry.tags,
               created_on = entry.date) for entry in rows]
     
     return dict(

@@ -135,6 +135,7 @@ db.define_table('blog',
     Field('body', 'text'),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('author','integer', default=auth.user_id, writable=False, readable=False),
+    Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
     format='%(nodeId)s: Post: %(title)s'
     )
     

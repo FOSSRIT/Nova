@@ -13,10 +13,15 @@
         font-weight: bold;
     }
     div.blog{
+        margin: 4px;
         padding: 10px;
+        background: #EEE;
     }
     div.blog_body{
         padding: 10px;
+    }
+    div.blog_tags{
+        font-style: italic;
     }
 </style>
 {{canedit = can_edit(node)}}
@@ -29,6 +34,7 @@
 {{if canedit:}}{{=A("Edit/Delete Post", _href=URL('edit','blog',args=[node.url, entry['id']]))}}{{pass}}
 </div>
 <div class="blog_body">{{=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+<div class="blog_tags">{{=tags_2_html(entry['tags'])}}</div>
 </div>
 {{pass}}
 {{if request.args(1):}}
