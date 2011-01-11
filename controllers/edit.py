@@ -25,7 +25,7 @@ def link_me():
 
 @auth.requires_login()
 def take_picture():
-    node = get_node_or_404( request.args(1) )
+    node = get_node_or_404( request.args(0) )
 
     # Check node permissions
     if not can_edit(node):
