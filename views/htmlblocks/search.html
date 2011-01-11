@@ -1,8 +1,10 @@
 <script>
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('api','search.json')}}';
+var autoload_request_urlblog = 'https://{{=request.env.http_host}}{{=URL('api','searchBlog.json')}}';
 {{else:}}
 var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','search.json')}}';
+var autoload_request_urlblog = 'http://{{=request.env.http_host}}{{=URL('api','searchBlog.json')}}';
 {{pass}}
 </script>
 <script>
@@ -35,6 +37,7 @@ function pull_data(search, page, empty, full){
     gpage = page;
     gfull = full
     request = autoload_request_url + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
+    requestb = autoload_request_urlblog + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
     
     
     if( pending_request ){
@@ -79,6 +82,32 @@ function pull_data(search, page, empty, full){
             }
         });
         imgOndemand();
+        {{if "showblog" in globals():}}
+        //Start to pull blog posts
+        $.getJSON(requestb,
+        
+        function(data){
+            if( !data ){
+                return;
+            }
+            if( empty ){
+                $("#BLOG_TARGET").empty();
+                $("#BLOG_TARGET").append("Blog Entries<ul>");
+            }
+            $.each(data.blogentries, function(key,val){
+            
+                var html_add = "<li>\
+                        <a href='{{=URL('main','blogid')}}/" + val.id + "'>" + val.title + "</a>\
+                     </li>";
+            
+                $("#BLOG_TARGET").append( html_add );
+            });
+             $("#BLOG_TARGET").append("</ul>");
+        
+        });
+        
+        {{pass}}
+        
         if( data.nodes.length == 50 ){
             $("#TARGET").append( "<a href='#' id='MORE_LINK' style='clear: both; text-align: center;' onclick='pull_data(\"" + escape(search) + "\", " + (page + 1) + ", false, " + full + "); $(this).remove(); return false;'><br style='clear: both;'>More</a>");
 
@@ -120,7 +149,9 @@ $(document).ready(function(){
 </form>
 <div id="status"></div>
 </div>
-<div id="TARGET" style="clear:both;">
+<table>
+<tr><td valign="top">
+<div id="TARGET">
 <img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...
 </div>
-<br style="clear:both;" />
+</td><td valign="top" {{if "showblog" in globals():}}width=200>{{pass}}<div id="BLOG_TARGET"></div></td></tr></table>

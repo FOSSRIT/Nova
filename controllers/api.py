@@ -74,3 +74,45 @@ def search():
         search = (db.node.id>0) 
 
     return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, db.node.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )
+    
+def searchBlog():
+    # Determine Page Information
+    try:
+        page = int(request.vars.page) - 1
+        if page < 0:
+            page = 0
+    except:
+        page = 0
+     
+    limit_start = page * API_MAX_NODES_PER_PAGE
+    limit_end = (page + 1) * API_MAX_NODES_PER_PAGE
+    
+    # Determine order information
+    try:
+        if request.vars.order=="name":
+            request.vars.order = "title"
+        orderby = db.blog[request.vars.order]
+        if request.vars.sort == 'desc':
+            orderby = ~orderby
+    except:
+        orderby = db.blog.title
+    
+    search = None
+    # Search Criteria
+    if request.vars.search and len(request.vars.search):
+        search = (db.blog.body.contains(request.vars.search)) | \
+                 (db.blog.title.contains(request.vars.search))
+                 
+            
+    # Tag Criteria
+    if request.vars.tag and len(request.vars.tag):
+        if search:
+            search = search & (db.blog.tags.contains(request.vars.tag))
+        else:
+            search = (db.blog.tags.contains(request.vars.tag))
+
+    # If no criteria, then select everything
+    if not search:
+        search = (db.blog.id>0) 
+
+    return dict(blogentries=db(search).select(db.blog.id, db.blog.title, db.blog.body, db.blog.date, db.blog.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.blog.id).as_list() )

@@ -53,6 +53,14 @@ def nodeid():
     except Exception, oops:
         raise HTTP(404, oops)#"Node not found")
 
+def blogid():
+    try:
+        current_blog = db(db.blog.id==request.args[0]).select().first()
+        current_node = get_home_from_user(current_blog.author)
+        redirect( URL('blog', args=[current_node.url,current_blog.id]) )
+    except Exception, oops:
+        raise HTTP(404, oops)#"Node not found")
+
 
 def node():
     # Check if the supplied a node request
@@ -136,6 +144,11 @@ def tags():
         total_tags = 0
         tagcount = {}
         for row in db(db.node.tags != []).select(db.node.tags):
+            for tag in row.tags:
+                total_tags += 1
+                tagcount[tag] = tagcount.get(tag, 0) + 1
+                
+        for row in db(db.blog.tags != []).select(db.blog.tags):
             for tag in row.tags:
                 total_tags += 1
                 tagcount[tag] = tagcount.get(tag, 0) + 1
