@@ -44,7 +44,8 @@ def search():
     if request.vars.search and len(request.vars.search):
         search = (db.node.description.contains(request.vars.search)) | \
                  (db.node.name.contains(request.vars.search)) | \
-                 (db.node.url.contains(request.vars.search))
+                 (db.node.url.contains(request.vars.search)) |\
+                 (db.node.tags.contains(request.vars.search))
                  
         # Should we search the attributes table (slow)
         if request.vars.fulltext:
@@ -101,7 +102,8 @@ def searchBlog():
     # Search Criteria
     if request.vars.search and len(request.vars.search):
         search = (db.blog.body.contains(request.vars.search)) | \
-                 (db.blog.title.contains(request.vars.search))
+                 (db.blog.title.contains(request.vars.search)) | \
+                 (db.blog.tags.contains(request.vars.search))
                  
             
     # Tag Criteria
