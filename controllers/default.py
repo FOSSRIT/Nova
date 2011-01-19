@@ -8,7 +8,8 @@
 ## - call exposes all registered services (none by default)
 #########################################################################  
 
-def index(): redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, "main"))
+def index():
+    redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, "main"))
 def not_in_beta():
     return dict()
     

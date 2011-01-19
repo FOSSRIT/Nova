@@ -206,6 +206,31 @@ def category():
 def batch_tag():
     return dict()
     
+@auth.requires_membership("Site Admin")
+def home_page():
+    linkedSet = db(db.highlights.id == request.args(0)).select().first()
+    
+    if linkedSet:
+        return dict(linkedSet=linkedSet.nodes, category=linkedSet)
+    else:
+        raise HTTP(404, "No Category Found")
+
+@auth.requires_membership("Site Admin")
+def home_page_cat():
+    highlight = db(db.highlights.id == request.args(0)).select().first()
+    form = SQLFORM(db.highlights, highlight, deletable=True, showid=False, fields=['title','weight'])
+    
+    if not highlight:
+        form.vars.nodes = []
+        
+    if form.accepts(request.vars, session):
+        redirect( URL('main','index') )
+        
+    elif form.errors:
+        response.flash = form.errors
+        
+    return dict(form=form)
+    
 @auth.requires_login()
 def attribute_vocab():
     """
@@ -214,7 +239,7 @@ def attribute_vocab():
     vocab_form = SQLFORM(db.vocab)
     if vocab_form.accepts(request.vars, session):
         response.flash = 'New Attribute accepted'
-    elif vocab_form .errors:
+    elif vocab_form.errors:
         response.flash = 'New Attribute has errors'
     return dict(vocab_form=vocab_form)
 

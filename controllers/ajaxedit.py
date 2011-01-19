@@ -238,3 +238,21 @@ def tag_toggle():
         node.update_record(tags=node.tags+[request.vars.tag])
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
         raise HTTP(200, 'Tag Added')
+
+@auth.requires_membership("Site Admin")
+def home_toggle():
+    home_cat = db(db.highlights.id == request.args(0)).select().first()
+    node = get_node_or_404(request.args(1))
+    
+    if not home_cat:
+        raise HTTP(404, "Category not found")
+    
+    if node.id in home_cat.nodes:
+        home_cat.nodes.remove(node.id)
+        home_cat.update_record(nodes=home_cat.nodes)
+        #db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+        raise HTTP(200, 'Removed from %s' % home_cat.title)
+    else:
+        home_cat.update_record(nodes=home_cat.nodes+[node.id])
+        #db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+        raise HTTP(200, 'Added to %s' % home_cat.title)

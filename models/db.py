@@ -144,6 +144,13 @@ db.define_table('feedback',
     Field('user_input', 'text'),
     Field('user', 'integer', default=auth.user_id, writable=False, readable=False),
     Field('date', writable=False, readable=False, default=request.now))
+    
+db.define_table('highlights',
+    Field('title'),
+    Field('weight', 'integer'),
+    Field('nodes', 'list:reference node'),
+    format='%(title)s',
+)
 
 #########################################################################
 ## Authentication

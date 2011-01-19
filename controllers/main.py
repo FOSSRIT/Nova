@@ -1,8 +1,8 @@
 # coding: utf8
 
 def index():
-    redirect(URL('main','node', args="csi"))
-    #return dict()
+    #redirect(URL('main','node', args="csi"))
+    return dict(highlights=db(db.highlights.id>0).select(orderby=db.highlights.weight))
 def about(): return dict()
 
 def search():

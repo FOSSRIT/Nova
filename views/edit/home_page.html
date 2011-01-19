@@ -1,0 +1,47 @@
+{{extend 'csi_view.html'}}
+{{search_mode=""}}
+<script>
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+proto = 'https://{{=request.env.http_host}}';
+{{else:}}
+proto = 'http://{{=request.env.http_host}}';
+{{pass}}
+
+</script>
+{{search_functions="var links = [ " + ",".join([str(x) for x in linkedSet]) + """ ];
+
+function click_action( url, node_id, link_element ){
+    var url = proto + '""" + URL('ajaxedit','home_toggle',args=request.args(0)) + """/' + url;
+        $.ajax({
+            url: url,
+            success: function(){
+                var idx = links.indexOf(node_id); // Find the index
+                if(idx!=-1) links.splice(idx, 1);
+                $('div.flash').html('Node Added/Removed');
+                $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
+                if($(link_element).parent().css('background') == ""){
+                    $(link_element).parent().css('background', 'green');
+                }else{
+                    $(link_element).parent().css('background', '');
+                }
+                //pull_data(gsearch, gpage, true, gfull);
+            },
+            error: function(){
+                alert('unable to unlink');
+            }
+    });
+    
+    return false;
+}
+
+function is_highlighted( url, node_id ){
+    return (links.indexOf(node_id) != -1);
+}
+
+function is_visible( url, node_id ){
+    return true;
+}
+"""}}
+
+<h2>Editing Home Category: {{=category.title}}</h2>
+{{include "htmlblocks/search.html"}}

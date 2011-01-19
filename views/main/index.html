@@ -1,11 +1,52 @@
 {{extend 'csi_view.html'}}
-    
-    <div id="mainContent">
-    
-        <img src="http://www.rit.edu/academicaffairs/centerforstudentinnovation/wp-content/uploads/2009/09/csicroppedweb.jpg" />
-      <p>
-      
-          Welcome to our new site!  <a href="{{=URL('default','user',args='login')}}">Login</a>, to add your personal page, and then take a crack and adding new projects, groups, and ideas!
-      
-      </p>  
+    <div id="descriptionBox">
+    <img src="{{=URL('static','images/csi_home_image.png')}}" style="float:left; padding: 10px;">
+    <p>
+      A round glass building on a campus of brick cubes, the Center for
+      Student Innovation is a mixing bowl ;-) for collaborative innovation
+      that thinks outside the discipline.
+    </p>
+    <p>
+      This website is a Virtual Innovation Center for our community, where
+      People and Groups generate and develop Ideas, Projects and Events.
+      RIT innovators watch these pages for innovation opportunities
+      (projects, collaborators, ideas, opportunities to make a contribution, etc.).
+      Don't put any proprietary information up here by accident.
+    </p>
+    <p>
+      The best way to have a great idea is to have a lot of ideas. And the best way
+      to have a lot of ideas is by sharing them, and combining them with others.
+    </p>
+    <p>
+      Our Informational Website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>.
+    </p>
     </div>
+    <br style="clear:both;">
+    {{if auth.has_membership("Site Admin"):}}
+    {{=A("Add New Category", _href=URL('edit','home_page_cat'))}}
+    {{pass}}
+    {{for category in highlights:}}
+        <div class="highlight" style="clear: both;">
+        <h2 style="margin: 0px; padding: 0px;">{{=category.title}}</h2>
+        {{if auth.has_membership("Site Admin"):}}
+        {{=A("Add Memebers",_href=URL('edit','home_page',args=category.id))}} 
+        {{=A("Edit Category", _href=URL('edit','home_page_cat', args=category.id))}}<br>{{pass}}
+        {{if category.nodes:}}
+            {{for node_i in category.nodes:}}
+                  <div class="nodeBox">
+                  {{node_obj = db(db.node.id == node_i).select().first()}}
+                  <a href="{{=URL('main','node', args=node_obj.url)}}">
+                  <div class="nodePic"><img src="{{=URL('default','thumb',args=[150,150,node_obj.picFile])}}"></div>
+                  <div class="nodeName">{{=node_obj.name}}</div>
+                  </a>
+              </div>
+            {{pass}}
+        {{else:}}
+            No Pages Found
+        {{pass}}
+        </div>
+    {{pass}}
+    <br style="clear: both;">
+    
+
+{{#=BEAUTIFY(highlights)}}
