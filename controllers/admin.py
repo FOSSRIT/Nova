@@ -7,6 +7,37 @@ def email_dump():
     return dict(emails=db(db.auth_user.email!="").select(db.auth_user.email).as_list())
 
 @auth.requires_membership("Site Admin")
+def image_resize():
+    import Image
+    import os
+    
+    request_sorce_path = os.path.join(request.folder, 'uploads')
+    
+    badFiles = []
+    goodFiles = []
+    for file_path in os.listdir(request_sorce_path):
+        if file_path == "thumb":
+            continue
+        
+        file_full_path = os.path.join(request_sorce_path,file_path)
+        
+        try:
+            thumb = Image.open(file_full_path)
+        except:
+            badFiles += [file_path]
+            
+        thumb.thumbnail((800,800), Image.ANTIALIAS)
+        try:
+            thumb.save(file_full_path)
+            goodFiles += [file_path]
+        except KeyError:
+            if thumb.mode != "RGB":
+               thumb = thumb.convert("RGB")
+            thumb.save(file_full_path, "JPEG")
+            
+    return dict(files_failed=badFiles, goodFiles=goodFiles)
+
+@auth.requires_membership("Site Admin")
 def cleanup_dead_ref():
     dead_nodes = []
     #Remove dead watched pages
