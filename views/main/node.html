@@ -295,3 +295,5 @@
     <div id="feeds" class="db_editable">
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
     </div>
+
+{{=A("View Printout Mode", _href=URL('main','node_print',args=node.url))}}
