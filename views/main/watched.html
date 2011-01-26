@@ -9,8 +9,8 @@
 <h1>Watched Pages</h1>
 {{if watched:}}
 <table border=1 width="100%">
-{{for node in watched:}}
-{{node_db = db(db.node.id == node).select(db.node.name, db.node.id, db.node.url, orderby=db.node.name).first()}}
+{{for node_L in watched:}}
+{{node_db = db(db.node.id == node_L).select(db.node.name, db.node.id, db.node.url, orderby=db.node.name).first()}}
 
 {{if node_db:}}
 <tr><td>
