@@ -17,6 +17,6 @@
 {{pass}}
 </table>
 <p>
-    Using {{="%.2f"%(float(sum)/MAX_FILE_STORE*100)}}% of available space ({{=convert_bytes(sum)}}/{{=convert_bytes(MAX_FILE_STORE)}})
+    Using {{="%.2f"%(float(sum or 0)/MAX_FILE_STORE*100)}}% of available space ({{=convert_bytes(sum or 0)}}/{{=convert_bytes(MAX_FILE_STORE)}})
 </p>
 <br />
