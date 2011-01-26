@@ -6,6 +6,26 @@ import os.path
 def index(): return dict(message="hello from edit.py")
 
 @auth.requires_login()
+def dropbox():
+    filerecord = db((db.filebox.id == request.args(0)) & (db.filebox.owner == auth.user_id)).select().first()
+        
+    sum = db(db.filebox.owner == auth.user_id).select('sum(filebox.size)').first()
+    sum = sum._extra['sum(filebox.size)']
+    
+    if not filerecord and sum > MAX_FILE_STORE:
+        form = P("You have maxed your upload limit, please delete files in order to upload more.")
+    else:
+        form=SQLFORM(db.filebox, filerecord, deletable=True)
+        if form.accepts(request, session):
+            session.flash = "Form Accepted"
+    
+            redirect( URL() )
+        elif form.errors:
+            response.flash = "Form has errors"
+        
+    return dict(form=form, files=db(db.filebox.owner == auth.user_id).select(), sum=sum)
+
+@auth.requires_login()
 def link_me():
     node = get_node_or_404( request.args(1) )
     

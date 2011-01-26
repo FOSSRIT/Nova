@@ -1,0 +1,22 @@
+{{extend 'csi_view.html'}}
+<h1>Personal Dropbox</h1>
+{{if request.args(0):}}
+    {{=A("Upload New", _href=URL(args=[]))}}
+{{pass}}
+{{=form}}
+
+<table>
+<tr><th>File</th><th>Size</th><th>Edit</th><th>Link</th></tr>
+{{for file in files:}}
+    <tr>
+        <td>{{=file.Name}}</td>
+        <td>{{=convert_bytes(file.size or 0)}}</td>
+        <td>{{=A("Edit", _href=URL(args=file.id))}}</td>
+        <td>{{=A("link", _href=URL('default', 'download',args=file.File))}}</td>
+    </tr>
+{{pass}}
+</table>
+<p>
+    Using {{="%.2f"%(float(sum)/MAX_FILE_STORE*100)}}% of available space ({{=convert_bytes(sum)}}/{{=convert_bytes(MAX_FILE_STORE)}})
+</p>
+<br />

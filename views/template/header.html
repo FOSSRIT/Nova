@@ -14,19 +14,19 @@
     
     div.header div.login_form{
         float: right;
-        width: 330px;
+        width: 400px;
         color: #fff;
         text-align: right;
     }
     
     div.login_right_form{
-        width: 140;
+        width: 160;
         padding: 10px;
         font-size: 70%
     }
     
     div.login_left_form{
-        width: 160;
+        width: 180;
         padding: 10px;
     }
     
@@ -97,6 +97,7 @@
         {{=form.custom.end}}
     {{elif auth.is_logged_in():}}
     Hello {{=A(get_home_node().name, _href=URL('main', 'nodeid', args=auth.user.home_node))}} |
+    {{=A('My Files', _href=URL('edit','dropbox'))}} |
     {{=A('Watched Pages', _href=URL('main','watched'))}} |
     {{=A("Logout", _href=URL('default','user',args='logout'))}}<br />
     

@@ -17,7 +17,9 @@ else:                                         # else use a normal relational dat
 
 ###########
 DATE_FORMAT = "%m/%d/%y %I:%M %p"
-
+MAX_FILE_STORE = 20971520
+MAX_UPLOAD_SIZE = 10485760
+MAX_SIZE_ENG = "10mb"
 #########################################################################
 ## Prepare Auth
 ##
@@ -150,6 +152,14 @@ db.define_table('highlights',
     Field('weight', 'integer'),
     Field('nodes', 'list:reference node'),
     format='%(title)s',
+)
+
+import os
+db.define_table('filebox',
+    Field('Name'),
+    Field('File','upload', requires=IS_LENGTH(MAX_UPLOAD_SIZE, error_message="File must be less then %s" % MAX_SIZE_ENG)),
+    Field('size','integer', compute=lambda x: os.path.getsize(os.path.join(request.folder, "uploads", x['File']))),
+    Field('owner', default = auth.user_id, writable=False, readable=False),
 )
 
 #########################################################################
