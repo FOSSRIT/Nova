@@ -118,3 +118,7 @@ def searchBlog():
         search = (db.blog.id>0) 
 
     return dict(blogentries=db(search).select(db.blog.id, db.blog.title, db.blog.body, db.blog.date, db.blog.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.blog.id).as_list() )
+
+@auth.requires_login()
+def myFileList():
+    return dict(files=db(db.filebox.owner == auth.user_id).select())

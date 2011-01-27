@@ -155,10 +155,20 @@ db.define_table('highlights',
 )
 
 import os
+import Image
+
+def checkImage(imgpath):
+    try:
+        Image.open(imgpath)
+        return True
+    except:
+        return False
+
 db.define_table('filebox',
     Field('Name'),
     Field('File','upload', requires=IS_LENGTH(MAX_UPLOAD_SIZE, error_message="File must be less then %s" % MAX_SIZE_ENG)),
     Field('size','integer', compute=lambda x: os.path.getsize(os.path.join(request.folder, "uploads", x['File']))),
+    Field('image','boolean', compute=lambda x: checkImage( os.path.join(request.folder, "uploads", x['File'])) ),
     Field('owner', default = auth.user_id, writable=False, readable=False),
 )
 

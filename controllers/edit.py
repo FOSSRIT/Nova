@@ -15,7 +15,7 @@ def dropbox():
     if not filerecord and sum > MAX_FILE_STORE:
         form = P("You have maxed your upload limit, please delete files in order to upload more.")
     else:
-        form=SQLFORM(db.filebox, filerecord, deletable=True)
+        form=SQLFORM(db.filebox, filerecord, deletable=True, upload=URL("default","download"))
         if form.accepts(request, session):
             session.flash = "Form Accepted"
     

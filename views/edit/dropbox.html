@@ -6,13 +6,14 @@
 {{=form}}
 
 <table>
-<tr><th>File</th><th>Size</th><th>Edit</th><th>Link</th></tr>
+<tr><th>File</th><th>Size</th><th>Edit</th><th>Link</th><th>Type</th></tr>
 {{for file in files:}}
     <tr>
         <td>{{=file.Name}}</td>
         <td>{{=convert_bytes(file.size or 0)}}</td>
         <td>{{=A("Edit", _href=URL(args=file.id))}}</td>
         <td>{{=A("link", _href=URL('default', 'download',args=file.File))}}</td>
+        <td>{{="Image" if file.image else "File"}}</td>
     </tr>
 {{pass}}
 </table>
