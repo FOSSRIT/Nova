@@ -238,6 +238,32 @@ def tag_toggle():
         node.update_record(tags=node.tags+[request.vars.tag])
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
         raise HTTP(200, 'Tag Added')
+        
+@auth.requires_login()
+def blog_tag_toggle():
+    #node = get_node_or_404( request.args(0) )
+    blog = db(db.blog.id==request.args(0)).select().first()
+    
+    
+    if not can_edit(blog.nodeId):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    
+    if not blog:
+        raise HTTP(404, 'Blog entry not found')
+        
+    if blog.tags == None:
+        blog.tags = []
+    if request.vars.tag in blog.tags:
+        blog.tags.remove(request.vars.tag)
+        blog.update_record(tags=blog.tags)
+        db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
+        
+        raise HTTP(200, 'Tag Removed')
+    else:
+        blog.update_record(tags=blog.tags+[request.vars.tag])
+        db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
+        raise HTTP(200, 'Tag Added')
 
 @auth.requires_membership("Site Admin")
 def home_toggle():

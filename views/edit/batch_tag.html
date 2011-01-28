@@ -42,7 +42,35 @@ function is_highlighted( url, node_id ){
 function is_visible( url, node_id ){
     return true;
 }
+
+function is_blog_highlited( blog ){
+    try{
+        return blog.tags.indexOf($('#tag_input').val()) != -1;
+    }catch(e){}
+}
+
+function blog_click_action( blog_id, link_element ){
+    var url = proto + '""" + URL('ajaxedit','blog tag_toggle') + """/' + blog_id + '?tag=' + escape($('#tag_input').val());
+        $.ajax({
+        url: url,
+        success: function(){
+            $('div.flash').html('Tag Change Applied');
+            $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
+            //pull_data(gsearch, gpage, true, gfull);
+            if($(link_element).css('color') != "green"){
+                $(link_element).css('color', 'green');
+            }else{
+                $(link_element).css('color', '');
+            }
+        },
+        error: function(){
+            alert('Unable to Change Tag, You may not have permissions to edit that page');
+        }
+    });
+    return false;
+}
 """}}
+{{showblog = True}}
 
 <h2>Add Tags</h2>
 Tag: <input type="text" name="tag_input" id="tag_input"

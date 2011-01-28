@@ -28,6 +28,14 @@ function is_highlighted( url, node_id ){
 function is_visible( url, node_id ){
     return true;
 }
+
+function is_blog_highlited( blog ){
+    return false;
+}
+
+function blog_click_action( blog_id ){
+    return true;
+}
 {{pass}}
 
 
@@ -95,9 +103,12 @@ function pull_data(search, page, empty, full){
                 $("#BLOG_TARGET").append("Blog Entries<ul>");
             }
             $.each(data.blogentries, function(key,val){
-            
+                style = "";
+                if( is_blog_highlited(val) ){
+                    style = "color: green;";
+                }
                 var html_add = "<li>\
-                        <a href='{{=URL('main','blogid')}}/" + val.id + "'>" + val.title + "</a>\
+                        <a href='{{=URL('main','blogid')}}/" + val.id + "' style='"+style+"' onclick='return blog_click_action("+val.id+", this);'>" + val.title + "</a>\
                      </li>";
             
                 $("#BLOG_TARGET").append( html_add );
