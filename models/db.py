@@ -133,7 +133,7 @@ db.linkTable.linkId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 
 db.define_table('blog',
     Field('nodeId', db.node, writable=False, readable=False),
-    Field('title', 'string'),
+    Field('title', 'string', required=True),
     Field('body', 'text'),
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('author','integer', default=auth.user_id, writable=False, readable=False),
