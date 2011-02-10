@@ -56,8 +56,8 @@ def nodeid():
 def blogid():
     try:
         current_blog = db(db.blog.id==request.args[0]).select().first()
-        current_node = get_home_from_user(current_blog.author)
-        redirect( URL('blog', args=[current_node.url,current_blog.id]) )
+        #current_node = get_home_from_user(current_blog.author)
+        redirect( URL('blog', args=[current_blog.nodeId.url,current_blog.id]) )
     except Exception, oops:
         raise HTTP(404, oops)#"Node not found")
 
