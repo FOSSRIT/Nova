@@ -146,12 +146,12 @@ def tags():
         for row in db(db.node.tags != []).select(db.node.tags):
             for tag in row.tags:
                 total_tags += 1
-                tagcount[tag] = tagcount.get(tag, 0) + 1
+                tagcount[tag.lower()] = tagcount.get(tag.lower(), 0) + 1
                 
         for row in db(db.blog.tags != []).select(db.blog.tags):
             for tag in row.tags:
                 total_tags += 1
-                tagcount[tag] = tagcount.get(tag, 0) + 1
+                tagcount[tag.lower()] = tagcount.get(tag.lower(), 0) + 1
         
         # Make a sorted list of tuples key, frequency by frequency
         import operator
