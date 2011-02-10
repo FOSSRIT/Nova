@@ -237,6 +237,10 @@ if auth.is_logged_in():
         db(auth_table.id == auth.user.id).update(home_node = id)
         auth.user.home_node = id
         
+        #have them watch their page
+        db(db.auth_user.id == auth.user.id).update(watch_nodes=[id])
+        session.auth.user.watch_nodes = [id]
+        
         #Give them an email attribute (6 is email)
         
         if auth.user.email == "":
