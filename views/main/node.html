@@ -254,7 +254,7 @@
     </script>
     {{pass}}
     
-        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="left primary button"><span class="pen icon"></span>Edit this page!</a>
+        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="left button"><span class="pen icon"></span>Edit this page!</a>
 {{pass}}
 
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
@@ -266,11 +266,11 @@
 {{if auth.is_logged_in():}}
     {{if auth.user.watch_nodes and node.id in auth.user.watch_nodes:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="heart icon"),'Unwatch'),_class="middle negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
         </div>
     {{else:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="heart icon"),'Watch'),_class="middle button",_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle button",_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
         </div>
     {{pass}}
     {{if auth.has_membership("Site Admin"):}}

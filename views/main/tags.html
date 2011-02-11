@@ -2,24 +2,24 @@
 {{showblog = True}}
 <div id="viewbar"> 
 {{if vars().has_key('tagcount'):}}
-    <h1 style="float:left; margin:20px; color:#FFF;">Tags</h1>
+    <div style="padding: 10px;">
+    <h2 style="float:left; margin:0px; padding: 0px; color:#FFF;">Tags</h2>
     {{if auth.is_logged_in():}}
-    <div id="addyourself">
-        {{=A("Batch Tag", _href=URL('edit','batch_tag'))}}
-        </div>
+        {{=A(SPAN(SPAN("",_class="icon cog"),"Batch Tag"), _class="big pill button", _style="float: right;", _href=URL('edit','batch_tag'))}}
     {{pass}}
-     <br style="clear: both;"/> 
+    <br style="clear: both;">
+    </div>
     </div>
     {{=tagcount}}
 {{else:}}
-    <h1 style="float:left; margin:20px; color:#FFF;">Pages tagged with <i>{{=tag}}</i></h1>
+    <div style="padding: 10px;">
+    <h2 style="float:left; margin:0px; padding: 0px; color:#FFF;">Pages tagged with <i>{{=tag}}</i></h2>
     
     {{if auth.is_logged_in():}}
-    <div id="addyourself">
-        {{=A("Batch Tag", _href=URL('edit','batch_tag', args=tag))}}
-        </div>
+        {{=A(SPAN(SPAN("",_class="icon cog"),"Batch Tag"), _class="big pill button", _style="float: right;", _href=URL('edit','batch_tag', args=tag))}}
     {{pass}}
     <br style="clear: both;"/> 
+    </div>
     </div>
     
     {{search_mode="tag=%s" % tag}}
