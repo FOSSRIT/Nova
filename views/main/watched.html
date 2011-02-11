@@ -1,9 +1,9 @@
 {{extend 'csi_view.html'}}
 <div id="watch_email">
 {{if auth.user.email_watch:}}
-    Daily Email Enabled, {{=A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), cid='watch_email')}}
+    Daily Email Enabled, {{=A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), _class="pill negative button", cid='watch_email')}}
 {{else:}}
-    Daily Email Disabled, {{=A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), cid='watch_email')}}
+    Daily Email Disabled, {{=A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), _class="pill button", cid='watch_email')}}
 {{pass}}
 </div>
 <h1>Watched Pages</h1>
@@ -15,9 +15,9 @@
 {{if node_db:}}
 <tr><td>
 {{=A(node_db.name, _href=URL('node', args=node_db.url))}}
-</td><td width="100px">
+</td><td width="70px">
 <div id="watch_{{=node_db.id}}">
-{{=A('Unwatch',_href=URL('ajaxedit','unwatch',args=node_db.url,vars={'cid':"watch_%d"%node_db.id}), cid="watch_%d"%node_db.id)}}
+{{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_href=URL('ajaxedit','unwatch',args=node_db.url,vars={'cid':"watch_%d"%node_db.id}), _class="middle negative button", cid="watch_%d"%node_db.id)}}
 </div>
 {{pass}}
 {{pass}}

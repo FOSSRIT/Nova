@@ -212,13 +212,13 @@ def watchemail():
         db(db.auth_user.id == auth.user.id).update(email_watch=True)
         session.auth.user.email_watch = True
         response.view = "generic.load"
-        return "Daily Email Enabled, " + A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), cid='watch_email').xml()
+        return "Daily Email Enabled, " + A('Disable Daily Email', _href=URL('ajaxedit','watchemail',args='False'), _class="pill negative button", cid='watch_email').xml()
     else:
         auth.user.email_watch = False
         db(db.auth_user.id == auth.user.id).update(email_watch=False)
         session.auth.user.email_watch = False
         response.view = "generic.load"
-        return "Daily Email Disabled, " + A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), cid='watch_email').xml()
+        return "Daily Email Disabled, " + A('Enable Daily Email', _href=URL('ajaxedit','watchemail',args='True'), _class="pill button", cid='watch_email').xml()
 
 @auth.requires_login()
 def tag_toggle():
