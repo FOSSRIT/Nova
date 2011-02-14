@@ -37,7 +37,7 @@
     
     function exit_edit_mode(){
         in_edit_mode = false;
-        $("#mode_a").show();
+        $("#mode_a").removeClass("active").unbind("click").bind("click", function(){enter_edit_mode(); return false;});
         $("div.flash").slideUp();
         
         $(".db_editable, .db_attributes, .db_photo_editable").each(
@@ -66,7 +66,8 @@
     
         disable_lightBox();
     
-        $("#mode_a").hide();
+        $("#mode_a").addClass("active").unbind("click").attr("onclick", "").bind("click", function(){exit_edit_mode(); return false;});
+
         $("div.flash").html("You can edit anything in yellow. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#F99;'>Finish Editing</a>.");
         $("div.flash").slideDown('slow');
         
