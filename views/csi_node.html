@@ -1,9 +1,9 @@
 {{extend 'csi_base.html'}}
         <div id="sidebar">
-            <h3>Liked Pages</h3>
+            <h3>Links</h3>
             <div class="nodeTopLinks" style="float: right">
             {{if can_edit(node):}}
-            <a href="{{=URL('edit','link', args=node.url)}}" class="left button pill">Manage Likes</a>
+            <a href="{{=URL('edit','link', args=node.url)}}" class="left button pill">Manage links</a>
             {{pill="pill"}}
             {{else:}}
             {{pill=""}}
