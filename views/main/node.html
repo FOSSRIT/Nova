@@ -161,8 +161,9 @@
                 }
             });
             
+            
             //Load in wysiwyg if form element exists
-            $("#node_description,#nodeAttr_value").width("98%").height($("#overlay_body").height()-130){{include "htmlblocks/wysiwyg_js.html"}};
+            $("#node_description,#nodeAttr_value").width("98%").height($("#overlay_body").height()-130).wysiwyg(wysiwyg_control);
             
             $(".custom").css('background', 'url({{=URL('static','images/edit.png')}})').css('background-size', '16px 16px');
             
