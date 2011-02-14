@@ -3,34 +3,7 @@
 $(document).ready( function(){
     $("form table").width("100%");
     $("#blog_title").width("90%");
-    $("#blog_body").width("98%").wysiwyg({
-        controls:{
-            html: {visible: true},
-            custom: {
-                icon: "{{=URL('static','images/edit.png')}}",
-                tooltip: "Add File from MyFiles",
-                visible: true,
-                exec:  function() {
-                    $.getJSON('{{=URL('api','myFileList', extension='json')}}',
-                        function(data){
-                        overlay = ""
-                        $(".wysiwyg").hide();
-                        $.each(data.files, function(i,item){
-                            if( item.image ){
-                                    overlay += "IMAGE: <a href=\"#\" onclick=\"$('#blog_body').wysiwyg('insertHtml','<img src=\{{=URL('default','download')}}/"+item.File+">'); $('#ov1').remove(); $('.wysiwyg').show();\">"+item.Name+"</a><br>";
-                                    
-                            }else{
-                                overlay += "LINK: <a href=\"#\" onclick=\"$('#blog_body').wysiwyg('createLink','{{=URL('default','download')}}/"+item.File+"'); $('#ov1').remove(); $('.wysiwyg').show();\">"+item.Name+"</a><br>";
-                            }
-                        });
-                        overlay += '<br><input type="button" value="Never Mind" onclick="$(\'#ov1\').remove(); $(\'.wysiwyg\').show();">';
-                        $("<div id='ov1'>"+overlay+"</div>").insertBefore( "#blog_body" );
-                        });
-                    }
-              
-                }
-            }
-    });
+    $("#blog_body").width("98%").wysiwyg(wysiwyg_control);
     $(".custom").css('background', 'url({{=URL('static','images/edit.png')}})').css('background-size', '16px 16px');
 });
 </script>
