@@ -1,14 +1,22 @@
 {{
-response.files.insert(0,URL(r=request,c='static',f='jquery.js'))
+response.files.insert(0,URL(r=request,c='static',f='jquery/jquery.js'))
 response.files.insert(1,URL(r=request,c='static',f='calendar.css'))
 response.files.insert(2,URL(r=request,c='static',f='calendar.js'))
-response.files.insert(3,URL(r=request,c='static',f='jquery.lightbox-0.5.css'))
-response.files.insert(4,URL(r=request,c='static',f='jquery.lightbox-0.5.pack.js'))
-response.files.insert(5,URL(r=request,c='static',f='jquery-images-ondemand.0.1.min.js'))
-response.files.insert(6,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.js'))
-response.files.insert(7,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.css'))
-response.files.insert(8,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.modal.css'))
-response.files.insert(8,URL(r=request,c='static',f='css3buttons.css'))
+response.files.insert(3,URL(r=request,c='static',f='jquery/jquery.lightbox-0.5.css'))
+response.files.insert(4,URL(r=request,c='static',f='jquery/jquery.lightbox-0.5.pack.js'))
+response.files.insert(5,URL(r=request,c='static',f='jquery/jquery-images-ondemand.0.1.min.js'))
+
+response.files.insert(6,URL(r=request,c='static',f='jquery/ui/jquery.ui.core.min.js'))
+response.files.insert(7,URL(r=request,c='static',f='jquery/jquery.simplemodal.1.4.1.min.js'))
+response.files.insert(9,URL(r=request,c='static',f='jquery/ui/jquery.ui.position.min.js'))
+response.files.insert(10,URL(r=request,c='static',f='jquery/ui/jquery.ui.widget.min.js'))
+response.files.insert(12,URL(r=request,c='static',f='jquery/ui/jquery.ui.dialog.min'))
+
+response.files.insert(13,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.js'))
+response.files.insert(14,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.css'))
+response.files.insert(15,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.modal.css'))
+
+response.files.insert(16,URL(r=request,c='static',f='css3buttons.css'))
 for _item in response.meta or []:}}
      <meta name="{{=_item}}" content="{{=response.meta[_item]}}" />{{
 pass
