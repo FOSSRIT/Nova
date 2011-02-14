@@ -189,7 +189,7 @@ def watch():
     
     if add_rem_watch(node, True):
         response.view = "generic.load"
-        return A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
+        return A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle negative pill button", _href=URL('ajaxedit','unwatch',args=node.url), cid=the_cid)
         
     else:
         raise HTTP(405, 'Already watched')
@@ -201,7 +201,7 @@ def unwatch():
     
     if add_rem_watch(node, False):
         response.view = "generic.load"
-        return A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle button", _href=URL('ajaxedit','watch',args=node.url), cid=the_cid)
+        return A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle pill button", _href=URL('ajaxedit','watch',args=node.url), cid=the_cid)
     else:
         raise HTTP(405, 'Not watched')
 

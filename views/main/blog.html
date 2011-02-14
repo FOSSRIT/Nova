@@ -2,9 +2,11 @@
 <h1>{{=node.name}}'s Blog</h1>
 
 <div class="nodeTopLinks">
-{{=A('Back to %s' % node.name, _href=URL('main','node',args=node.url))}}
 {{if can_edit(node):}}
-{{=A('New Entry', _href=URL('edit','blog',args=node.url))}}
+{{=A(SPAN(SPAN(_class="icon loop"),'Back to %s' % node.name), _class="left pill button", _href=URL('main','node',args=node.url))}}
+{{=A(SPAN(SPAN(_class="icon plus"),'New Entry'), _class="right pill button", _href=URL('edit','blog',args=node.url))}}
+{{else:}}
+{{=A(SPAN(SPAN(_class="icon loop"),'Back to %s' % node.name), _class="pill button", _href=URL('main','node',args=node.url))}}
 {{pass}}
 </a>
 </div><br />
@@ -31,12 +33,12 @@
 <div class="blog_title">{{=A(entry['title'], _href=URL('main','blog',args=[node.url, entry['id']]))}} by
 {{=A(author_node.name, _href=URL('main','node',args=author_node.url))}}</div>
 <div class="blog_date">{{=entry['created_on'].strftime(DATE_FORMAT)}}
-{{if canedit:}}{{=A("Edit/Delete Post", _href=URL('edit','blog',args=[node.url, entry['id']]))}}{{pass}}
+{{if canedit:}}{{=A(SPAN(SPAN(_class="icon pen"),"Edit/Delete Post"), _class="button pill", _href=URL('edit','blog',args=[node.url, entry['id']]))}}{{pass}}
 </div>
 <div class="blog_body">{{=XML(entry['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
 <div class="blog_tags">{{=tags_2_html(entry['tags'])}}</div>
 </div>
 {{pass}}
 {{if request.args(1):}}
-{{=A('View All Posts', _href=URL('main','blog',args=node.url))}}
+{{=A('View All Posts', _class="button pill", _href=URL('main','blog',args=node.url))}}
 {{pass}}
