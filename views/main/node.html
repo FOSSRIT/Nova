@@ -244,6 +244,11 @@
 {{pass}}
 
 <div class="nodeTopLinks">
+{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
+<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
+{{else:}}
+<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
+{{pass}}
 {{if can_edit(node):}}
     {{if node.url==node.name and node.type==1:}}
     <script type="text/javascript">
@@ -254,39 +259,35 @@
     </script>
     {{pass}}
     
-        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="left button"><span class="pen icon"></span>Edit this page!</a>
-{{pass}}
-
-{{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="middle button"><span class="magnifier icon"></span>View Page Activity</a>
-{{else:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="middle button"><span class="magnifier icon"></span>View Page Activity</a>
+        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="middle pill button"><span class="pen icon"></span>Edit this page!</a>
 {{pass}}
 
 {{if auth.is_logged_in():}}
     {{if auth.user.watch_nodes and node.id in auth.user.watch_nodes:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle pill negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
         </div>
     {{else:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle button",_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle pill button",_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
         </div>
     {{pass}}
     {{if auth.has_membership("Site Admin"):}}
     {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;" class="right button"><span class="mail icon"></span>Email Linked  People</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;" class="middle pill button"><span class="mail icon"></span>Email Linked  People</a>
 {{else:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;" class="right button"><span class="mail icon"></span>Email Linked  People</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;" class="middle pill button"><span class="mail icon"></span>Email Linked  People</a>
 {{pass}}
     
     {{pass}}
 {{pass}}
+
+{{=A(SPAN(SPAN(_class="icon tag"),"Printout Mode"), _class="right pill button", _href=URL('main','node_print',args=node.url))}}
+
     </div>
 <br />
     <div id="nodeTitle">
-        <div id="name" class="db_editable">{{=node.name}}
-            {{if node.url!="csi":}}({{=node.type.value_node}}){{pass}}</div>
+        <div id="name" class="db_editable">{{=node.name}}({{=node.type.value_node}})</div>
     </div> <!-- end nodeTitle -->
     
     <div id="picture" class="db_photo_editable">
@@ -323,5 +324,3 @@
     <div id="feeds" class="db_editable">
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
     </div>
-
-{{=A("View Printout Mode", _href=URL('main','node_print',args=node.url))}}
