@@ -68,7 +68,7 @@
     
         $("#mode_a").addClass("active").unbind("click").attr("onclick", "").bind("click", function(){exit_edit_mode(); return false;});
 
-        $("div.flash").html("You can edit anything in yellow. <a href='#' onclick='exit_edit_mode(); return false;' style='background-color:#F99;'>Finish Editing</a>.");
+        $("div.flash").html("<span style='font-size: 70%;'>Edit Mode: You can edit anything in yellow.<br>When you are done, click the edit button again.</span>");
         $("div.flash").slideDown('slow');
         
         //Add New Attribute Link
