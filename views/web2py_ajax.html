@@ -12,7 +12,7 @@ response.files.insert(9,URL(r=request,c='static',f='jquery/ui/jquery.ui.position
 response.files.insert(10,URL(r=request,c='static',f='jquery/ui/jquery.ui.widget.min.js'))
 response.files.insert(12,URL(r=request,c='static',f='jquery/ui/jquery.ui.dialog.min'))
 
-response.files.insert(13,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.js'))
+response.files.insert(13,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg_csicustom.js'))
 response.files.insert(14,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.css'))
 response.files.insert(15,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.modal.css'))
 
@@ -123,8 +123,7 @@ wysiwyg_control = {controls:{
                                     $(".wysiwyg").hide();
                                     $.each(data.files, function(i,item){
                                         if( item.image ){
-                                       overlay += "IMAGE: <a href=\"#\" onclick=\"$('#node_description,#nodeAttr_value').wysiwyg('insertHtml','<img src=\{{=URL('default','download')}}/"+item.File+">'); $('#ov1').remove(); $('.wysiwyg').show();\">"+item.Name+"</a><br>";
-                                    
+                                          //FUNCTONALITY MOVED
                                     }else{
                                         overlay += "LINK: <a href=\"#\" onclick=\"$('#node_description,#nodeAttr_value').wysiwyg('createLink','{{=URL('default','download')}}/"+item.File+"'); $('#ov1').remove(); $('.wysiwyg').show();\">"+item.Name+"</a><br>";
                                     }
