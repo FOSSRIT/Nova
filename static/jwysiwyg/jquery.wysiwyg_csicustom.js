@@ -123,7 +123,7 @@
         $.fn.wysiwyg.defaults = {
                 html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">STYLE_SHEET</head><body style="margin: 0px;">INITIAL_CONTENT</body></html>',
                 formTableHtml: '<form class="wysiwyg"><fieldset><legend>Insert table</legend><label>Count of columns: <input type="text" name="colCount" value="3" /></label><label><br />Count of rows: <input type="text" name="rowCount" value="3" /></label><input type="submit" class="button" value="Insert table" /> <input type="reset" value="Cancel" /></fieldset></form>',
-                formImageHtml:'<form class="wysiwyg"><fieldset><legend>Insert Image from web</legend><label for="url">Image URL:</label><input type="text" name="url" value="http://" style="width: 100%;"/><label for="imagetitle">Image Title:</label><input type="text" name="imagetitle" value="" style="width: 100%;" /><label for="description">Image Description:</label><input type="text" name="description" value="" style="width: 100%;" /><input type="submit" class="button" value="Insert Image" /> <input type="reset" value="Cancel" /></fieldset><fieldset><legend>Insert Image from My Files</legend><div id="file_list">Loading...</div></fieldset></form>',
+                formImageHtml:'<form class="wysiwyg"><fieldset><legend>Insert Image from web</legend><label for="url">Image URL:</label><input type="text" name="url" value="http://" style="width: 100%;"/><label for="imagetitle">Image Title:</label><input type="text" name="imagetitle" value="" style="width: 100%;" /><div style="display: none;"<label for="description">Image Description:</label><input type="text" name="description" value="" style="width: 100%;" /></div><input type="submit" class="button" value="Insert Image" /> <input type="reset" value="Cancel" /></fieldset><fieldset><legend>Insert Image from My Files</legend><div id="file_list">Loading...</div></fieldset></form>',
                 formWidth: 440,
                 formHeight: 470,
                 tableFiller: 'Lorem ipsum',
@@ -312,6 +312,11 @@
                         visible: true,
                         exec: function ()
                         {
+                        
+                        if(this.getInternalRange() == null){
+                            alert("You must place your cursor to insert image");
+                            return;
+                        }
                                 var self = this;
                                 if ($.modal)
                                 {
@@ -424,6 +429,10 @@
                         visible: true,
                         exec: function ()
                         {
+                            if(this.getInternalRange() == null){
+                                alert("You must place your cursor to insert image");
+                                return;
+                            }
                                 var self = this;
                                 if ($.fn.modal)
                                 {
