@@ -285,20 +285,7 @@
 
                                 if (selection && selection.length > 0)
                                 {
-                                        if ($.browser.msie)
-                                        {
-                                                this.focus();
-                                                this.editorDoc.execCommand('createLink', true, null);
-                                        }
-                                        else
-                                        {
-                                                var szURL = prompt('URL', 'http://');
-                                                if (szURL && szURL.length > 0)
-                                                {
-                                                        this.editorDoc.execCommand('unlink', false, null);
-                                                        this.editorDoc.execCommand('createLink', false, szURL);
-                                                }
-                                        }
+                                    show_image_selection(this, false);
                                 }
                                 else if (this.options.messages.nonSelection)
                                 {
@@ -317,109 +304,8 @@
                             alert("You must place your cursor to insert image");
                             return;
                         }
-                                var self = this;
-                                if ($.modal)
-                                {
-                                        $.modal($.fn.wysiwyg.defaults.formImageHtml, {
-                                                onShow: function(dialog)
-                                                {
-                                                 $.getJSON('/csi2/api/myFileList.json',
-                                                    function(data){
-                                                        container_file = $("#file_list");
-                                                        container_file.html("");
-                                                        
-                                                        $.each(data.files, function(i,item){
-                                                            if( item.image ){
-                                                                $("<img/>", {
-                                                                    src: "/csi2/default/thumb/50/50/" + item.File,
-                                                                    title: item.Name,
-                                                                    click: function(){
-                                                                            img="<img src='/csi2/default/download/" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
-                                                                            self.insertHtml(img);
-                                                                            $.modal.close();
-                                                                           }
-                                                                    } ).appendTo(container_file);
-                                                            }
-                                                        });
-                                                        
-                                                        if( container_file.html() == "" ){
-                                                            container_file.html("No Image Files found in your Dropbox.");
-                                                        }
-                                                    }
-                                                );
-                                                
-                                                        $('input:submit', dialog.data).click(function(e)
-                                                        {
-                                                                e.preventDefault();
-                                                                var szURL = $('input[name="url"]', dialog.data).val();
-                                                                var title = $('input[name="imagetitle"]', dialog.data).val();
-                                                                var description = $('input[name="description"]', dialog.data).val();
-                                                                var img="<img src='" + szURL + "' title='" + title + "' alt='" + description + "' />";
-                                                                self.insertHtml(img);
-                                                                $.modal.close();
-                                                        });
-                                                        $('input:reset', dialog.data).click(function(e)
-                                                        {
-                                                                e.preventDefault();
-                                                                $.modal.close();
-                                                        });
-                                                },
-                                                maxWidth: $.fn.wysiwyg.defaults.formWidth,
-                                                maxHeight: $.fn.wysiwyg.defaults.formHeight,
-                                                overlayClose: true
-                                        });
-                                }
-                                else
-                                {
-                                     if ($.fn.dialog){
-                                        var dialog = $($.fn.wysiwyg.defaults.formImageHtml).appendTo('body');
-                                        dialog.dialog({
-                                            modal: true,
-                                            width: $.fn.wysiwyg.defaults.formWidth,
-                                            height: $.fn.wysiwyg.defaults.formHeight,
-                                            open: function(ev, ui)
-                                            {
-                                                 $('input:submit', $(this)).click(function(e)
-                                                 {
-                                                       e.preventDefault();
-                                                       var szURL = $('input[name="url"]', dialog).val();
-                                                       var title = $('input[name="imagetitle"]', dialog).val();
-                                                       var description = $('input[name="description"]', dialog).val();
-                                                       var img="<img src='" + szURL + "' title='" + title + "' alt='" + description + "' />";
-                                                       self.insertHtml(img);
-                                                       $(dialog).dialog("close");
-                                                 });
-                                                 $('input:reset', $(this)).click(function(e)
-                                                        {
-                                                                e.preventDefault();
-                                                                $(dialog).dialog("close");
-                                                        });
-                                            },
-                                            close: function(ev, ui){
-                                                  $(this).dialog("destroy");
-
-                                            }
-                                        });
-                                    }
-                                    else
-                                    {
-                                        if ($.browser.msie)
-                                        {
-                                                this.focus();
-                                                this.editorDoc.execCommand('insertImage', true, null);
-                                        }
-                                        else
-                                        {
-                                                var szURL = prompt('URL', 'http://');
-                                                if (szURL && szURL.length > 0)
-                                                {
-                                                        this.editorDoc.execCommand('insertImage', false, szURL);
-                                                }
-                                        }
-                                    }
-
-
-                                }
+                        
+                        show_image_selection(this, true);
 
                         },
                         tags: ['img'],
@@ -430,7 +316,7 @@
                         exec: function ()
                         {
                             if(this.getInternalRange() == null){
-                                alert("You must place your cursor to insert image");
+                                alert("You must place your cursor to table image");
                                 return;
                             }
                                 var self = this;

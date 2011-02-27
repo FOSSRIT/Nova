@@ -10,7 +10,7 @@ response.files.insert(6,URL(r=request,c='static',f='jquery/ui/jquery.ui.core.min
 response.files.insert(7,URL(r=request,c='static',f='jquery/jquery.simplemodal.1.4.1.min.js'))
 response.files.insert(9,URL(r=request,c='static',f='jquery/ui/jquery.ui.position.min.js'))
 response.files.insert(10,URL(r=request,c='static',f='jquery/ui/jquery.ui.widget.min.js'))
-response.files.insert(12,URL(r=request,c='static',f='jquery/ui/jquery.ui.dialog.min'))
+response.files.insert(12,URL(r=request,c='static',f='jquery/ui/jquery.ui.dialog.min.js'))
 
 response.files.insert(13,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg_csicustom.js'))
 response.files.insert(14,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.css'))
@@ -113,27 +113,105 @@ function web2py_component(action,target) {
 
 wysiwyg_control = {controls:{
                 html: {visible: true},
-                custom: {
-                        icon: "{{=URL('static','images/edit.png')}}",
-                        tooltip: "Add File from MyFiles",
-                        exec:  function() {
-                            $.getJSON('{{=URL('api','myFileList', extension='json')}}',
-                                function(data){
-                                    overlay = ""
-                                    $(".wysiwyg").hide();
-                                    $.each(data.files, function(i,item){
-                                        if( item.image ){
-                                          //FUNCTONALITY MOVED
-                                    }else{
-                                        overlay += "LINK: <a href=\"#\" onclick=\"$('#node_description,#nodeAttr_value').wysiwyg('createLink','{{=URL('default','download')}}/"+item.File+"'); $('#ov1').remove(); $('.wysiwyg').show();\">"+item.Name+"</a><br>";
-                                    }
-                                    });
-                                    overlay += '<br><input type="button" value="Never Mind" onclick="$(\'#ov1\').remove(); $(\'.wysiwyg\').show();">';
-                                    $("<div id='ov1'>"+overlay+"</div>").insertBefore( "#node_description,#nodeAttr_value" )
-                                });
-                            },
-                        visible: true,
-                        }
                 }
 };
+
+function show_image_selection(editorCallback, imageMode){
+    $.modal('<div style="background: #fff; border: 1px solid #000; text-align: left;" id="sel_overlay">\
+        <table><tr valign=top><td>\
+          Select Source:<br>\
+          <a href="#" onclick="$(\'#tab-upload\').hide();$(\'#tab-files\').hide();$(\'#tab-url\').show(400); return false;" class="button" style="width:90%">URL</a><br>\
+          <a href="#" onclick="$(\'#tab-files\').hide();$(\'#tab-url\').hide();$(\'#tab-upload\').show(400); return false;" class="button" style="width:90%">Computer Upload</a><br>\
+          <a href="#" onclick="$(\'#tab-url\').hide();$(\'#tab-upload\').hide();$(\'#tab-files\').show(400); return false;" class="button" style="width:90%">My Files dropbox</a>\
+        </td><td>\
+        <div id="tab-upload" width="100%">\
+          <form>\
+            <fieldset>\
+              <legend>Upload File</legend>\
+              <b>Quick Upload Coming Soon</b>.\
+              Until then upload to: <a href="/csi2/edit/dropbox" class="pill button" target="_new">My Files</a> then re-open this dialog to the <i>My Files Dropbox</i> to attach the file<br>\
+            </fieldset>\
+          </form>\
+        </div>\
+        <div id="tab-url" width="100%">\
+          <form>\
+            <fieldset>\
+              <legend>Insert URL</legend>\
+              <label for="img_url">Url:</label><input type="text" name="img_url" id="img_url"<br>\
+              <label for="img_title">Title:</label><input type="text" name="img_title" id="img_title"><br>\
+              <input type="button" id="insert_by_url" value="Insert">\
+            </fieldset>\
+          </form>\
+        </div>\
+        <div id="tab-files" width="100%">\
+          <fieldset>\
+            <legend>From My Files</legend>\
+            <div id="file_list">Loading</div>\
+          </filedset></div>\
+          </td></tr></table>\
+          <a href="#" onclick="$.modal.close()" class="pill button">Cancel</a>\
+          </div>',{
+        onShow: function(dialog){
+        $('#tab-upload').hide();
+        $('#tab-files').hide();
+        $('#tab-url').show();
+        
+        $("#insert_by_url", dialog.data).click(
+            function(e){
+                if( imageMode ){
+                    img = "<img src='" + $("#img_url", dialog.data).val() + "' title='" + $("#img_title", dialog.data).val() + "' alt='" + $("#img_title", dialog.data).val() + "' />";
+                    editorCallback.insertHtml(img);
+                }else{
+                    editorCallback.execute("createLink", $("#img_url", dialog.data).val());
+                }
+                
+                $.modal.close();
+            }
+        );
+
+        $.getJSON('/csi2/api/myFileList.json',
+            function(data){
+                container_file = $("#file_list");
+                container_file.html("");
+                
+                $.each(data.files, function(i,item){
+                    if( imageMode ){
+                        if( item.image ){
+                            $("<img/>", {
+                                src: "/csi2/default/thumb/100/100/" + item.File,
+                                title: item.Name,
+                                style: "max-width: none; max-height: none; cursor: pointer;",
+                                click: function(){
+                                        img="<img src='/csi2/default/download/" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
+                                        editorCallback.insertHtml(img);
+                                        $.modal.close();
+                                       }
+                                } ).appendTo(container_file);
+                        }
+                    }else{
+                        $("<a/>", {
+                                href: "#",
+                                text: item.Name,
+                                click: function(){
+                                        editorCallback.execute("createLink",'/csi2/default/download/'+item.File);
+                                        $.modal.close();
+                                       }
+                                } ).appendTo(container_file);
+                        container_file.append("<br>");
+                    }
+                });
+                
+                if( container_file.html() == "" ){
+                    container_file.html("No Image Files found in your Dropbox.");
+                }
+            }
+        );
+
+        },
+        maxWidth: 600,
+        maxHeight: 400,
+        overlayClose: true
+        
+        });
+}
 //--></script>
