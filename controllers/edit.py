@@ -237,7 +237,7 @@ def batch_tag():
     
 @auth.requires_membership("Site Admin")
 def home_page():
-    linkedSet = db(db.highlights.id == request.args(0)).select().first()
+    linkedSet = db(db.highlights.title == request.args(0)).select().first()
     
     if linkedSet:
         return dict(linkedSet=linkedSet.nodes, category=linkedSet)
@@ -246,7 +246,7 @@ def home_page():
 
 @auth.requires_membership("Site Admin")
 def home_page_cat():
-    highlight = db(db.highlights.id == request.args(0)).select().first()
+    highlight = db(db.highlights.title == request.args(0)).select().first()
     form = SQLFORM(db.highlights, highlight, deletable=True, showid=False, fields=['title','weight'])
     
     if not highlight:

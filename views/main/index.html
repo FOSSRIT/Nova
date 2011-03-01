@@ -25,23 +25,19 @@
     {{if auth.has_membership("Site Admin"):}}
     {{=A("Add New Category", _href=URL('edit','home_page_cat'))}}
     {{pass}}
-    {{for category in highlights:}}
+    {{for category, nodes in highlights.items():}}
         <div class="highlight" style="clear: both;">
-        <h2 style="margin: 0px; padding: 0px;">{{=category.title}}</h2>
+        <h2 style="margin: 0px; padding: 0px;">{{=category}}</h2>
         {{if auth.has_membership("Site Admin"):}}
-        {{=A("Add Members",_href=URL('edit','home_page',args=category.id))}} 
-        {{=A("Edit Category", _href=URL('edit','home_page_cat', args=category.id))}}<br>{{pass}}
-        {{if category.nodes:}}
-            {{for node_i in category.nodes:}}
+        {{=A("Add Members",_href=URL('edit','home_page',args=category))}} 
+        {{=A("Edit Category", _href=URL('edit','home_page_cat', args=category))}}<br>{{pass}}
+        {{if nodes:}}
+            {{for node_i in nodes:}}
                   <div class="nodeBox">
-                  {{node_obj = db(db.node.id == node_i).select().first()}}
-                  <a href="{{=URL('main','node', args=node_obj.url)}}">
-                  {{if node_obj.picFile:}}
-                  <div class="nodePic"><img src="{{=URL('default','thumb',args=[150,150,node_obj.picFile])}}"></div>
-                  {{else:}}
-                  <div class="nodePic"><img src="{{=URL('static', 'images', args='placeholder_thumb.png')}}"></div>
-                  {{pass}}
-                  <div class="nodeName">{{=node_obj.name}}</div>
+                  <a href="{{=node_i['Url']}}">
+
+                  <div class="nodePic"><img src="{{=node_i['Pic']}}"></div>
+                  <div class="nodeName">{{=node_i['Name']}}</div>
                   </a>
               </div>
             {{pass}}

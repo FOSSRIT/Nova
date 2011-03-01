@@ -2,7 +2,23 @@
 
 def index():
     #redirect(URL('main','node', args="csi"))
-    return dict(highlights=db(db.highlights.id>0).select(orderby=db.highlights.weight))
+    highlights = db(db.highlights.id>0).select(orderby=db.highlights.weight)
+    
+    h_list = {}
+    for highlight in highlights:
+        h_list[highlight.title] = []
+        for nodeid in highlight.nodes:
+            cNode = db(db.node.id == nodeid).select().first()
+            info = {
+                    "Name": cNode.name,
+                    "Url": URL('main','node', args=cNode.url, extension="").xml(),
+                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="").xml() \
+                           if cNode.picFile else URL('static', 'images', args='placeholder_thumb.png', extension="")
+                    }
+            h_list[highlight.title].append(info)
+        
+    return dict(highlights=h_list)
+    
 def about(): return dict()
 
 def search():
