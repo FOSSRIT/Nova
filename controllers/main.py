@@ -4,9 +4,9 @@ def index():
     #redirect(URL('main','node', args="csi"))
     highlights = db(db.highlights.id>0).select(orderby=db.highlights.weight)
     
-    h_list = {}
+    h_list = []
     for highlight in highlights:
-        h_list[highlight.title] = []
+        tmp_list = []
         for nodeid in highlight.nodes:
             cNode = db(db.node.id == nodeid).select().first()
             info = {
@@ -15,7 +15,8 @@ def index():
                     "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="").xml() \
                            if cNode.picFile else URL('static', 'images', args='placeholder_thumb.png', extension="")
                     }
-            h_list[highlight.title].append(info)
+            tmp_list.append(info)
+        h_list.append((highlight.title, tmp_list))
         
     return dict(highlights=h_list)
     
