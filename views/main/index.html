@@ -1,27 +1,36 @@
 {{extend 'csi_view.html'}}
     <div id="descriptionBox">
-    <img src="{{=URL('static','images/csi_home_image.png')}}" style="float:left; padding: 10px;">
-    <p>
+    <div style="border: 1px solid #666; text-align: center; width: 400px; float: left; margin: 15px;">
+      <img src="{{=URL('static','images/csi_home_image.png')}}">
+    <p style="font-size: 80%; color: #4F81BD;">
       A round glass building on a campus of brick cubes, the Center for
       Student Innovation is a mixing bowl ;-) for collaborative innovation
       that thinks outside the discipline.
     </p>
-    <p>
-      This website is a Virtual Innovation Center for our community, where
-      People and Groups generate and develop Ideas, Projects and Events.
-      RIT innovators watch these pages for innovation opportunities
-      (projects, collaborators, ideas, opportunities to make a contribution, etc.).
-      Don't put any proprietary information up here by accident.
-    </p>
-    <p>
-      The best way to have a great idea is to have a lot of ideas. And the best way
-      to have a lot of ideas is by sharing them, and combining them with others.
-    </p>
-    <p>
-      Our Informational Website is at <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>.
-    </p>
     </div>
+    <p style="text-align: center;">
+      Welcome to the RIT <b>Center for Student Innovation</b>'s<br>
+      virtual collaboration space, where<br>
+      <b>People</b> and <b>Groups</b> develop
+      <b>Ideas</b>, <b>Projects</b> and <b>Events</b>.
+    </p>
+    <p>
+      The best way to have a great idea is to have a lot of ideas.
+      And the best way to have a lot of ideas is by sharing them,
+      and combining them with others.  That's what happens here.
+      (Our informational website is at
+      <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>.)
+    </p>
+    <p>
+      If you have an RIT email address, just log in with your RIT Username
+      and Password.  Or click the Signup link and request an account.
+    </p>
+    <p>
+      Once you're logged in, you can create new pages and connect with others.
+      Don't put any proprietary information as this is is publicly viewable! 
+    </p>
     <br style="clear:both;">
+    </div>
     {{if auth.has_membership("Site Admin"):}}
     {{=A("Add New Category", _href=URL('edit','home_page_cat'))}}
     {{pass}}
