@@ -142,7 +142,6 @@ function show_image_selection(editorCallback, imageMode){
             <fieldset>\
               <legend>Insert URL</legend>\
               <label for="img_url">Url:</label><input type="text" name="img_url" id="img_url"<br>\
-              <label for="img_title">Title:</label><input type="text" name="img_title" id="img_title"><br>\
               <input type="button" id="insert_by_url" value="Insert">\
             </fieldset>\
           </form>\
@@ -163,7 +162,7 @@ function show_image_selection(editorCallback, imageMode){
             $("#insert_by_url", dialog.data).click(
                 function(e){
                     if( imageMode ){
-                        img = "<img src='" + $("#img_url", dialog.data).val() + "' title='" + $("#img_title", dialog.data).val() + "' alt='" + $("#img_title", dialog.data).val() + "' />";
+                        img = "<img src='" + $("#img_url", dialog.data).val() + "' />";
                         editorCallback.insertHtml(img);
                     }else{
                         editorCallback.execute("createLink", $("#img_url", dialog.data).val());
