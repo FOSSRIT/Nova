@@ -92,7 +92,7 @@
         <div class="login_right_form">
             <input type="checkbox" name="remember" id="auth_user_remember" class="checkbox" />Remember me
             <input type="submit" value="Login" />
-            <a href="{{=URL('default','user',args='login', vars={'_next':request.url})}}">Signup</a>
+            <a href="{{=URL('default','user',args='login', vars={'_next':request.url})}}" class="button pill" style="color: #000;">Signup</a>
         </div>
         {{=form.custom.end}}
     {{elif auth.is_logged_in():}}
