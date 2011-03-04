@@ -125,11 +125,15 @@ function show_image_selection(editorCallback, imageMode){
           <a href="#" onclick="$(\'#tab-url\').hide();$(\'#tab-upload\').hide();$(\'#tab-files\').show(400); return false;" class="button" style="width:90%">My Files dropbox</a>\
         </td><td>\
         <div id="tab-upload" width="100%">\
-          <form>\
+          <form method="post" enctype="multipart/form-data" action="{{=URL('ajaxedit','dropbox_upload')}}" target="__Fake_IT_Frame">\
             <fieldset>\
               <legend>Upload File</legend>\
-              <b>Quick Upload Coming Soon</b>.\
-              Until then upload to: <a href="/csi2/edit/dropbox" class="pill button" target="_new">My Files</a> then re-open this dialog to the <i>My Files Dropbox</i> to attach the file<br>\
+              <div id="quota-form">\
+              <label for="file_upload">File</label>\
+              <input type="file" name="file_upload">\
+              <input type="submit" value="Upload and Attach">\
+              </div>\
+              <p id="quota"></p>\
             </fieldset>\
           </form>\
         </div>\
@@ -152,61 +156,88 @@ function show_image_selection(editorCallback, imageMode){
           <a href="#" onclick="$.modal.close()" class="pill button">Cancel</a>\
           </div>',{
         onShow: function(dialog){
-        $('#tab-upload').hide();
-        $('#tab-files').hide();
-        $('#tab-url').show();
-        
-        $("#insert_by_url", dialog.data).click(
-            function(e){
-                if( imageMode ){
-                    img = "<img src='" + $("#img_url", dialog.data).val() + "' title='" + $("#img_title", dialog.data).val() + "' alt='" + $("#img_title", dialog.data).val() + "' />";
-                    editorCallback.insertHtml(img);
-                }else{
-                    editorCallback.execute("createLink", $("#img_url", dialog.data).val());
-                }
-                
-                $.modal.close();
-            }
-        );
-
-        $.getJSON('/csi2/api/myFileList.json',
-            function(data){
-                container_file = $("#file_list");
-                container_file.html("");
-                
-                $.each(data.files, function(i,item){
+            $('#tab-upload').hide();
+            $('#tab-files').hide();
+            $('#tab-url').show();
+            
+            $("#insert_by_url", dialog.data).click(
+                function(e){
                     if( imageMode ){
-                        if( item.image ){
-                            $("<img/>", {
-                                src: "/csi2/default/thumb/100/100/" + item.File,
-                                title: item.Name,
-                                style: "max-width: none; max-height: none; cursor: pointer;",
-                                click: function(){
-                                        img="<img src='/csi2/default/download/" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
-                                        editorCallback.insertHtml(img);
-                                        $.modal.close();
-                                       }
-                                } ).appendTo(container_file);
-                        }
+                        img = "<img src='" + $("#img_url", dialog.data).val() + "' title='" + $("#img_title", dialog.data).val() + "' alt='" + $("#img_title", dialog.data).val() + "' />";
+                        editorCallback.insertHtml(img);
                     }else{
-                        $("<a/>", {
-                                href: "#",
-                                text: item.Name,
-                                click: function(){
-                                        editorCallback.execute("createLink",'/csi2/default/download/'+item.File);
-                                        $.modal.close();
-                                       }
-                                } ).appendTo(container_file);
-                        container_file.append("<br>");
+                        editorCallback.execute("createLink", $("#img_url", dialog.data).val());
                     }
-                });
-                
-                if( container_file.html() == "" ){
-                    container_file.html("No Image Files found in your Dropbox.");
+                    
+                    $.modal.close();
+                }
+            );
+    
+            $.getJSON('{{=URL('api','myFileList', extension='json')}}',
+                function(data){
+                    container_file = $("#file_list");
+                    container_file.html("");
+                    
+                    $.each(data.files, function(i,item){
+                        if( imageMode ){
+                            if( item.image ){
+                                $("<img/>", {
+                                    src: "{{=URL('default','thumb', args=['100','100'])}}/" + item.File,
+                                    title: item.Name,
+                                    style: "max-width: none; max-height: none; cursor: pointer;",
+                                    click: function(){
+                                            img="<img src=''{{=URL('default','download')}}" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
+                                            editorCallback.insertHtml(img);
+                                            $.modal.close();
+                                           }
+                                    } ).appendTo(container_file);
+                            }
+                        }else{
+                            $("<a/>", {
+                                    href: "#",
+                                    text: item.Name,
+                                    click: function(){
+                                            editorCallback.execute("createLink",'{{=URL('default','download')}}'+item.File);
+                                            $.modal.close();
+                                           }
+                                    } ).appendTo(container_file);
+                            container_file.append("<br>");
+                        }
+                    });
+                    
+                    if( container_file.html() == "" ){
+                        container_file.html("No Image Files found in your Dropbox.");
+                    }
+                }
+            );
+    
+            //Fake it frame for file upload
+            f_frame = document.createElement("iframe");
+            f_frame.name = "__Fake_IT_Frame";
+            f_frame.id = "__Fake_IT_Frame";
+            f_frame.style.display = "none";
+            f_frame.onload = function(){
+                if( this.contentWindow.document.body.innerHTML != "" ){
+                    if( imageMode ){
+
+                        img="<img src='" + this.contentWindow.document.body.innerHTML + "' />";
+                        
+                        editorCallback.insertHtml(img);
+                    }else{
+                        editorCallback.execute("createLink",this.contentWindow.document.body.innerHTML);
+                    }
+                    $.modal.close();
                 }
             }
-        );
-
+            
+            $("#tab-upload").append(f_frame);
+            
+            $.getJSON('{{=URL('api', 'quota', extension='json')}}', function(data) {
+                        $("#quota").html( data.quota_text );
+                        if( data.quota_max ){
+                            $("#quota-form").html("You have maxed your quota. See My Files for more information.");
+                        }
+                    });
         },
         maxWidth: 600,
         maxHeight: 400,

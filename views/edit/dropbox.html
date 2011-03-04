@@ -17,7 +17,5 @@
     </tr>
 {{pass}}
 </table>
-<p>
-    Using {{="%.2f"%(float(sum or 0)/MAX_FILE_STORE*100)}}% of available space ({{=convert_bytes(sum or 0)}}/{{=convert_bytes(MAX_FILE_STORE)}})
-</p>
+<p>{{=get_quota_string()}}</p>
 <br />

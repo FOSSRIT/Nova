@@ -48,3 +48,17 @@ def convert_bytes(bytes):
     else:
         size = '%.2fb' % bytes
     return size
+
+def get_quota_usage(rebuild_cache=False):
+    if session.sum and not rebuild_cache:
+        return session.sum
+        
+    sum = db(db.filebox.owner == auth.user_id).select('sum(filebox.size)').first()
+    sum = sum._extra['sum(filebox.size)']
+    
+    session.sum = sum
+    return sum
+    
+def get_quota_string():
+    sum = float( get_quota_usage() or 0)
+    return "%.2f%% of available space (%s/%s)" % ((sum/MAX_FILE_STORE*100), convert_bytes(sum), convert_bytes(MAX_FILE_STORE))

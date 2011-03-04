@@ -122,3 +122,7 @@ def searchBlog():
 @auth.requires_login()
 def myFileList():
     return dict(files=db(db.filebox.owner == auth.user_id).select())
+    
+@auth.requires_login()
+def quota():
+    return dict( quota=get_quota_usage(), quota_text = get_quota_string(), quota_max=get_quota_usage()>MAX_FILE_STORE)

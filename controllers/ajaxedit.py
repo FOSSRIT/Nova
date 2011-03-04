@@ -282,3 +282,22 @@ def home_toggle():
         home_cat.update_record(nodes=home_cat.nodes+[node.id])
         #db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
         raise HTTP(200, 'Added to %s' % home_cat.title)
+
+@auth.requires_login()
+def dropbox_upload():
+    if get_quota_usage() > MAX_FILE_STORE:
+        raise HTTP(400, "User has maxed quota")
+        
+    if request.vars.has_key("file_upload"):
+        id = db.filebox.insert(Name=request.vars.file_upload.filename, File=db.filebox.File.store(request.vars.file_upload.file, request.vars.file_upload.filename))
+        
+        entry = db(db.filebox.id == id).select().first()
+        
+        #Force cache to be rebuilt
+        quota = get_quota_usage(True)
+        quota_text = get_quota_string()
+        
+        
+        return URL("default","download", args=entry.File)
+        
+    raise HTTP(400, "No file upload found")

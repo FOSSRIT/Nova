@@ -9,8 +9,7 @@ def index(): return dict(message="hello from edit.py")
 def dropbox():
     filerecord = db((db.filebox.id == request.args(0)) & (db.filebox.owner == auth.user_id)).select().first()
         
-    sum = db(db.filebox.owner == auth.user_id).select('sum(filebox.size)').first()
-    sum = sum._extra['sum(filebox.size)']
+    sum = get_quota_usage()
     
     if not filerecord and sum > MAX_FILE_STORE:
         form = P("You have maxed your upload limit, please delete files in order to upload more.")
@@ -27,6 +26,7 @@ def dropbox():
             
         if form.accepts(request, session):
             session.flash = "Form Accepted"
+            sum = get_quota_usage(True)
     
             redirect( URL() )
         elif form.errors:
