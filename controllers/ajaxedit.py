@@ -267,7 +267,7 @@ def blog_tag_toggle():
 
 @auth.requires_membership("Site Admin")
 def home_toggle():
-    home_cat = db(db.highlights.title == request.args(0)).select().first()
+    home_cat = db(db.highlights.title == request.args(0).replace("_", " ")).select().first()
     node = get_node_or_404(request.args(1))
     
     if not home_cat:
