@@ -185,7 +185,7 @@ function show_image_selection(editorCallback, imageMode){
                                     title: item.Name,
                                     style: "max-width: none; max-height: none; cursor: pointer;",
                                     click: function(){
-                                            img="<img src=''{{=URL('default','download')}}" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
+                                            img="<img src='{{=URL('default','download')}}/" + item.File + "' title='" + item.Name + "' alt='" + item.Name + "' />";
                                             editorCallback.insertHtml(img);
                                             $.modal.close();
                                            }
