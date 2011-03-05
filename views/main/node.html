@@ -1,4 +1,4 @@
-{{extend 'csi_node.html'}}
+{{extend 'csi_base.html'}}
 <script>
     function enable_lightBox(){
         $('#picture a').lightBox(
@@ -219,7 +219,9 @@
     </script>
 {{pass}}
 
-<div class="nodeTopLinks">
+<div style="text-align: left">
+    <h2 style="border-bottom: 1px solid black;">{{=node.name}}</h2>
+        <div class="nodeTopLinks" style="white-space: nowrap; margin-top: -15px;">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
 {{else:}}
@@ -259,17 +261,15 @@
 {{pass}}
 
 {{=A(SPAN(SPAN(_class="icon tag"),"Printout Mode"), _class="right pill button", _href=URL('main','node_print',args=node.url))}}
+</div>
 
-    </div>
-<br />
-    <div id="nodeTitle">
-        <div id="name" class="db_editable">{{=node.name}}({{=node.type.value_node}})</div>
-    </div> <!-- end nodeTitle -->
-    
-    <div id="picture" class="db_photo_editable">
+<br style="clear: both;">
+    <div style="float: left; width: 300px;">
+        <div id="picture" class="db_photo_editable">
         {{if node.picFile:}}
-        <a href="{{=URL('default','download',args=node.picFile)}}">
-        <img src="{{=URL('default','thumb',args=[300,300,node.picFile])}}" /></a>
+            <a href="{{=URL('default','download',args=node.picFile)}}">
+                <img src="{{=URL('default','thumb',args=[300,300,node.picFile])}}" />
+            </a>
         {{else:}}
             {{if can_edit(node):}}
                 <img src="{{=URL('static', 'images', args=['placeholder_edit.png'])}}" />
@@ -277,26 +277,69 @@
                 <img src="{{=URL('static', 'images', args=['placeholder.png'])}}"/>
             {{pass}}
         {{pass}}
-    </div> <!-- end bigPic -->
-     
-    <div id="sideStats">{{include "htmlblocks/attributes.html"}}</div>
+        </div>
+        
+                     <div class="nodeTopLinks">
+            {{if can_edit(node):}}
+                {{if node.id != auth.user.home_node:}}
+                    <a href="{{=URL('edit','link', args=node.url)}}" class="left button pill">Manage Links</a>
+                {{else:}}
+                    <a href="{{=URL('edit','link', args=node.url)}}" class="button pill">Manage Links</a>
+                {{pass}}
+            {{pill="pill"}}
+            {{else:}}
+            {{pill=""}}
+            {{pass}}
 
-    <div id="descriptionBox">
-    <div id="description" class="db_editable">
-    {{if node.description:}}{{=XML(node.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}{{else:}}No Description Yet :({{pass}}</div>
-    </div> <!-- end description -->
-
-    {{if node.tags and len(node.tags):}}
-    <h3>Tags</h3>
-    <div id="tags" class="db_editable">{{=tags_2_html(node.tags)}}</div>
-    {{elif can_edit(node):}}
-    <h3>Tags</h3>
-    <div id="tags" class="db_editable">No tags found.</div>
-    {{pass}}
     
-
-    <h3>Feed</h3>
-    {{=A("View Internal Blog", _href=URL('main','blog',args=node.url))}}
-    <div id="feeds" class="db_editable">
-    {{=LOAD('main','feed', args=node.url, ajax=True)}}
+    {{if auth.is_logged_in() and node.id != auth.user.home_node:}}
+        {{if is_linked(node, get_home_node()):}}
+            <a href="{{=URL('edit','link_me',args=['remove', node.url])}}" class="right button {{=pill}} negative"><span class="icon heart"></span>Unlink</a>
+        {{else:}}
+            <a href="{{=URL('edit','link_me',args=['add', node.url])}}" class="right button {{=pill}}"><span class="icon heart"></span>Link</a>
+                    {{pass}}
+                {{pass}}
+            </div><br style="clear:left;"/>
+            
+        {{for node_name, node_holder in node_list.items():}}
+        <div>
+          <h4 style="margin:5px; text-align:center;">
+              <a href="{{=URL('category', args=node_name)}}" style="text-decoration: none; font-weight: bold; color: #A00;">{{=node_name}}</a>
+          </h4>    
+              {{for node_item in node_holder:}}
+    
+                  <a href="{{=node_item['url']}}" id="link_{{=node_item['id']}}" title="{{=node_item['name']}}" style="width: 80px; height: 80px; border: 2px solid #ddd; background: #eee; float: left; -moz-border-radius: 5px;
+    border-radius: 5px; margin: 1px; text-align: center; display: block; vertical-align: middle; padding: 2px;">
+                      {{if node_item.picFile:}}
+                      <img src="{{=URL('default','thumb', args=[75,75,node_item.picFile])}}" style="margins: auto;"/>
+                      {{else:}}
+                      <img src="{{=URL('static','images', args='placeholder_mini_thumb.png')}}"  style="margins: auto; width: 75px; height: 75px;" />
+                      {{pass}}
+                  </a>
+    
+              {{pass}}
+        <br style="clear: left;">
+        </div>
+    {{pass}}
+    <div style="clear: both; height: 100px;"></div>
+</div>
+<div style="padding-left: 310px;">
+    <div id="descriptionBox" style="clear: none;"> 
+    <div id="description" class="db_editable">
+    {{if node.description:}}
+        {{=XML(node.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
+    {{else:}}
+        No Description Yet :(
+    {{pass}}
     </div>
+    </div>
+
+    {{for x in node_attributes:}}
+    <div>
+        <div style="border-bottom: 1px solid black; font-weight: bold;" id="attrdel_{{=x.id}}" >{{=x.vocab.value}}</div>
+        <div id="attr_{{=x.id}}" class="db_attributes">{{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+    </div>
+    {{pass}}
+
+</div>
+</div>

@@ -11,6 +11,7 @@ response.files.insert(7,URL(r=request,c='static',f='jquery/jquery.simplemodal.1.
 response.files.insert(9,URL(r=request,c='static',f='jquery/ui/jquery.ui.position.min.js'))
 response.files.insert(10,URL(r=request,c='static',f='jquery/ui/jquery.ui.widget.min.js'))
 response.files.insert(12,URL(r=request,c='static',f='jquery/ui/jquery.ui.dialog.min.js'))
+response.files.insert(12,URL(r=request,c='static',f='jquery/jquery.qtip-1.0.0-rc3.js'))
 
 response.files.insert(13,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg_csicustom.js'))
 response.files.insert(14,URL(r=request,c='static',f='jwysiwyg/jquery.wysiwyg.css'))
@@ -244,4 +245,26 @@ function show_image_selection(editorCallback, imageMode){
         
         });
 }
+
+// Create the tooltips only on document load
+$(document).ready(function() 
+{
+   $('a[href][title]').qtip({
+      content: {
+         text: false, // Use each elements title attribute
+      },
+      corner: {
+                     tooltip: "topLeft", // Use the corner...
+                     target: "bottomRight" // ...and opposite corner
+                  },
+      style: { 
+          name: 'red', // Inherit from preset style
+          border: {
+             width: 7,
+             radius: 5,
+             },
+       tip: 'topLeft',
+       }
+   });
+});
 //--></script>
