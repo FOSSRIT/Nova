@@ -276,6 +276,14 @@
         {{pass}}
         </div>
         
+        {{if node.tags and len(node.tags):}}
+        <h4 style="margin:5px; text-align:center;">Tags</h4>
+        <div id="tags" class="db_editable">{{=tags_2_html(node.tags)}}</div>
+        {{elif can_edit(node):}}
+        <h4 style="margin:5px; text-align:center;">Tags</h4>
+        <div id="tags" class="db_editable">No tags found.</div>
+        {{pass}}<br>
+        
                      <div class="nodeTopLinks">
             {{if can_edit(node):}}
                 {{if node.id != auth.user.home_node:}}
@@ -335,5 +343,10 @@
     {{include "htmlblocks/attributes.html"}}
     </div>
 
+    <h3>Feed</h3>
+    {{=A("View Internal Blog", _href=URL('main','blog',args=node.url))}}
+    <div id="feeds" class="db_editable">
+    {{=LOAD('main','feed', args=node.url, ajax=True)}}
+    </div>
 </div>
 </div>
