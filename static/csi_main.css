@@ -249,49 +249,6 @@ a.del_attr_link{
     padding-left:0px;
     clear:both;
 }
-.socialPic {
-    float:left;
-    margin-right:5px;
-}
-
-#sideStats {
-    border-radius: 16px; /* half of button size + padding */
-    float:right;
-    width:220px;
-    height:auto;
-    margin-right:20px;
-    margin-top:20px;
-    background-color:#ABF;
-    margin-bottom:20px;
-    
-    
-}
-
-.statTitle, .statValue {
-    width:190px;
-    
-    margin: 0 auto;
-    margin-top:10px;
-}
-
-.statTitle {
-    width:90%;
-    color:#FFF;
-    border-top-width: thin;
-    border-top-style: solid;
-    border-top-color: #000;
-    padding-left:10px;
-    margin-top:2px;
-    
-}
-
-.statValue {
-    margin-bottom:2px;
-    margin-top:2px;
-    padding-left:25px;
-    font-size: 80%;
-    
-}
 
 #submit_record__row {
     text-align:left;
@@ -301,7 +258,6 @@ a.del_attr_link{
     width: 100%;
     height:auto;
     background-color:#999;
-    
 }
 
 img{

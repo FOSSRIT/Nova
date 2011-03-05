@@ -1,10 +1,4 @@
-<ul style="list-style-type: none; margin: 0; padding: 0;" id="at_sort">
-    {{for x in node_attributes:}}
-        <li><span>
-            <div class="statTitle" id="attrdel_{{=x.id}}" >{{=x.vocab.value}}</div>
-            <div class="statValue">
-                <div id="attr_{{=x.id}}" class="db_attributes">{{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
-            </div></span>
-        </li>
-    {{pass}}
-</ul>
+{{for x in node_attributes:}}
+        <div style="border-bottom: 1px solid black; font-weight: bold;" id="attrdel_{{=x.id}}" class="del_title">{{=x.vocab.value}}</div>
+        <div id="attr_{{=x.id}}" class="db_attributes">{{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+{{pass}}

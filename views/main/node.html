@@ -51,9 +51,8 @@
         $("#add_attr_link").remove()
         
         //TEMPORARY
-         $("#at_sort .statTitle").each( function(){
-             $(this).unbind('mouseenter').unbind('mouseleave');     
-         });
+         $(".del_title").unbind('mouseenter').unbind('mouseleave');     
+
          //TEMPORARY
          
          enable_lightBox();
@@ -76,7 +75,7 @@
        
         new_attr_lnk.setAttribute('href','#');
         new_attr_lnk.setAttribute('onclick',
-            'edit_request("{{=URL('ajaxedit','addattribute')}}/" + url_segment,"at_sort"); return false;');
+            'edit_request("{{=URL('ajaxedit','addattribute')}}/" + url_segment,"sideStats"); return false;');
         new_attr_lnk.setAttribute('id', 'add_attr_link');
         new_attr_lnk.appendChild(document.createTextNode("Add More"));
 
@@ -113,22 +112,20 @@
     
     function add_del_attr(){
         //Add Delete Links
-        $("#at_sort .statTitle").each( function(){
-            $(this).hover( function () {
+        $(".del_title").hover( function () {
                 var del_image=document.createElement('img');
                 del_image.src= "{{=URL('static', 'images', args='delete.png')}}";
                 del_image.alt="Delete";
                 del_attr_link = document.createElement("a");
                 del_attr_link.setAttribute('href', '#');
                 del_attr_link.setAttribute('onclick', 'delete_request("{{=URL('ajaxedit','deleteattribute', args=node.url)}}/' +
-                                                       this.id + '","at_sort"); return false;');
+                                                       this.id + '","sideStats"); return false;');
                 del_attr_link.setAttribute('class', 'del_attr_link');
                 del_attr_link.appendChild(del_image);
                 $(this).prepend(del_attr_link);
             }, function(){
                 $(this).find(".del_attr_link").remove();
             });
-        });
     }
 
     function delete_request(url, div_loc){
@@ -139,7 +136,7 @@
                     document.getElementById(div_loc).innerHTML=r;
                     reflash_edit_mode()
                     //Add back the edit links
-                    $(".db_attributes").each( function(){ add_edit_link( this ) });
+                    $(".db_attributes").add_edit_link( this );
                 },
                 error: function() { alert("Failed to submit"); },
             });
@@ -334,12 +331,9 @@
     </div>
     </div>
 
-    {{for x in node_attributes:}}
-    <div>
-        <div style="border-bottom: 1px solid black; font-weight: bold;" id="attrdel_{{=x.id}}" >{{=x.vocab.value}}</div>
-        <div id="attr_{{=x.id}}" class="db_attributes">{{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+    <div id="sideStats">
+    {{include "htmlblocks/attributes.html"}}
     </div>
-    {{pass}}
 
 </div>
 </div>
