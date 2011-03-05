@@ -52,31 +52,4 @@
         </div>
         </div>
     </fieldset>
-
-    {{if attribute_form:}}
-    <fieldset>
-        <legend>Add Section</legend>
-        {{=attribute_form}}
-        <a href="{{=URL('attribute_vocab', args=node.url)}}">Add New Section Title</a>.
-    </fieldset>
-    {{pass}}
-    
-  {{if attr:}}
- <fieldset>
- <legend>Current Sections</legend>
-
- <form method="post" action="{{=URL(args=node.url)}}">
- <br />Leave blank to remove<br /><br />
- 
-               <ul>
-                 {{for x in attr:}}
-                 <li><label for="attr.{{=x.id}}">{{=x.vocab.value}}:</label>
-                     <input type="text" name="attr.{{=x.id}}" value="{{=x.value}}" />
-                 </li>
-                 {{pass}}
-              </ul>
-              <input type="submit"/>
- </form>
- </fieldset>
- {{pass}}
  </div>

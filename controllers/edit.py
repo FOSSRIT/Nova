@@ -90,8 +90,6 @@ def node():
     
     # Now we want to populate the response
     node = None
-    attr = None
-    attribute_form = None
 
     # If requested a node in the url, pull from the database
     if len(request.args):
@@ -105,35 +103,9 @@ def node():
         # TODO ADD PERMISSION SYSTEM HERE
         if not can_edit(node):
             raise HTTP(403, "Not Authorized to edit this node")
-    
-        # Update all the attributes if they exist
-        # This must be done before attribute form is created
-        # TODO NEED TO ADD SECURITY FOR THIS LOOP
-        for key,attr in request.vars.items():
-            
-            # All attributes start with attr. then the key
-            if key.startswith('attr.'):
-                
-                if attr == "":
-                    vocab = db(db.nodeAttr.id == key[5:]).select()[0].vocab
-                    db(db.nodeAttr.id==key[5:]).delete()
-                    db.syslog.insert(action="Deleted Attribute", target=node.id, target2=key[5:])
-                        
-                    # A small Cleanup Routine, check if attriubte is
-                    # still in use, if not delete the attribue
-                    thecount = db(db.nodeAttr.vocab==vocab).count()
-                    if thecount == 0:
-                        db(db.vocab.id==vocab.id).delete()
-                    
-                else:
-                    #TODO: protect against misc hits
-                    db(db.nodeAttr.id==key[5:]).update(value=attr)
       
         # Process NODE SQL FORM
         form = SQLFORM(db.node, node, deletable=node.type.public, showid = False)
-        
-        attribute_form = SQLFORM(db.nodeAttr)
-        attribute_form.vars.nodeId = node
         
         # Node found, Check and submit to db if needed
         if form.accepts(request.vars):
@@ -144,20 +116,12 @@ def node():
                 redirect(URL('main','index'))
             else:
                 session.flash = 'form accepted'
-                db.syslog.insert(action="Edited Page", target=node.id)
+                db.syslog.insert(action="Edited Page", target=node.id, target2="Full Page (Unknown, manual form)")
                 
                 redirect(URL('edit','node',args=form.vars.url))
         elif form.errors:
             response.flash = 'form has errors'
             
-        if attribute_form.accepts(request.vars):
-            response.flash = 'Attribute Form accepted'
-        elif attribute_form.errors:
-            response.flash = 'Attribute Form has errors'
-            
-        # Get Attribute List
-        attr = db(db.nodeAttr.nodeId==node).select()
-        
     elif not node and request.vars.type:
         type = db(db.nodeType.value==request.vars.type).select().first()
         if type and type.public:
@@ -198,7 +162,7 @@ def node():
         #No node found and no type requested (BAD)
         raise HTTP(404, "No node requested, no type requested")
     
-    return dict(node=node, attr=attr, form=form, attribute_form=attribute_form)
+    return dict(node=node, form=form)
 
 @auth.requires_login()
 def link():
