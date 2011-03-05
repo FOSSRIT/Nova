@@ -217,7 +217,7 @@
 {{pass}}
 
 <div style="text-align: left">
-    <h2 style="border-bottom: 1px solid black;">{{=node.name}}</h2>
+    <h2 style="border-bottom: 1px solid black;"><div id="name" class="db_editable">{{=node.name}}</div></h2>
         <div class="nodeTopLinks" style="white-space: nowrap; margin-top: -15px;">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
