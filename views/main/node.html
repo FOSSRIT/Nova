@@ -344,7 +344,8 @@
     </div>
 
     <h3>Feed</h3>
-    {{=A("View Internal Blog", _href=URL('main','blog',args=node.url))}}
+    {{=A(SPAN(SPAN(_class="icon magnifier"), SPAN("View Internal Blog")), _href=URL('main','blog',args=node.url), _class="button pill")}}
+    {{if can_edit(node):}}{{=A(SPAN(SPAN(_class="icon plus"), SPAN('New Post')), _href=URL("edit","blog",args=node.url), _class="button pill")}}{{pass}}
     <div id="feeds" class="db_editable">
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
     </div>
