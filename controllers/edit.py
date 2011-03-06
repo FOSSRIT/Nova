@@ -210,7 +210,10 @@ def home_page():
 
 @auth.requires_membership("Site Admin")
 def home_page_cat():
-    highlight = db(db.highlights.title == request.args(0).replace("_"," ")).select().first()
+    if request.args(0):
+        highlight = db(db.highlights.title == request.args(0).replace("_"," ")).select().first()
+    else:
+        highlight = None
     form = SQLFORM(db.highlights, highlight, deletable=True, showid=False, fields=['title','weight'])
     
     if not highlight:
