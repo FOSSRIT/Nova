@@ -52,6 +52,8 @@ def download():
     return response.download(request,db)
 
 def thumb():
+    if not request.args(2):
+        raise HTTP(404, "Image Not Found")
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
