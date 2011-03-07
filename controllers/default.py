@@ -60,6 +60,7 @@ def thumb():
     response.headers['Cache-Control'] = "max-age=3600"
 
     import os.path
+    import gluon.contenttype as c
     try:
         size_x = int(request.args(0))
         size_y = int(request.args(1))
@@ -71,6 +72,7 @@ def thumb():
     request_sorce_path = os.path.join(request.folder, 'uploads', request.args(2))
     
     if os.path.exists(request_path):
+        response.headers['Content-Type'] = c.contenttype(request_path) 
         return response.stream(open(request_path, 'rb'))
     
     elif os.path.exists(request_sorce_path):
@@ -82,6 +84,7 @@ def thumb():
         except KeyError:
             thumb.save(request_path, "JPEG")
         
+        response.headers['Content-Type'] = c.contenttype(request_path) 
         return response.stream(open(request_path, 'rb'))
     else:
         raise HTTP(404, "Image not found")
