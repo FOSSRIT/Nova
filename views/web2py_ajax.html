@@ -112,10 +112,12 @@ function web2py_component(action,target) {
 }
 
 
-wysiwyg_control = {controls:{
+function getWysiwyg_controls(){
+    return {controls:{
                 html: {visible: true},
                 }
-};
+           }
+}
 
 function show_image_selection(editorCallback, imageMode){
     $.modal('<div style="background: #fff; border: 1px solid #000; text-align: left;" id="sel_overlay">\
