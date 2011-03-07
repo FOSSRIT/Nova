@@ -1,58 +1,9 @@
-<style>
-    div.navigation{
-        padding-left: 10%;
-        padding-right: 10%;
-        clear:both;
-        font-family: Arial, sans-serif;
-    }
-    
-    div.navigation li a:hover {
-        text-decoration: underline;
-    }
-    
-    div.navigation ul.topnav {  
-        list-style: none;  
-        padding: 0px;
-        margin: 0 auto;
-        font-size: 120%;
-    } 
-
-    div.navigation ul.topnav > li {  
-        float: left;
-        margin: 0;
-        padding-right: 20px; 
-    }  
-
-    div.navigation ul.topnav li a{  
-        color: #A00;
-        text-decoration: none;  
-    } 
-
-    div.navigation ul.topnav li ul{
-        list-style: none;
-        display: none;
-        position: relative;
-    }
-
-    div.navigation ul.topnav li:hover ul{
-        display: block;
-        float: none;
-        position: absolute;
-        padding: 20px;
-        font-size: 80%; 
-        border: 1px solid #A00;
-        background: white;
-        text-align: left;
-        z-index: 50;
-    }
-</style>
-
 <div class="navigation">
     {{=MENU(response.menu,_class='topnav')}}
     <form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;" >
     <input type="text" name="query" value="Type here to search"
-        onfocus="if(this.value=='Type here to search'){this.value='';}"
-        onblur="if(this.value==''){this.value='Type here to search';}">
+        onfocus="if(this.value=='Type here to search')this.value='';"
+        onblur="if(this.value=='')this.value='Type here to search';">
     <input type="submit" value="Search">
     </form><br style="clear: both;">
 </div>

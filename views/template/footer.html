@@ -1,49 +1,14 @@
-<style>
-div.footer {
-    margin: 0;
-    padding: 10px 0;
-    width: 100%;
-    height: 100px;
-    clear:both;
-    margin-top: 0px;
-    background-color:#600;
-    position:relative;
-    border-top: 5px solid black;
-    color: #fff;
-    text-align: left;
-}
-
-div.footer_content{
-    padding-left: 10%;
-    padding-right: 10%;
-}
-
-div.footer ul{
-    list-style: none;
-    padding: 5px;
-}
-
-div.footer a{
-    color: #fff;
-    font-size: 70%;
-}
-
-#footerpic {
-    position:absolute;
-    bottom: 108px;
-    
-}
-</style>
 <div class="footer">
     <img src="{{=URL('static', 'images', args=['footer.png'])}}" width="300px" id="footerpic"/>
     <div class="footer_content">
     <div style="float: right;">
-    <img src="{{=URL('static','images/Feed_32x32.png')}}" width="16px" height="16px">
     {{if vars().has_key('node') and node:}}
+         <img src="{{=URL('static','images/Feed_32x32.png')}}" width="16px" height="16px">
         {{=A("Page Activity", _href=URL('main','node_activity',args=node.url, extension="rss"))}}
         {{=A(node.name + "'s Blog", _href=URL('main','blog',args=node.url, extension="rss"))}}
         {{=A(node.name + "'s Aggregated Feed", _href=URL('main','feed',args=node.url, extension="rss"))}} 
     {{elif request.function == "log":}}
+         <img src="{{=URL('static','images/Feed_32x32.png')}}" width="16px" height="16px">
         {{=A("Page Activity", _href=URL('main','log', extension="rss"))}} 
     {{pass}}
     </div>

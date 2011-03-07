@@ -1,3 +1,255 @@
+/* Styling for a comma separated list of values from a ul */
+/* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */
+ul.comma-separated { display: inline; list-style: none; margin: 0; padding: 0; }
+ul.comma-separated li { display: inline; }
+ul.comma-separated li:first-child:before { content:""; }
+ul.comma-separated li:before { content: ", "; white-space: pre;}
+ul.comma-separated li:last-child:before { content:" and "; white-space: pre;}
+ul.comma-separated li:last-child:after { content: "."; }
+ul.comma-separated li:only-child:before { content:""; }
+
+/* Force word-wrapping for pre tags*/
+pre {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+/* Hide image borders for links, and cap size to container */
+img{
+    border: none;
+    max-width: 100%; max-height: 100%;
+}
+
+/************************************
+ * HEADER Style
+ ************************************/
+div.header{
+        text-align: left;
+        background: #600;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    
+    div.header h1{
+        float: left;
+        color: #fff;
+        font-size: 160%;
+    }
+    
+    div.header div.login_form{
+        float: right;
+        width: 400px;
+        color: #fff;
+        text-align: right;
+    }
+    
+    div.login_form #auth_user_username, div.login_form #auth_user_password{
+        width: 100px;
+        font-size: 70%;
+        border: 1px solid #006;
+        background: #ffc;
+    }
+    
+    div.login_form #auth_user_username:hover, div.login_form #auth_user_password:hover{
+        border: 1px solid #f00;
+        background: #ff6;
+    }
+    
+    div.login_form a{
+        color: #fff;
+    }
+    
+    div.login_form span{
+        padding-right: 145px;
+    }
+    div.login_form input[type="submit"],
+    div.login_form input[type="button"]{
+        width: 60px;
+    }
+    
+/************************************
+ * NAVIGATION Style
+ ************************************/
+    div.navigation{
+        padding-left: 10%;
+        padding-right: 10%;
+        clear:both;
+        font-family: Arial, sans-serif;
+    }
+    
+    div.navigation li a:hover {
+        text-decoration: underline;
+    }
+    
+    div.navigation ul.topnav {  
+        list-style: none;  
+        padding: 0px;
+        margin: 0 auto;
+        font-size: 120%;
+    } 
+
+    div.navigation ul.topnav > li {  
+        float: left;
+        margin: 0;
+        padding-right: 20px; 
+    }  
+
+    div.navigation ul.topnav li a{  
+        color: #A00;
+        text-decoration: none;  
+    } 
+
+    div.navigation ul.topnav li ul{
+        list-style: none;
+        display: none;
+        position: relative;
+    }
+
+    div.navigation ul.topnav li:hover ul{
+        display: block;
+        float: none;
+        position: absolute;
+        padding: 20px;
+        font-size: 80%; 
+        border: 1px solid #A00;
+        background: white;
+        text-align: left;
+        z-index: 50;
+    }
+    
+
+/************************************
+ * Footer Style
+ ************************************/    
+    div.footer {
+        margin: 0;
+        padding: 10px 0;
+        width: 100%;
+        height: 100px;
+        clear:both;
+        margin-top: 0px;
+        background-color:#600;
+        position:relative;
+        border-top: 5px solid black;
+        color: #fff;
+        text-align: left;
+    }
+    
+    div.footer_content{
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+    
+    div.footer ul{
+        list-style: none;
+        padding: 5px;
+    }
+    
+    div.footer a{
+        color: #fff;
+        font-size: 70%;
+    }
+    
+    #footerpic {
+        position:absolute;
+        bottom: 108px;
+        
+    }
+
+/************************************
+ * Node Style
+ ************************************/
+    div.node_container{
+        text-align: left;
+    }
+    
+    h2.node_name{
+        border-bottom: 1px solid black;
+    }
+
+    div.node_container div.nodeTopLinks{
+    white-space: nowrap; margin-top: -15px;
+    }
+    
+    div.node_sidebar{
+        float: left; width: 300px;
+        margin-bottom: 100px;
+    }
+    
+    div.node_link_section{}
+    
+    h4.node_link_title{
+        margin:5px; text-align:center;
+    }
+    
+    h4.node_link_title a{
+        text-decoration: none; font-weight: bold; color: #A00;
+    }
+    
+    h4.node_link_title a img{
+    margins: auto; width: 75px; height: 75px;
+    }
+    
+    a.node_link_widget{
+    width: 80px; height: 80px; border: 2px solid #ddd; background: #eee; float: left; -moz-border-radius: 5px;
+    border-radius: 5px; margin: 1px; text-align: center; display: block; vertical-align: middle; padding: 2px;
+    }
+    
+    div.node_main_content{
+    padding-left: 310px;
+    }
+    
+    div.node_description{
+    padding: 25px;
+    }
+    
+    div.node_attribute_title{
+    border-bottom: 1px solid black; font-weight: bold;
+    }
+    
+    div.node_attribute_body{
+    padding-left: 20px; margin-bottom: 25px;
+    }
+    
+
+/* Styling for a comma separated list of values from a ul */
+/* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */
+ul.comma-separated { display: inline; list-style: none; margin: 0; padding: 0; }
+ul.comma-separated li { display: inline; }
+ul.comma-separated li:first-child:before { content:""; }
+ul.comma-separated li:before { content: ", "; white-space: pre;}
+ul.comma-separated li:last-child:before { content:" and "; white-space: pre;}
+ul.comma-separated li:last-child:after { content: "."; }
+ul.comma-separated li:only-child:before { content:""; }
+
+/* Force word-wrapping for pre tags*/
+pre {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+/* Hide image borders for links, and cap size to container */
+img{
+    border: none;
+    max-width: 100%; max-height: 100%;
+}
+
+
+    
+/*
+old/unkown
+*/
+
+
+
+
+
 @media only screen and (max-device-width: 600px)
      {
     div#header h1 {
@@ -20,13 +272,7 @@ body {
     color: #000;
 }
 
-pre {
-white-space: pre-wrap; /* css-3 */
-white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-white-space: -pre-wrap; /* Opera 4-6 */
-white-space: -o-pre-wrap; /* Opera 7 */
-word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
+
 
 #add_attr_link{
     font-size: 70%;
@@ -60,20 +306,6 @@ a.del_attr_link{
 }
 #picture img{
     max-width:auto;
-}
-
-
-#descriptionBox {
-    border-radius: 16px; /* half of button size + padding */
-    width:90%;
-    height:auto;
-    background-color:#EBEBEB;
-    
-    margin: 0 auto;
-    margin-top:20px;
-    margin-bottom:20px;
-    padding:10px;
-    clear:left;
 }
 
 #editForm {
@@ -259,21 +491,6 @@ a.del_attr_link{
     height:auto;
     background-color:#999;
 }
-
-img{
-    border: none;
-    max-width: 100%; max-height: 100%;
-}
-
-/* Styling for a comma separated list of values from a ul */
-/* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */
-ul.comma-separated { display: inline; list-style: none; margin: 0; padding: 0; }
-ul.comma-separated li { display: inline; }
-ul.comma-separated li:first-child:before { content:""; }
-ul.comma-separated li:before { content: ", "; white-space: pre;}
-ul.comma-separated li:last-child:before { content:" and "; white-space: pre;}
-ul.comma-separated li:last-child:after { content: "."; }
-ul.comma-separated li:only-child:before { content:""; }
 
 
 @media print{

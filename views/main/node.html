@@ -214,9 +214,9 @@
     </script>
 {{pass}}
 
-<div style="text-align: left">
-    <h2 style="border-bottom: 1px solid black;"><div id="name" class="db_editable">{{=node.name}}</div></h2>
-        <div class="nodeTopLinks" style="white-space: nowrap; margin-top: -15px;">
+<div class="node_container">
+    <h2 class="node_name"><div id="name" class="db_editable">{{=node.name}}</div></h2>
+    <div class="nodeTopLinks" style="">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
 {{else:}}
@@ -259,7 +259,7 @@
 </div>
 
 <br style="clear: both;">
-    <div style="float: left; width: 300px;">
+    <div class="node_sidebar">
         <div id="picture" class="db_photo_editable">
         {{if node.picFile:}}
             <a href="{{=URL('default','download',args=node.picFile)}}">
@@ -305,29 +305,23 @@
             </div><br style="clear:left;"/>
             
         {{for node_name, node_holder in node_list.items():}}
-        <div>
-          <h4 style="margin:5px; text-align:center;">
-              <a href="{{=URL('category', args=node_name)}}" style="text-decoration: none; font-weight: bold; color: #A00;">{{=node_name}}</a>
-          </h4>    
-              {{for node_item in node_holder:}}
-    
-                  <a href="{{=node_item['url']}}" id="link_{{=node_item['id']}}" title="{{=node_item['name']}}" style="width: 80px; height: 80px; border: 2px solid #ddd; background: #eee; float: left; -moz-border-radius: 5px;
-    border-radius: 5px; margin: 1px; text-align: center; display: block; vertical-align: middle; padding: 2px;">
-                      {{if node_item.picFile:}}
-                      <img src="{{=URL('default','thumb', args=[75,75,node_item.picFile])}}" style="margins: auto;"/>
-                      {{else:}}
-                      <img src="{{=URL('static','images', args='placeholder_mini_thumb.png')}}"  style="margins: auto; width: 75px; height: 75px;" />
-                      {{pass}}
-                  </a>
-    
-              {{pass}}
+        <div class="node_link_section">
+          <h4 class="node_link_title"><a href="{{=URL('category', args=node_name)}}">{{=node_name}}</a></h4>    
+          {{for node_item in node_holder:}}
+              <a href="{{=node_item['url']}}" id="link_{{=node_item['id']}}" title="{{=node_item['name']}}" class="node_link_widget">
+                  {{if node_item.picFile:}}
+                  <img src="{{=URL('default','thumb', args=[75,75,node_item.picFile])}}"/>
+                  {{else:}}
+                  <img src="{{=URL('static','images', args='placeholder_mini_thumb.png')}}" />
+                  {{pass}}
+              </a>
+          {{pass}}
         <br style="clear: left;">
         </div>
     {{pass}}
-    <div style="clear: both; height: 100px;"></div>
 </div>
-<div style="padding-left: 310px;">
-    <div id="descriptionBox" style="clear: none;"> 
+<div class="node_main_content">
+    <div class="node_description"> 
     <div id="description" class="db_editable">
     {{if node.description:}}
         {{=XML(node.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}

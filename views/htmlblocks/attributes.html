@@ -1,4 +1,6 @@
 {{for x in node_attributes:}}
-        <div style="border-bottom: 1px solid black; font-weight: bold;" id="attrdel_{{=x.id}}" class="del_title">{{=x.vocab.value}}</div>
-        <div id="attr_{{=x.id}}" class="db_attributes">{{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+        <div id="attrdel_{{=x.id}}" class="del_title node_attribute_title">{{=x.vocab.value}}</div>
+        <div id="attr_{{=x.id}}" class="db_attributes node_attribute_body">
+            {{=XML(x.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
+        </div>
 {{pass}}
