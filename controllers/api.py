@@ -118,6 +118,18 @@ def searchBlog():
         search = (db.blog.id>0) 
 
     return dict(blogentries=db(search).select(db.blog.id, db.blog.title, db.blog.body, db.blog.date, db.blog.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.blog.id).as_list() )
+    
+def links():
+    node = get_node_or_404(request.args(0))
+    
+    retDict = {}
+    for key,lst in get_node_links(node).items():
+        retDict[key] = []
+        for node_id in lst:
+            #TODO CONVERT ID TO DICT
+            #description=node_id.description,
+            retDict[key].append(dict( id=node_id.id, name=node_id.name, url=node_id.url,  picFile=node_id.picFile, tags=node_id.tags ))
+    return retDict
 
 @auth.requires_login()
 def myFileList():
