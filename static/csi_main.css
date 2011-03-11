@@ -214,6 +214,12 @@ div.header{
     padding-left: 20px; margin-bottom: 25px;
     }
     
+    div.feeds h4{
+    padding: 0px;
+    margin: 0px;
+    }
+    
+ 
 
 /* Styling for a comma separated list of values from a ul */
 /* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */

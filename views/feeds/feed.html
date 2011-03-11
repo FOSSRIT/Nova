@@ -1,0 +1,13 @@
+{{extend 'csi_view.html'}}
+
+<h1>{{=A(title, _href=link)}}</h1>
+<div>{{=description}}</div>
+
+<div>
+    {{for entry in entries:}}
+    <div>
+    <h2>{{=A(entry.title, _href=entry.link)}}</h2>
+    <div>{{=XML(entry.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+    </div>
+    {{pass}}
+</div>

@@ -33,3 +33,9 @@ def send_watch_email():
 def _username_to_email():
     for user in db(db.auth_user.email == "").select():
         user.update_record(email = "%s@rit.edu" % user.username)
+        
+def hourly():
+    if request.env.remote_addr not in ["127.0.0.1","129.21.47.143"]:
+        raise HTTP(401, 'unauthorized')
+        
+    return "<br>".join(update_feeds())

@@ -1,0 +1,13 @@
+{{extend 'csi_view.html'}}
+<h1>Feeds</h1>
+{{for feed in feeds:}}
+    <div style="padding: 10px;">
+
+        <div style="font-weight: bold;">{{=A(feed.title or "Invalid Feed", _href=feed.base_link or "#")}}</div>
+        <div style="font-size: 70%;">RSS Source:{{=A(feed.link, _href=feed.link)}}</div>
+        <div style="font-size: 70%">Added By {{=feed.added_by}} on {{=feed.added_on.strftime(DATE_FORMAT)}}</div>
+        <div style="padding-left: 5px;">{{=XML(feed.description or "", True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+        <div style="font-size: 70%;">{{=A("View Cached Entries", _href=URL('feeds','feed', args=feed.id))}}</div>
+    </div>
+{{pass}}
+{{=BEAUTIFY(response._vars)}}

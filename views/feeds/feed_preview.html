@@ -1,0 +1,7 @@
+<h4>{{=A(title or "Feed Error/No Title", _href=link or rss_link)}}</h4>
+<div>{{=XML(description or "Feed Error/No Description", True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+<ul>
+    {{for entry in entries:}}
+    {{=LI("[%s] " % entry.updated.strftime(DATE_FORMAT),A(entry.title, _href=URL('feeds','entry',args=entry.id)))}}
+    {{pass}}
+</ul>

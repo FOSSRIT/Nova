@@ -190,36 +190,14 @@ def tags():
         
         return dict(tagcount=ret)
 
-def _get_feed(feed):
-    import gluon.contrib.feedparser as feedparser
-    import datetime
-    data = feedparser.parse(feed)
-    try:
-        return [dict(title = "[%s] %s" %(data.feed.title, entry.title),
-           link = entry.link,
-           description = entry.description,
-           #author = "" if not hasattr(entry, "author_detail") else entry.author_detail.name, 
-           created_on = datetime.datetime(*entry.updated_parsed[:6])) for entry in data.entries]
-
-    except:
-        return [dict(title="ERROR IN %s" % feed,
-        link = "",
-        description = "Error reading feed",
-        created_on = request.now)]
-
-    return entries
-
 def feed():
     node = get_node_or_404(request.args(0))
     
-    description = "Feed sources: %s"% (", ".join( node.feeds or [] ))
+    description = node.name
     entries = []
-    
-    for feed in (node.feeds or []):
-        entries += cache.disk(feed, lambda: _get_feed(feed),time_expire=60*60)
         
     local_entries = db(db.blog.nodeId == node.id).select()
-    entries += [dict(title = "[%s] %s" %(node.url, entry.title),
+    entries += [dict(title = entry.title,
               link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
               description = entry.body,
               #author = get_home_from_user(entry.author).name,

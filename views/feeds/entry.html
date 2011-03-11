@@ -1,0 +1,4 @@
+{{extend 'csi_view.html'}}
+<h1 style="margin-bottom: 0px;">{{=A(title, _href=link)}}</h1>
+<div style="font-size: 70%">{{=A('View Source Feed', _href=URL('feeds','feed',args=feedid), _class="pill button")}}</div>
+<div>{{=XML(description or "", True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>

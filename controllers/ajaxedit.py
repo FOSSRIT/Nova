@@ -96,6 +96,8 @@ def addattribute():
 
 @auth.requires_login()
 def editnode():
+    response.view = "generic.load"
+    
     # Find the node we are trying to update
     node = get_node_or_404( request.args(0) )
     
@@ -103,23 +105,65 @@ def editnode():
     if not can_edit(node):
         raise HTTP(403, "Not allowed to edit this node")
         
+        
+    if request.args(1) == "feeds":    
+        form = SQLFORM( db.rss_feed, fields=['link'], submit_button="Add Feed",
+                        _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
+        
+        if form.accepts(request.vars, dbio=False):
+            a_id = db.rss_feed.insert(**db.rss_feed._filter_fields(form.vars))
+            
+            # Add to node
+            feeds = node.feeds or []
+            feeds += [a_id]
+            
+            node.update_record(feeds = feeds)
+            
+            # Trigger Update
+            update_feed(db.rss_feed[a_id])
+            
+            # Return Feed List
+            return "Refresh to view new content"
+        
+        entry_list = []
+        for id in node.feeds:
+            entry = db(db.rss_feed.id == id).select().first()
+            entry_list.append( LI("%s (%s) " % (entry.title, entry.link), A('Remove Feed',_href=URL('ajaxedit','delfeed',args=[node.url,entry.id]))))
+            
+        return dict(form=DIV(H2("Add Feed"),form,H2("Remove Feed"),UL(entry_list)))
+        
+        
     form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
-                    comments=(request.args(1) in ["tags",'feeds']), formstyle="divs" , showid = False, submit_button="Save",
+                    comments=(request.args(1) in ['feeds']), formstyle="divs" , showid = False, submit_button="Save",
                     _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
                     
-    response.view = "generic.load"
+    
     if form.accepts(request.vars):
         # Grab the new version of the node to populate data
         node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
         if request.args(1) =='tags':
             return tags_2_html(node.tags)
-        elif request.args(1) == 'feeds':
-            return LOAD('main','feed',args=[node.url,], ajax=False)
         else:
             return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:
         return dict(form=form)
+        
+@auth.requires_login()
+def delfeed():
+    # Find the node we are trying to update
+    node = get_node_or_404( request.args(0) )
+    
+    # Check node permissions
+    if not can_edit(node):
+        raise HTTP(403, "Not allowed to edit this node")
+        
+    if request.args(1) in node.feeds:
+        node.feeds.remove( request.args(1) )
+        node.update_record(feeds = node.feeds)
+        
+        db(db.rss_feed.id == request.args(1)).delete()
+    redirect(URL("main", "node", args=node.url))
         
 @auth.requires_login()
 def editphoto():

@@ -56,3 +56,18 @@ def cleanup_dead_ref():
                 user.update_record(watch_nodes=nodelst)
                 
     dict(dead_nodes=dead_nodes)
+   
+@auth.requires_membership("Site Admin") 
+def feeds_to_db():
+    errors = []
+    
+    for node in db(db.node.feeds != None).select():
+        feed_id = []
+        for feed_string in node.feeds:
+            if (feed_string, None) == db.rss_feed.link.validate(feed_string):
+                id = db.rss_feed.insert(link=feed_string)
+                feed_id.append(id)
+            else:
+                errors.append("%s: %s"% ( node.name, feed_string))
+        node.update_record(feeds=feed_id, modified=node.modified)
+    return dict(errors=errors)

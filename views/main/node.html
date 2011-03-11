@@ -335,11 +335,19 @@
     {{include "htmlblocks/attributes.html"}}
     </div>
 
-    <h3>Feed</h3>
+    <h3>Blog</h3>
     {{=A(SPAN(SPAN(_class="icon magnifier"), SPAN("View Internal Blog")), _href=URL('main','blog',args=node.url), _class="button pill")}}
     {{if can_edit(node):}}{{=A(SPAN(SPAN(_class="icon plus"), SPAN('New Post')), _href=URL("edit","blog",args=node.url), _class="button pill")}}{{pass}}
-    <div id="feeds" class="db_editable">
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
+    
+    
+    <h3>Feeds</h3>
+    <div class="feeds">
+        <div id="feeds" class="db_editable">
+        {{for feed in node.feeds:}}
+            {{=LOAD('feeds','feed', args=feed, vars={"preview":"true"}, ajax=True)}}
+        {{pass}}
+    </div>
     </div>
 </div>
 </div>
