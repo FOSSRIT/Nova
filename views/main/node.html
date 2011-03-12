@@ -344,8 +344,10 @@
     <h3>Feeds</h3>
     <div class="feeds">
         <div id="feeds" class="db_editable">
+        {{if node.feeds:}}
         {{for feed in node.feeds:}}
             {{=LOAD('feeds','feed', args=feed, vars={"preview":"true"}, ajax=True)}}
+        {{pass}}
         {{pass}}
     </div>
     </div>

@@ -119,6 +119,8 @@ def editnode():
             
             node.update_record(feeds = feeds)
             
+            db.syslog.insert(action="Edited Page", target=node.id, target2="Feed")
+            
             # Trigger Update
             update_feed(db.rss_feed[a_id])
             
@@ -126,7 +128,7 @@ def editnode():
             return "Refresh to view new content"
         
         entry_list = []
-        for id in node.feeds:
+        for id in node.feeds or []:
             entry = db(db.rss_feed.id == id).select().first()
             entry_list.append( LI("%s (%s) " % (entry.title, entry.link), A('Remove Feed',_href=URL('ajaxedit','delfeed',args=[node.url,entry.id]))))
             
@@ -163,6 +165,7 @@ def delfeed():
         node.update_record(feeds = node.feeds)
         
         db(db.rss_feed.id == request.args(1)).delete()
+        db.syslog.insert(action="Edited Page", target=node.id, target2="Feed")
     redirect(URL("main", "node", args=node.url))
         
 @auth.requires_login()

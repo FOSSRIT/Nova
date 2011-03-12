@@ -8,14 +8,18 @@ def index():
 def feed():
     feed = db(db.rss_feed.id == request.args(0)).select().first()
     
-    entries = feed.rss_entry.select()
+    if feed:
+        entries = feed.rss_entry.select()
 
-    if request.vars.preview:
-        response.view = "feeds/feed_preview.html"
+        if request.vars.preview:
+            response.view = "feeds/feed_preview.html"
 
-    return dict(title=feed.title, created_on=feed.updated,
+        return dict(title=feed.title, created_on=feed.updated,
                 link=feed.base_link, rss_link=feed.link, feed_id=feed.id,
                 description=feed.description, entries=entries)
+    else:
+        session.flash="Feed Not Found"
+        redirect( URL('feeds','index') )
 
 def entry():
     entry = db(db.rss_entry.id == request.args(0)).select().first()

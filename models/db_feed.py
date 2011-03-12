@@ -58,8 +58,10 @@ def update_feed(feed):
                 db.rss_entry.insert(title=entry.title, feed=feed,
                                      link=entry.link, description=entry.description,
                                      updated = datetime.fromtimestamp(mktime(entry.updated_parsed)))
-    except Exception as err:
-        status_log.append("ERROR: %s" % err)
+    #except Exception as err:
+    #    status_log.append("ERROR: %s" % err)
+    except:
+        status_log.append("ERROR")
     return status_log
 
 def update_feeds():

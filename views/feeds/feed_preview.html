@@ -1,4 +1,5 @@
 <h4>{{=A(title or "Feed Error/No Title", _href=link or rss_link)}}</h4>
+{{=A("View Feed", _href=URL('feeds','feed',args=feed_id), _class="pill button")}}
 <div>{{=XML(description or "Feed Error/No Description", True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
 <ul>
     {{for entry in entries:}}
