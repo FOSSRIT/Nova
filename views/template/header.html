@@ -8,9 +8,9 @@
         <form action="{{=URL('default','user',args='login')}}" enctype="multipart/form-data" method="post">
         {{###=form.custom.begin}}
             <label for="auth_user_username">{{=form.custom.label.username}}</label> 
-            {{=form.custom.widget.username}} <input type="submit" value="Login" /><br />
+            {{=form.custom.widget.username}} <input type="submit" value="Login" tabindex=3/><br />
             <label for="auth_user_password">{{=form.custom.label.password}}</label>
-            {{=form.custom.widget.password}} <input type="button" value="Signup" onclick="document.location='{{=URL('default','user',args='login', vars={'_next':request.url})}}'"><br />
+            {{=form.custom.widget.password}} <input type="button" value="Signup"  tabindex=4 onclick="document.location='{{=URL('default','user',args='login', vars={'_next':request.url})}}'"><br />
 
         {{=form.custom.end}}
     {{elif auth.is_logged_in():}}
