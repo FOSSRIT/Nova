@@ -30,6 +30,7 @@ from gluon.contrib.login_methods.ldap_auth import ldap_auth
 
 auth = Auth(globals(),db)                      # authentication/authorization
 
+auth.settings.create_user_groups = False
 auth.messages.label_remember_me = "Stay Logged In (for 30 days)"
 
 # RIT Ldap
