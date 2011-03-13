@@ -269,6 +269,11 @@ def watchemail():
 
 @auth.requires_login()
 def tag_toggle():
+    if not request.vars.tag:
+        raise HTTP(404, "Tag Required")
+        
+    new_tag = request.vars.tag.replace("_", " ")
+
     node = get_node_or_404( request.args(0) )
     
     if not can_edit(node):
@@ -276,18 +281,23 @@ def tag_toggle():
         
     if node.tags == None:
         node.tags = []
-    if request.vars.tag in node.tags:
-        node.tags.remove(request.vars.tag)
+    if new_tag in node.tags:
+        node.tags.remove(new_tag)
         node.update_record(tags=node.tags)
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
         raise HTTP(200, 'Tag Removed')
     else:
-        node.update_record(tags=node.tags+[request.vars.tag])
+        node.update_record(tags=node.tags+[new_tag])
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
         raise HTTP(200, 'Tag Added')
         
 @auth.requires_login()
 def blog_tag_toggle():
+    if not request.vars.tag:
+        raise HTTP(404, "Tag Required")
+        
+    new_tag = request.vars.tag.replace("_", " ")
+
     #node = get_node_or_404( request.args(0) )
     blog = db(db.blog.id==request.args(0)).select().first()
     
@@ -301,14 +311,14 @@ def blog_tag_toggle():
         
     if blog.tags == None:
         blog.tags = []
-    if request.vars.tag in blog.tags:
-        blog.tags.remove(request.vars.tag)
+    if new_tag in blog.tags:
+        blog.tags.remove(new_tag)
         blog.update_record(tags=blog.tags)
         db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
         
         raise HTTP(200, 'Tag Removed')
     else:
-        blog.update_record(tags=blog.tags+[request.vars.tag])
+        blog.update_record(tags=blog.tags+[new_tag])
         db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
         raise HTTP(200, 'Tag Added')
 
