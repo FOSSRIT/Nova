@@ -206,11 +206,11 @@ div.header{
     padding: 25px;
     }
     
-    div.node_attribute_title{
+    div.del_title{
     border-bottom: 1px solid black; font-weight: bold;
     }
     
-    div.node_attribute_body{
+    div.db_attributes{
     padding-left: 20px; margin-bottom: 25px;
     }
     
