@@ -178,7 +178,7 @@ def tags():
         # Make html output
         ret = UL(_class='comma-separated')
         for tag, count in sorted_x:
-            if count / 10.0 < 1:
+            if count / 10.0 <= 1:
                 size = count / 10.0 + 1
             elif count / 10.0 > 3:
                 size = 3
