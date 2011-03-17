@@ -11,9 +11,8 @@ response.menu = [
     ('About', False, URL(request.application,'main','about'), [
        ('Blog', False, "http://innovation.rit.edu", []),
        ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
-       ('Events', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
-       ('Engage', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=230", []),
-          ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
+       ('Calendar', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
+       ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
     ]),
     ('Tags', False, URL(request.application,'main','tags'), []),
 ]
