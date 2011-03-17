@@ -33,7 +33,12 @@ function click_action( url, node_id, link_element ){
 
 function is_highlighted( url, node_id ){
     try{
-    return dataArr[node_id].tags.indexOf($('#tag_input').val()) != -1;
+    for(i = 0; i < dataArr[node_id].tags.length; i++){
+        if(dataArr[node_id].tags[i].toLowerCase() == $('#tag_input').val().toLowerCase()){
+            return true;
+        }
+    }
+    return false;
     }catch(e){}
     
   
@@ -45,7 +50,11 @@ function is_visible( url, node_id ){
 
 function is_blog_highlited( blog ){
     try{
-        return blog.tags.indexOf($('#tag_input').val()) != -1;
+        for(i = 0; i < blog.tags.length; i++){
+            if(blog.tags[i].toLowerCase() == $('#tag_input').val().toLowerCase()){
+                return true;
+            }
+        }
     }catch(e){}
 }
 
