@@ -15,8 +15,8 @@
         {{=form.custom.end}}
     {{elif auth.is_logged_in():}}
     {{=A(get_home_node().name, _href=URL('main', 'nodeid', args=auth.user.home_node))}} |
-    {{=A('My Files', _href=URL('edit','dropbox'))}} |
-    {{=A('Watched Pages', _href=URL('main','watched'))}} |
+    {{=A('My Files', _href=URL('edit','dropbox'), _title="Storage space, for files that you may want to link to.")}} |
+    {{=A('Watched Pages', _href=URL('main','watched'), _title="When you watch a  page, it's history accumulates on your very own WatchedPages report.  You can also get a daily update. ")}} |
     {{=A("Logout", _href=URL('default','user',args='logout'))}}<br />
     
     {{if auth.has_membership("Site Admin"):}}

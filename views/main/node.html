@@ -218,9 +218,9 @@
     <h2 class="node_name"><div id="name" class="db_editable">{{=node.name}}</div></h2>
     <div class="nodeTopLinks" style="">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button" title="View every edit on this page"><span class="magnifier icon"></span>View Page Activity</a>
 {{else:}}
-<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button"><span class="magnifier icon"></span>View Page Activity</a>
+<a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button" title="View every edit on this page"><span class="magnifier icon"></span>View Page Activity</a>
 {{pass}}
 {{if can_edit(node):}}
     {{if node.url==node.name and node.type==1:}}
@@ -232,17 +232,17 @@
     </script>
     {{pass}}
     
-        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="middle pill button"><span class="pen icon"></span>Edit this page!</a>
+        <a href="#" onclick="enter_edit_mode(); return false;" id="mode_a" class="middle pill button" title="Enter edit mode and edit any highlighted element by clicking on it."><span class="pen icon"></span>Edit this page!</a>
 {{pass}}
 
 {{if auth.is_logged_in():}}
     {{if auth.user.watch_nodes and node.id in auth.user.watch_nodes:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle pill negative button",_href=URL('ajaxedit','unwatch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Unwatch'),_class="middle pill negative button", _href=URL('ajaxedit','unwatch',args=node.url), _title="Remove this page from your watch list.", cid='watch_link')}}
         </div>
     {{else:}}
         <div id='watch_link'>
-            {{=A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle pill button",_href=URL('ajaxedit','watch',args=node.url), cid='watch_link')}}
+            {{=A(SPAN(SPAN(_class="check icon"),'Watch'),_class="middle pill button",_href=URL('ajaxedit','watch',args=node.url), _title="Add this page to your watch list.", cid='watch_link')}}
         </div>
     {{pass}}
     {{if auth.has_membership("Site Admin"):}}
@@ -255,7 +255,7 @@
     {{pass}}
 {{pass}}
 
-{{=A(SPAN(SPAN(_class="icon tag"),"Printout Mode"), _class="right pill button", _href=URL('main','node_print',args=node.url))}}
+{{=A(SPAN(SPAN(_class="icon tag"),"Printout Mode"), _class="right pill button", _title="Print your page poster style, complete with QRcode", _href=URL('main','node_print',args=node.url))}}
 </div>
 
 <br style="clear: both;">
@@ -275,7 +275,7 @@
         </div>
         
         {{if node.tags and len(node.tags):}}
-        <h4 style="margin:5px; text-align:center;clear: left;">Tags</h4>
+        <h4 style="margin:5px; text-align:center;clear: left;" title="Tags make it easy to find and collect People, Projects, Groups, etc.">Tags</h4>
         <div id="tags" class="db_editable">{{=tags_2_html(node.tags)}}</div>
         {{elif can_edit(node):}}
         <h4 style="margin:5px; text-align:center;clear: left;">Tags</h4>
@@ -285,9 +285,9 @@
                      <div class="nodeTopLinks" style="clear: left;">
             {{if can_edit(node):}}
                 {{if node.id != auth.user.home_node:}}
-                    <a href="{{=URL('edit','link', args=node.url)}}" class="left button pill">Manage Links</a>
+                    <a href="{{=URL('edit','link', args=node.url)}}" class="left button pill" title="link this page to other pages.">Manage Links</a>
                 {{else:}}
-                    <a href="{{=URL('edit','link', args=node.url)}}" class="button pill">Manage Links</a>
+                    <a href="{{=URL('edit','link', args=node.url)}}" class="button pill" title="link this page to other pages.">Manage Links</a>
                 {{pass}}
             {{pill="pill"}}
             {{else:}}
@@ -297,9 +297,9 @@
     
     {{if auth.is_logged_in() and node.id != auth.user.home_node:}}
         {{if is_linked(node, get_home_node()):}}
-            <a href="{{=URL('edit','link_me',args=['remove', node.url])}}" class="right button {{=pill}} negative"><span class="icon heart"></span>Unlink</a>
+            <a href="{{=URL('edit','link_me',args=['remove', node.url])}}" class="right button {{=pill}} negative" title="Unlink this page from your personal page."><span class="icon heart"></span>Unlink</a>
         {{else:}}
-            <a href="{{=URL('edit','link_me',args=['add', node.url])}}" class="right button {{=pill}}"><span class="icon heart"></span>Link</a>
+            <a href="{{=URL('edit','link_me',args=['add', node.url])}}" class="right button {{=pill}}" title="Link this page to your personal page."><span class="icon heart"></span>Link</a>
                     {{pass}}
                 {{pass}}
             </div><br style="clear:left;"/>
@@ -335,13 +335,13 @@
     {{include "htmlblocks/attributes.html"}}
     </div>
 
-    <h3>Blog</h3>
+    <h3 title="Every page has a blog.  Your personal page blog can be edited only by you.  Other pages can accept Blog posts from anyone.">Blog</h3>
     {{=A(SPAN(SPAN(_class="icon magnifier"), SPAN("View Internal Blog")), _href=URL('main','blog',args=node.url), _class="button pill")}}
     {{if can_edit(node):}}{{=A(SPAN(SPAN(_class="icon plus"), SPAN('New Post')), _href=URL("edit","blog",args=node.url), _class="button pill")}}{{pass}}
     {{=LOAD('main','feed', args=node.url, ajax=True)}}
     
     
-    <h3>Feeds</h3>
+    <h3 title="Every page can display information from other sources that provide RSS feeds.">Feeds</h3>
     <div class="feeds">
         <div id="feeds" class="db_editable">
         {{if node.feeds:}}

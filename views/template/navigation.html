@@ -1,6 +1,6 @@
 <div class="navigation">
     {{=MENU(response.menu,_class='topnav')}}
-    <form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;" >
+    <form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;" title="Type a word, hit enter, see all pages that feature that word.  Click Full Search on that page for a deeper slower full text search.">
     <input type="text" name="query" value="Type here to search"
         onfocus="if(this.value=='Type here to search')this.value='';"
         onblur="if(this.value=='')this.value='Type here to search';">
