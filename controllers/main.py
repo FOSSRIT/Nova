@@ -84,11 +84,13 @@ def node():
     if len(request.args):
 
         # Search for the node
-        current_node = db(db.node.url==request.args[0]).select()
+        current_node = db(db.node.url==request.args[0]).select().first()
 
         # Check if we got a node
-        if len(current_node):
-            current_node = current_node[0]
+        if current_node:
+            addRss("Page Activity", URL('main','node_activity',args=current_node.url, extension="rss"), "An rss feed of page edit activity")
+            addRss("Blog", URL('main','blog',args=current_node.url, extension="rss"), "An rss feed of %s's Blog posts" % current_node.name)
+            #addRss("s Aggregated Feed", _href=URL('main','feed',args=node.url, extension="rss")) OLD and needs to be re-added
 
             # Get Node Attributes
             attrs = db(db.nodeAttr.nodeId==current_node).select(orderby=db.nodeAttr.weight)
@@ -124,6 +126,7 @@ def node_activity():
     return dict(activity=activity,node=current_node)
 
 def log():
+    addRss("Page Activity", URL('main','log', extension="rss"), "A sitewide activity log of page edits")
     page = 0
     if request.args(0):
         try:

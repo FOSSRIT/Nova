@@ -3,13 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>{{=response.title or request.application}}</title>
-{{if vars().has_key('node') and node:}}
-<link rel="alternate" type="application/atom+xml" title="Page Activity" href="{{=URL('main','node_activity',args=node.url, extension="rss")}}" /> 
-<link rel="alternate" type="application/atom+xml" title="{{=node.name}}'s Blog" href="{{=URL('main','blog',args=node.url, extension="rss")}}" />
-<link rel="alternate" type="application/atom+xml" title="{{=node.name}}'s Aggregated Feed" href="{{=URL('main','feed',args=node.url, extension="rss")}}" /> 
-{{elif request.function == "log":}}
-<link rel="alternate" type="application/atom+xml" title="Page Activity" href="{{=URL('main','log', extension="rss")}}" /> 
-{{pass}}
+{{=printRssHeader()}}
 <link href="{{=URL(request.application,'static','csi_main.css')}}" rel="stylesheet" type="text/css" />
 {{include 'web2py_ajax.html'}}
 {{include 'htmlblocks/google_analytics.html'}}

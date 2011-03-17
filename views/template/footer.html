@@ -2,15 +2,7 @@
     <img src="{{=URL('static', 'images', args=['footer.png'])}}" width="300px" id="footerpic"/>
     <div class="footer_content">
     <div style="float: right;">
-    {{if vars().has_key('node') and node:}}
-         <img src="{{=URL('static','images/Feed_32x32.png')}}" width="16px" height="16px">
-        {{=A("Page Activity", _href=URL('main','node_activity',args=node.url, extension="rss"))}}
-        {{=A(node.name + "'s Blog", _href=URL('main','blog',args=node.url, extension="rss"))}}
-        {{=A(node.name + "'s Aggregated Feed", _href=URL('main','feed',args=node.url, extension="rss"))}} 
-    {{elif request.function == "log":}}
-         <img src="{{=URL('static','images/Feed_32x32.png')}}" width="16px" height="16px">
-        {{=A("Page Activity", _href=URL('main','log', extension="rss"))}} 
-    {{pass}}
+        {{=printRss()}}
     </div>
     <div style="float: left;">
     <ul>
