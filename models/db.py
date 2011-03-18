@@ -98,7 +98,7 @@ db.define_table('node',
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False),
     Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
-    Field('feeds', 'list:string', label="External Feeds", comment="A list of RSS feeds related to the page.  One feed per box, press enter to add more boxes."),
+    Field('feeds', 'list:string', label="External Feeds", comment="A list of RSS feeds related to the page.  One feed per box, press enter to add more boxes.", writable=False,readable=False),
     format='%(name)s'
     )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
@@ -167,7 +167,7 @@ def checkImage(imgpath):
 
 db.define_table('filebox',
     Field('Name', requires=IS_NOT_EMPTY(), comment="(Optional, will default to filename on upload)"),
-    Field('File','upload', autodelete=True, requires=IS_LENGTH(MAX_UPLOAD_SIZE, error_message="File must be less then %s" % MAX_SIZE_ENG)),
+    Field('File','upload', autodelete=True, required=True, requires=IS_LENGTH(MAX_UPLOAD_SIZE, error_message="File must be less then %s" % MAX_SIZE_ENG)),
     Field('size','integer', compute=lambda x: os.path.getsize(os.path.join(request.folder, "uploads", x['File']))),
     Field('image','boolean', compute=lambda x: checkImage( os.path.join(request.folder, "uploads", x['File'])) ),
     Field('owner', default = auth.user_id, writable=False, readable=False),
