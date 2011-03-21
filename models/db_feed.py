@@ -40,7 +40,7 @@ def update_feed(feed):
     
         # Update Feed Data
         feed.update_record(title=d.channel.title,
-                           description=d.channel.description if d.channel.has_key("description") else d.channel.title,
+                           description=d.channel.description if d.channel.has_key("description") and d.channel.description != "" else d.channel.title,
                            updated = request.now,
                            base_link =link)
         
