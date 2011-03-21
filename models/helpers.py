@@ -30,6 +30,12 @@ def tags_2_html(tags):
         return ret
     else:
         return "No Tags Found"
+        
+def tags_2_text(tags):
+    if tags:
+        return ", ".join(tags)
+    else:
+        return "No Tags Found"
 
 def convert_bytes(bytes):
     bytes = float(bytes)

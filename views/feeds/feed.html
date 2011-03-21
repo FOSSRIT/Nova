@@ -9,6 +9,10 @@
     <div>
     <h2 style="margin-bottom: 0px;">{{=A(entry.title, _href=entry.link)}}</h2>
     <div>{{=entry.updated.strftime(DATE_FORMAT)}}</div>
+    <div id="{{="feed_%s_buttons"%entry.id}}" style="display: inline;">
+        {{=A('Edit Tags', _href=URL('feeds','edit_entry', args=entry.id, extension="load"), _class="pill button", cid="feed_%s_buttons"%entry.id)}}
+        {{=tags_2_html(entry.tags)}}
+    </div>
     <div>{{=XML(entry.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
     </div>
     {{pass}}

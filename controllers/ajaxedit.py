@@ -322,6 +322,39 @@ def blog_tag_toggle():
         db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
         raise HTTP(200, 'Tag Added')
 
+        
+@auth.requires_login()
+def feed_tag_toggle():
+    if not request.vars.tag:
+        raise HTTP(404, "Tag Required")
+        
+    new_tag = request.vars.tag.replace("_", " ")
+
+    #node = get_node_or_404( request.args(0) )
+    feed = db(db.rss_entry.id==request.args(0)).select().first()
+    
+    
+    #if not can_edit(blog.nodeId):
+    #    raise HTTP(403, "Not allowed to edit this node")
+        
+    
+    if not feed:
+        raise HTTP(404, 'feed entry not found')
+        
+    if feed.tags == None:
+        feed.tags = []
+    if new_tag in feed.tags:
+        feed.tags.remove(new_tag)
+        feed.update_record(tags=feed.tags)
+        db.syslog.insert(action="Edited Feed Entry", target=feed.id, target2="Tags")
+        
+        raise HTTP(200, 'Tag Removed')
+    else:
+        feed.update_record(tags=feed.tags+[new_tag])
+        db.syslog.insert(action="Edited Feed Entry", target=feed.id, target2="Tags")
+        raise HTTP(200, 'Tag Added')
+        
+
 @auth.requires_membership("Site Admin")
 def home_toggle():
     home_cat = db(db.highlights.title == request.args(0).replace("_", " ")).select().first()

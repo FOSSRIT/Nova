@@ -172,6 +172,11 @@ def tags():
             for tag in row.tags:
                 total_tags += 1
                 tagcount[tag.lower()] = tagcount.get(tag.lower(), 0) + 1
+                
+        for row in db(db.rss_entry.tags != []).select(db.rss_entry.tags):
+            for tag in row.tags:
+                total_tags += 1
+                tagcount[tag.lower()] = tagcount.get(tag.lower(), 0) + 1
         
         # Make a sorted list of tuples key, frequency by frequency
         import operator

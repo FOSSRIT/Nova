@@ -2,9 +2,11 @@
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 var autoload_request_url = 'https://{{=request.env.http_host}}{{=URL('api','search.json')}}';
 var autoload_request_urlblog = 'https://{{=request.env.http_host}}{{=URL('api','searchBlog.json')}}';
+var autoload_request_urlfeed = 'https://{{=request.env.http_host}}{{=URL('api','searchFeed.json')}}';
 {{else:}}
 var autoload_request_url = 'http://{{=request.env.http_host}}{{=URL('api','search.json')}}';
 var autoload_request_urlblog = 'http://{{=request.env.http_host}}{{=URL('api','searchBlog.json')}}';
+var autoload_request_urlfeed = 'http://{{=request.env.http_host}}{{=URL('api','searchFeed.json')}}';
 {{pass}}
 </script>
 <script>
@@ -36,6 +38,14 @@ function is_blog_highlited( blog ){
 function blog_click_action( blog_id ){
     return true;
 }
+
+function feed_click_action( feed_id ){
+    return true;
+}
+
+function is_feed_highlited( feed ){
+    return false;
+}
 {{pass}}
 
 
@@ -44,8 +54,10 @@ function pull_data(search, page, empty, full){
     gsearch = search;
     gpage = page;
     gfull = full
-    request = autoload_request_url + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
-    requestb = autoload_request_urlblog + "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
+    reqest_part = "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
+    request = autoload_request_url + reqest_part;
+    requestb = autoload_request_urlblog + reqest_part;
+    requestf = autoload_request_urlfeed + reqest_part;
     
     
     if( pending_request ){
@@ -92,16 +104,20 @@ function pull_data(search, page, empty, full){
         imgOndemand();
         {{if "showblog" in globals():}}
         //Start to pull blog posts
+        
+        if( empty ){
+                $("#BLOG_TARGET").empty();
+                $("#FEED_TARGET").empty();
+        }
+        
         $.getJSON(requestb,
         
         function(data){
             if( !data ){
                 return;
             }
-            if( empty ){
-                $("#BLOG_TARGET").empty();
-                $("#BLOG_TARGET").append("Blog Entries<ul>");
-            }
+            
+            $("#BLOG_TARGET").append("Blog Entries<ul>");
             $.each(data.blogentries, function(key,val){
                 style = "";
                 if( is_blog_highlited(val) ){
@@ -114,6 +130,34 @@ function pull_data(search, page, empty, full){
                 $("#BLOG_TARGET").append( html_add );
             });
              $("#BLOG_TARGET").append("</ul>");
+        
+        });
+        
+        
+        
+        
+        
+                //Start to pull blog posts
+        $.getJSON(requestf,
+
+        function(data){
+            if( !data ){
+                return;
+            }
+            $("#FEED_TARGET").append("Feed Entries<ul>");
+
+            $.each(data.feedentries, function(key,val){
+                style = "";
+                if( is_feed_highlited(val) ){
+                    style = "color: green;";
+                }
+                var html_add = "<li>\
+                        <a href='{{=URL('feeds','entry')}}/" + val.id + "' style='"+style+"' onclick='return feed_click_action("+val.id+", this);'>" + (val.title?val.title:"No Title") + "</a>\
+                     </li>";
+            
+                $("#FEED_TARGET").append( html_add );
+            });
+             $("#FEED_TARGET").append("</ul>");
         
         });
         
@@ -165,4 +209,4 @@ $(document).ready(function(){
 <div id="TARGET">
 <img src="{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}">Loading Content...
 </div>
-</td><td valign="top" {{if "showblog" in globals():}}width=200>{{pass}}<div id="BLOG_TARGET"></div></td></tr></table>
+</td><td valign="top" {{if "showblog" in globals():}}width=200>{{pass}}<div id="BLOG_TARGET"></div><div id="FEED_TARGET"></div></td></tr></table>

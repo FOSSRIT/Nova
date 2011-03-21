@@ -78,10 +78,43 @@ function blog_click_action( blog_id, link_element ){
     });
     return false;
 }
+
+
+function feed_click_action( feed_id, link_element ){
+    var url = proto + '""" + URL('ajaxedit','feed_tag_toggle') + """/' + feed_id + '?tag=' + escape($('#tag_input').val());
+    $.ajax({
+        url: url,
+        success: function(){
+            $('div.flash').html('Tag Change Applied');
+            $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
+            //pull_data(gsearch, gpage, true, gfull);
+            if($(link_element).css('color') != "green"){
+                $(link_element).css('color', 'green');
+            }else{
+                $(link_element).css('color', '');
+            }
+        },
+        error: function(){
+            alert('Unable to Change Tag, You may not have permissions to edit that page');
+        }
+    });
+    return false;
+}
+
+function is_feed_highlited( feed ){
+    try{
+        for(i = 0; i < feed.tags.length; i++){
+            if(feed.tags[i].toLowerCase() == $('#tag_input').val().toLowerCase()){
+                return true;
+            }
+        }
+    }catch(e){}
+}
+
 """}}
 {{showblog = True}}
 
 <h2>Add Tags</h2>
 Tag: <input type="text" name="tag_input" id="tag_input"
-            onkeyup="pull_data($('#search_filter').val(), 1, true, false)" value="{{=request.args(0) or ''}}"><br>
+            onkeyup="$(this).val($(this).val().replace(/_/, ' ')); pull_data($('#search_filter').val(), 1, true, false)" value="{{=request.args(0).replace('_', ' ') or ''}}"><br>
 {{include "htmlblocks/search.html"}}

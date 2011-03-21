@@ -7,14 +7,16 @@ db.define_table('rss_feed',
     Field('description', 'text', writable=False),
     Field('added_on', 'datetime', writable=False, readable=False, default=request.now),
     Field('added_by', db.auth_user, default=auth.user_id,writable=False,readable=False),
+    format="%(title)s"
     )
     
 db.define_table('rss_entry',
-    Field('feed', db.rss_feed),
-    Field('title'),
-    Field('link'),
-    Field('updated','datetime'),
-    Field('description', 'text'),
+    Field('feed', db.rss_feed, writable=False),
+    Field('title', writable=False),
+    Field('link', writable=False),
+    Field('updated','datetime', writable=False),
+    Field('description', 'text', writable=False),
+    Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this post. One tag per box. Press enter in the text box to get another box."),
     format='%(rss_feed.title)s: %(title)s'
     )
 

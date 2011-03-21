@@ -140,6 +140,14 @@ def log_to_string(entry, links=True):
         else:
             return "edited a blog post that no longer exists"
             
+    def edit_feed(entry):
+        rssent = db(db.rss_entry.id==entry.target).select().first()
+        
+        if rssent:
+            return "edited a feed post entitled <a href=\"%s\">%s</a>." % (URL('main','feeds',args=rssent.id), rssent.title or "No Title")
+        else:
+            return "edited a feed post that no longer exists"
+            
     def delete_blog(entry):
         node = db(db.node.id==entry.target).select().first()
         entry = db(db.blog.id==entry.target2).select().first()
@@ -161,6 +169,7 @@ def log_to_string(entry, links=True):
         "Added Blog Entry":add_blog,
         "Edited Blog Entry":edit_blog,
         "Deleted Blog Entry":delete_blog,
+        "Edited Feed Entry":edit_feed,
         }
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
@@ -182,10 +191,10 @@ def log_str_auto_compute(record):
         record['date'] = request.now
     class DictObj(dict):
         def __getattr__(self, name):
-            try:
-                return self.__getitem__(name)
-            except KeyError:
-                return super(DictObj,self).__getattr__(name)
+            #try:
+            return self.__getitem__(name)
+            #except KeyError:
+            #    return super(DictObj,self).__getattr__(name)
 
     msg = log_to_string(DictObj(record))
 
@@ -207,6 +216,7 @@ db.define_table('syslog',
                 'Added Blog Entry',
                 'Edited Blog Entry',
                 'Deleted Blog Entry'
+                'Edited Feed Entry',
             )
         ) ),
     Field('target', 'integer'),
