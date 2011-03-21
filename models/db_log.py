@@ -144,7 +144,7 @@ def log_to_string(entry, links=True):
         rssent = db(db.rss_entry.id==entry.target).select().first()
         
         if rssent:
-            return "edited a feed post entitled <a href=\"%s\">%s</a>." % (URL('main','feeds',args=rssent.id), rssent.title or "No Title")
+            return "edited a feed post entitled <a href=\"%s\">%s</a>." % (URL('feeds','entry',args=rssent.id), rssent.title or "No Title")
         else:
             return "edited a feed post that no longer exists"
             
