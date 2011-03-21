@@ -1,12 +1,14 @@
 {{extend 'csi_view.html'}}
 
-<h1>{{=A(title, _href=link)}}</h1>
+<h1 style="margin-bottom: 0px;">{{=A(title, _href=link)}}</h1>
+<div style="font-size: 70%">Feed RSS Source: {{=rss_link}}</div>
 <div>{{=description}}</div>
 
 <div>
     {{for entry in entries:}}
     <div>
-    <h2>{{=A(entry.title, _href=entry.link)}}</h2>
+    <h2 style="margin-bottom: 0px;">{{=A(entry.title, _href=entry.link)}}</h2>
+    <div>{{=entry.updated.strftime(DATE_FORMAT)}}</div>
     <div>{{=XML(entry.description, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
     </div>
     {{pass}}
