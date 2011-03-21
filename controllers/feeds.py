@@ -9,7 +9,7 @@ def feed():
     feed = db(db.rss_feed.id == request.args(0)).select().first()
     
     if feed:
-        entries = feed.rss_entry.select()
+        entries = feed.rss_entry.select(orderby=~db.rss_entry.updated)
 
         if request.vars.preview:
             response.view = "feeds/feed_preview.html"
