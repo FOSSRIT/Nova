@@ -36,6 +36,10 @@ def user():
         request.vars.username = request.vars.username.lower()
     if request.post_vars.username:
         request.post_vars.username = request.post_vars.username.lower()
+    
+    if request.post_vars.password == "":
+        session.flash="You attempted to login without a password"
+        redirect(URL('default','user',args="login"))
 
     return dict(form=auth())
 
