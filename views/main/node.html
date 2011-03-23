@@ -276,10 +276,15 @@
         
         {{if node.tags and len(node.tags):}}
         <h4 style="margin:5px; text-align:center;clear: left;" title="Tags make it easy to find and collect People, Projects, Groups, etc.">Tags</h4>
-        <div id="tags" class="db_editable">{{=tags_2_html(node.tags)}}</div>
-        {{elif can_edit(node):}}
+        <div id="tags" class="db_editable">
+            {{=A(node.url, _href=URL('main','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: 
+            {{=tags_2_html(node.tags)}}
+        </div>
+        {{else:}}
         <h4 style="margin:5px; text-align:center;clear: left;">Tags</h4>
-        <div id="tags" class="db_editable">No tags found.</div>
+        <div id="tags" class="db_editable">
+            {{=A(node.url, _href=URL('main','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: No tags found.
+        </div>
         {{pass}}<br>
         
                      <div class="nodeTopLinks" style="clear: left;">

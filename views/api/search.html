@@ -1,0 +1,11 @@
+{{for node in nodes:}}
+    <div class='nodeBox'>
+        {{=A(
+            DIV(
+                IMG( _src= URL('default','thumb',args=[150,150, node['picFile']]) if\
+                           node['picFile'] else URL('static', 'images', args='placeholder_thumb.png')),
+                _class="nodePic"),
+            DIV(node['name'], _class="nodeName"),
+            _href=URL('main','node', args=node['url']))}}
+    </div>
+{{pass}}
