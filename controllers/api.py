@@ -66,9 +66,9 @@ def search():
     # Tag Criteria
     if request.vars.tag and len(request.vars.tag):
         if search:
-            search = search & (db.node.tags.contains(request.vars.tag))
+            search = search & ((db.node.tags.contains(request.vars.tag)) | (db.node.url == request.vars.tag))
         else:
-            search = (db.node.tags.contains(request.vars.tag))
+            search = (db.node.tags.contains(request.vars.tag)) | (db.node.url == request.vars.tag)
 
     # If no criteria, then select everything
     if not search:
