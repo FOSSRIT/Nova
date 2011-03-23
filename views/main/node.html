@@ -348,7 +348,12 @@
     
     <h3 title="Every page can display information from other sources that provide RSS feeds.">Feeds</h3>
     <div class="feeds">
-        <div id="feeds" class="db_editable">
+        <div id="feeds">
+        {{if can_edit(node):}}
+        {{=A(SPAN(SPAN(_class="icon plus"), SPAN('Add/Remove Feed')),
+             _href=URL("ajaxedit","editnode", args=[node.url,"feeds"]), _class="button pill", cid="feeds")}}
+        {{pass}}
+        
         {{if node.feeds:}}
         {{for feed in node.feeds:}}
             {{=LOAD('feeds','feed', args=feed, vars={"preview":"true"}, ajax=True)}}
