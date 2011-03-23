@@ -3,8 +3,11 @@
 <div>{{=XML(description or "Feed Error/No Description", True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
 <ul>
     {{for entry in entries:}}
-    {{=LI("[%s] " % entry.updated.strftime(DATE_FORMAT),
-        A(entry.title, _href=URL('feeds','entry',args=entry.id) ), _title="%s\n%s" % (tags_2_text(entry.tags), entry.description[0:100]), _class="do_titles",
-       )}}
+    {{=LI(
+            A(entry.title, _href=URL('feeds','entry',args=entry.id) ),
+            DIV(entry.updated.strftime(DATE_FORMAT), ". ", tags_2_html(entry.tags), _style="font-size: 70%;"),
+            #DIV(entry.description[0:250])
+         )
+       }}
     {{pass}}
 </ul>
