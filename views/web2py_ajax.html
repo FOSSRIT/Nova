@@ -199,7 +199,7 @@ function show_image_selection(editorCallback, imageMode){
                                     href: "#",
                                     text: item.Name,
                                     click: function(){
-                                            editorCallback.execute("createLink",'{{=URL('default','download')}}'+item.File);
+                                            editorCallback.execute("createLink",'{{=URL('default','download')}}/'+item.File);
                                             $.modal.close();
                                            }
                                     } ).appendTo(container_file);
