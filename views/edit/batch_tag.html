@@ -116,5 +116,5 @@ function is_feed_highlited( feed ){
 
 <h2>Add Tags</h2>
 Tag: <input type="text" name="tag_input" id="tag_input"
-            onkeyup="$(this).val($(this).val().replace(/_/, ' ')); pull_data($('#search_filter').val(), 1, true, false)" value="{{=request.args(0).replace('_', ' ') or ''}}"><br>
+            onkeyup="$(this).val($(this).val().replace(/_/, ' ')); pull_data($('#search_filter').val(), 1, true, false)" value="{{=request.args(0).replace('_', ' ') if request.args(0) else ''}}"><br>
 {{include "htmlblocks/search.html"}}
