@@ -141,10 +141,17 @@ def log_to_string(entry, links=True):
             return "edited a blog post that no longer exists"
             
     def edit_feed(entry):
-        rssent = db(db.rss_entry.id==entry.target).select().first()
+        node = db(db.node.id==entry.target).select().first()
+        rssent = db(db.rss_entry.id==entry.target2).select().first()
         
         if rssent:
-            return "edited a feed post entitled <a href=\"%s\">%s</a>." % (URL('feeds','entry',args=rssent.id), rssent.title or "No Title")
+            return "edited one of <a href=\"%s\">%s</a>'s feed post entitled <a href=\"%s\">%s</a>." % \
+                (
+                    URL('main','node',args=node.url, extension=""),
+                    node.name,
+                    URL('feeds','entry',args=rssent.id, extension=""),
+                    rssent.title or "No Title"
+                )
         else:
             return "edited a feed post that no longer exists"
             

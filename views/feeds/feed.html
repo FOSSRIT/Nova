@@ -1,5 +1,5 @@
 {{extend 'csi_view.html'}}
-
+{{=A("Back to %s" % node_owner.name, _href=URL('main','node', args=node_owner.url))}}
 <h1 style="margin-bottom: 0px;">{{=A(title, _href=link)}}</h1>
 <div style="font-size: 70%">Feed RSS Source: {{=rss_link}}</div>
 <div>{{=description}}</div>
