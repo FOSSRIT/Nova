@@ -11,9 +11,9 @@ def log_to_string(entry, links=True):
         
         if page and page2:
             return "linked <a href=\"%s\">%s</a> to <a href=\"%s\">%s</a>." % (
-                    URL('main','node',args=page.url),
+                    URL('main','node',args=page.url, extension=""),
                     page.name,
-                    URL('main','node',args=page2.url),
+                    URL('main','node',args=page2.url, extension=""),
                     page2.name
                 )
         else:
@@ -21,7 +21,7 @@ def log_to_string(entry, links=True):
                page = page2
                
             return "linked <a href=\"%s\">%s</a> to a page that no longer exists." % (
-                    URL('main','node',args=page.url),
+                    URL('main','node',args=page.url, extension=""),
                     page.name
                 )
     
@@ -32,9 +32,9 @@ def log_to_string(entry, links=True):
         if page and page2:
         
             return "unlinked <a href=\"%s\">%s</a> from <a href=\"%s\">%s</a>." % (
-                    URL('main','node',args=page.url),
+                    URL('main','node',args=page.url, extension=""),
                     page.name,
-                    URL('main','node',args=page2.url),
+                    URL('main','node',args=page2.url, extension=""),
                     page2.name
                 )
         else:
@@ -42,7 +42,7 @@ def log_to_string(entry, links=True):
                page = page2
                
             return "unlinked <a href=\"%s\">%s</a> from a page that no longer exists." % (
-                    URL('main','node',args=page.url),
+                    URL('main','node',args=page.url, extension=""),
                     page.name
                 )
     
@@ -50,7 +50,7 @@ def log_to_string(entry, links=True):
         page = db(db.node.id==entry.target).select().first()
         
         if page:
-            return "created a new page entitled <a href=\"%s\">%s</a>." % (URL('main','node',args=page.url), page.name)
+            return "created a new page entitled <a href=\"%s\">%s</a>." % (URL('main','node',args=page.url, extension=""), page.name)
         else:
             return "created a new page that no longer exists"
             
@@ -59,7 +59,7 @@ def log_to_string(entry, links=True):
     
         if page:
             return "edited <a href=\"%s\">%s</a>'s %s" % (
-                URL('main','node',args=page.url),
+                URL('main','node',args=page.url, extension=""),
                 page.name,
                 entry.target2
             )
@@ -77,12 +77,12 @@ def log_to_string(entry, links=True):
             if attribute:
                 return "Added %s attribute to <a href=\"%s\">%s</a>." % (
                         attribute.vocab.value,
-                        URL('main','node',args=page.url),
+                        URL('main','node',args=page.url, extension=""),
                         page.name
                     )
             else:
                 return "Added an attribute that no longer exists to <a href=\"%s\">%s</a>." % (
-                        URL('main','node',args=page.url),
+                        URL('main','node',args=page.url, extension=""),
                         page.name
                     )
         else:
@@ -97,12 +97,12 @@ def log_to_string(entry, links=True):
             if attribute:
                 return "Edited %s attribute of <a href=\"%s\">%s</a>." % (
                         attribute.vocab.value,
-                        URL('main','node',args=page.url),
+                        URL('main','node',args=page.url, extension=""),
                         page.name
                     )
             else:
                 return "Edited an attribute that no longer exists of <a href=\"%s\">%s</a>." % (
-                        URL('main','node',args=page.url),
+                        URL('main','node',args=page.url, extension=""),
                         page.name
                     )
         else:
@@ -114,7 +114,7 @@ def log_to_string(entry, links=True):
         if page:
             attribute = db(db.nodeAttr.id==entry.target2).select().first()
             return "Deleted an attribute from <a href=\"%s\">%s</a>." % (
-                        URL('main','node',args=page.url),
+                        URL('main','node',args=page.url, extension=""),
                         page.name
                     )
         else:
@@ -127,7 +127,7 @@ def log_to_string(entry, links=True):
         entry = db(db.blog.id==entry.target2).select().first()
         
         if entry:
-            return "created a new blog post entitled <a href=\"%s\">%s</a>." % (URL('main','blog',args=[node.url, entry.id]), entry.title)
+            return "created a new blog post entitled <a href=\"%s\">%s</a>." % (URL('main','blog',args=[node.url, entry.id], extension=""), entry.title)
         else:
             return "created a new blog post that no longer exists"
             
@@ -136,7 +136,7 @@ def log_to_string(entry, links=True):
         entry = db(db.blog.id==entry.target2).select().first()
         
         if entry:
-            return "edited a blog post entitled <a href=\"%s\">%s</a>." % (URL('main','blog',args=[node.url, entry.id]), entry.title)
+            return "edited a blog post entitled <a href=\"%s\">%s</a>." % (URL('main','blog',args=[node.url, entry.id], extension=""), entry.title)
         else:
             return "edited a blog post that no longer exists"
             
@@ -174,7 +174,7 @@ def log_to_string(entry, links=True):
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
             entry.date.strftime(DATE_FORMAT),
-            URL('main','node',args=home_node.url),
+            URL('main','node',args=home_node.url, extension=""),
             home_node.name,
             switch[entry.action](entry)
         )
