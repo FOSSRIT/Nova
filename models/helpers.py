@@ -68,3 +68,33 @@ def get_quota_usage(rebuild_cache=False):
 def get_quota_string():
     sum = float( get_quota_usage() or 0)
     return "%.2f%% of available space (%s/%s)" % ((sum/MAX_FILE_STORE*100), convert_bytes(sum), convert_bytes(MAX_FILE_STORE))
+
+
+def _ref_support(new_tags, old_tags, item_id, item_tag):
+    # Test for new tags
+    for tag in set(new_tags or []) - set(old_tags or []):
+        if tag == "":
+            continue
+
+        test_node = db(db.node.url==tag).select().first()
+        if test_node:
+            db.syslog.insert(target=test_node.id, action="Refereced by %s" % item_tag, target2=item_id)
+
+    # Test for removed tags
+    for tag in set(old_tags or []) - set(new_tags or []):
+        if tag == "":
+            continue
+
+        test_node = db(db.node.url==tag).select().first()
+        if test_node:
+            db.syslog.insert(target=test_node.id, action="Derefereced by %s" % item_tag, target2=item_id)
+
+
+def blog_ref_support(new_tags, old_tags, blog_id ):
+    _ref_support(new_tags, old_tags, blog_id, "Blog")
+
+def page_ref_support(new_tags, old_tags, page_id ):
+    _ref_support(new_tags, old_tags, page_id, "Page")
+
+def feed_ref_support(new_tags, old_tags, page_id ):
+    _ref_support(new_tags, old_tags, page_id, "Feed")

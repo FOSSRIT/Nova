@@ -141,12 +141,16 @@ def editnode():
                     
     
     if form.accepts(request.vars):
-        # Grab the new version of the node to populate data
-        node = db(db.node.url == request.args(0)).select().first()
         db.syslog.insert(action="Edited Page", target=node.id, target2=request.args(1))
         if request.args(1) =='tags':
-            return tags_2_html(node.tags)
+
+            # Reference Support
+            page_ref_support(request.vars.tags, node.tags, node.id)
+
+            return tags_2_html(request.vars.tags)
         else:
+            # Grab the new version of the node to populate data
+            node = db(db.node.url == request.args(0)).select().first()
             return dict(node=XML(node.get(request.args(1)),True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR))
     else:
         return dict(form=form)
@@ -282,13 +286,20 @@ def tag_toggle():
     if node.tags == None:
         node.tags = []
     if new_tag in node.tags:
+        old_tags = node.tags[:]
         node.tags.remove(new_tag)
         node.update_record(tags=node.tags)
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+
+        page_ref_support(node.tags, old_tags, node.id)
+
         raise HTTP(200, 'Tag Removed')
     else:
         node.update_record(tags=node.tags+[new_tag])
         db.syslog.insert(action="Edited Page", target=node.id, target2="tags")
+
+        page_ref_support(node.tags+[new_tag], node.tags, node.id)
+
         raise HTTP(200, 'Tag Added')
         
 @auth.requires_login()
@@ -312,14 +323,20 @@ def blog_tag_toggle():
     if blog.tags == None:
         blog.tags = []
     if new_tag in blog.tags:
+        old_tags = blog.tags[:]
         blog.tags.remove(new_tag)
         blog.update_record(tags=blog.tags)
         db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
-        
+
+        blog_ref_support(blog.tags, old_tags, blog.id)
+
         raise HTTP(200, 'Tag Removed')
     else:
         blog.update_record(tags=blog.tags+[new_tag])
         db.syslog.insert(action="Edited Blog Entry", target=blog.nodeId.id, target2=blog)
+
+        blog_ref_support(blog.tags+[new_tag], blog.tags, blog.id)
+
         raise HTTP(200, 'Tag Added')
 
         
@@ -329,29 +346,33 @@ def feed_tag_toggle():
         raise HTTP(404, "Tag Required")
         
     new_tag = request.vars.tag.replace("_", " ")
-
-    #node = get_node_or_404( request.args(0) )
     feed = db(db.rss_entry.id==request.args(0)).select().first()
-    
-    
-    #if not can_edit(blog.nodeId):
-    #    raise HTTP(403, "Not allowed to edit this node")
-        
     
     if not feed:
         raise HTTP(404, 'feed entry not found')
+    
+    node_owner = db(db.node.feeds.contains(feed.feed.id)).select().first()
+    if not can_edit(node_owner):
+        raise HTTP(403, "Not allowed to edit this node")
         
     if feed.tags == None:
         feed.tags = []
+        
     if new_tag in feed.tags:
+        old_tags = feed.tags[:]
         feed.tags.remove(new_tag)
         feed.update_record(tags=feed.tags)
-        db.syslog.insert(action="Edited Feed Entry", target=feed.id, target2="Tags")
-        
+        db.syslog.insert(action="Edited Feed Entry", target=node_owner.id, target2=feed.id)
+
+        page_ref_support(feed.tags, old_tags, feed.id)
+
         raise HTTP(200, 'Tag Removed')
     else:
         feed.update_record(tags=feed.tags+[new_tag])
-        db.syslog.insert(action="Edited Feed Entry", target=feed.id, target2="Tags")
+        db.syslog.insert(action="Edited Feed Entry", target=node_owner.id, target2=feed.id)
+
+        feed_ref_support(feed.tags+[new_tag], feed.tags, feed.id)
+
         raise HTTP(200, 'Tag Added')
         
 

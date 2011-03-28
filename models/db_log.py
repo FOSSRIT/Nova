@@ -163,7 +163,78 @@ def log_to_string(entry, links=True):
             return "deleted a blog post entitled %s." % (entry.title)
         else:
             return "deleted a new blog post that no longer exists, WHAT?"
-
+            
+    def add_ref_by_page(entry):
+        node = db(db.node.id==entry.target).select().first()
+        node2 = db(db.node.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "added <a href=\"%s\">%s</a>'s page tag (%s) to <a href=\"%s\">%s</a>." % \
+                    (
+                    URL('main','node',args=node.url, extension=""), node.name,
+                    node.url,
+                    URL('main','node',args=node2.url, extension=""), node2.name
+                     )
+            
+    def rem_ref_by_page(entry):
+        node = db(db.node.id==entry.target).select().first()
+        node2 = db(db.node.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "removed <a href=\"%s\">%s</a>'s page tag  (%s) form <a href=\"%s\">%s</a>." % \
+                    (URL('main','node',args=node.url, extension=""), node.name,
+                     node.url,
+                     URL('main','node',args=node2.url, extension=""), node2.name)
+                     
+    def add_ref_by_blog(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.blog.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "added <a href=\"%s\">%s</a>'s page tag (%s) to <a href=\"%s\">%s</a>." % \
+                    (
+                    URL('main','node',args=node.url, extension=""), node.name,
+                    node.url,
+                    URL('main','blogid',args=entry.id, extension=""), entry.title
+                     )
+            
+    def rem_ref_by_blog(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.blog.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "removed <a href=\"%s\">%s</a>'s page tag  (%s) form <a href=\"%s\">%s</a>." % \
+                    (
+                    URL('main','node',args=node.url, extension=""), node.name,
+                    node.url,
+                    URL('main','blogid',args=entry.id, extension=""), entry.title
+                    )
+                    
+    def add_ref_by_feed(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.rss_entry.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "added <a href=\"%s\">%s</a>'s page tag (%s) to <a href=\"%s\">%s</a>." % \
+                    (
+                    URL('main','node',args=node.url, extension=""), node.name,
+                    node.url,
+                    URL('feeds','entry',args=entry.id, extension=""), entry.title
+                     )
+            
+    def rem_ref_by_feed(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.rss_entry.id==entry.target2).select().first()
+        
+        #todo add if entry check
+        return "removed <a href=\"%s\">%s</a>'s page tag  (%s) form <a href=\"%s\">%s</a>." % \
+                    (
+                    URL('main','node',args=node.url, extension=""), node.name,
+                    node.url,
+                    URL('feeds','entry',args=entry.id, extension=""), entry.title
+                    )
+                     
+                     
     switch = {
         "Linked Page":link_page,
         "Unlinked Page":unlink_page,
@@ -177,6 +248,12 @@ def log_to_string(entry, links=True):
         "Edited Blog Entry":edit_blog,
         "Deleted Blog Entry":delete_blog,
         "Edited Feed Entry":edit_feed,
+        "Refereced by Page":add_ref_by_page,
+        "Derefereced by Page":rem_ref_by_page,
+        "Refereced by Blog":add_ref_by_blog,
+        "Derefereced by Blog":rem_ref_by_blog,
+        "Refereced by Feed":add_ref_by_feed,
+        "Derefereced by Feed":rem_ref_by_feed,
         }
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
@@ -224,9 +301,14 @@ db.define_table('syslog',
                 'Edited Blog Entry',
                 'Deleted Blog Entry'
                 'Edited Feed Entry',
+                'Refereced by Page',
+                'Derefereced by Page',
+                'Refereced by Blog',
+                'Derefereced by Blog',
             )
         ) ),
     Field('target', 'integer'),
     Field('target2'),
+    Field('additional'),
     Field('string_cache', compute=log_str_auto_compute),
     )

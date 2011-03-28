@@ -145,6 +145,12 @@ def node():
                 populate_node_with_required(node)
                 
                 db.syslog.insert(action="Added Page", target=node.id)
+
+                if isinstance( request.vars.tags, list ):
+                    page_ref_support(request.vars.tags, [], node.id )
+                else:
+                    page_ref_support([request.vars.tags], [], node.id )
+
                 
                 # Link user node to page
                 db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
@@ -258,13 +264,19 @@ def blog():
                 session.flash = "Blog entry deleted"
                 db(db.blog.id==blog_entry.id).delete()
             else:
+                old_tags = blog_entry.tags[:]
                 blog_entry.update_record(**db.blog._filter_fields(form.vars))
                 db.syslog.insert(action="Edited Blog Entry", target=node.id, target2=blog_entry.id)
                 session.flash = "Blog entry edited"
+                
+                blog_ref_support(form.vars.tags, old_tags, blog_entry.id) 
+                
         else:
             a_id = db.blog.insert(**db.blog._filter_fields(form.vars))
             db.syslog.insert(action="Added Blog Entry", target=node.id, target2=a_id)
             session.flash = "Blog entry posted"
+            
+            blog_ref_support(form.vars.tags, [], a_id) 
         
            
         redirect( URL('main','blog',args=node.url) )

@@ -41,7 +41,9 @@ def edit_entry():
          #ADD TO LOG
          node_owner = db(db.node.feeds.contains(entry.feed.id)).select(db.node.id, db.node.url, db.node.name).first()
          db.syslog.insert(action="Edited Feed Entry", target=node_owner, target2=entry.id)
-     
+
+         feed_ref_support(request.vars.tags, entry.tags, entry.id)
+
          entry = db(db.rss_entry.id == request.args(0)).select().first()
          return SPAN(A('Edit Tags', _href=URL('feeds','edit_entry', args=entry.id, extension="load"), _class="pill button", cid="feed_%s_buttons"%entry.id), tags_2_html(entry.tags))
          
