@@ -163,13 +163,18 @@ def delfeed():
     # Check node permissions
     if not can_edit(node):
         raise HTTP(403, "Not allowed to edit this node")
-        
-    if request.args(1) in node.feeds:
-        node.feeds.remove( request.args(1) )
-        node.update_record(feeds = node.feeds)
-        
-        db(db.rss_feed.id == request.args(1)).delete()
-        db.syslog.insert(action="Edited Page", target=node.id, target2="Feed")
+
+    try:
+        if int(request.args(1)) in node.feeds:
+            node.feeds.remove( int(request.args(1)) )
+            node.update_record(feeds = node.feeds)
+            
+            db(db.rss_feed.id == request.args(1)).delete()
+            db.syslog.insert(action="Edited Page", target=node.id, target2="Feed")
+    
+    except:
+        raise HTTP(404, "Was expecting an integer id")
+    
     redirect(URL("main", "node", args=node.url))
         
 @auth.requires_login()
