@@ -1,0 +1,17 @@
+{{extend 'csi_base.html'}}
+<h1>{{=mode_text}}</h1>
+
+{{for need in needs:}}
+<div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">
+    <div style="float: left; padding: 10px;">
+        {{if need.node.picFile:}}
+            {{=IMG(_src=URL('default','thumb', args=[150,150,need.node.picFile]))}}
+        {{else:}}
+            {{=IMG(_src=URL('static', 'images', args=['placeholder.png']), _style="width: 150px;")}}
+        {{pass}}
+        </div>
+    <div>{{=A(need.node.name, _href=URL('main', 'node', args=need.node.url))}}</div>
+    <div>{{=XML(need.nodeAttr.value, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+    <br style="clear: both;">
+</div>
+{{pass}}
