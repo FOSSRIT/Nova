@@ -10,6 +10,7 @@ def index():
             db.node.name,
             db.node.url,
             db.node.picFile,
+            db.node.tags,
             orderby=~db.node.modified)
     
         return dict(mode_text=attr.value, needs=needs)

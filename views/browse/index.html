@@ -10,7 +10,8 @@
             {{=IMG(_src=URL('static', 'images', args=['placeholder.png']), _style="width: 150px;")}}
         {{pass}}
         </div>
-    <div>{{=A(need.node.name, _href=URL('main', 'node', args=need.node.url))}}</div>
+    <div style="font-weight: bold;">{{=A(need.node.name, _href=URL('main', 'node', args=need.node.url))}}</div>
+    <div style="font-size: 80%">{{=tags_2_html(need.node.tags)}}</div>
     <div>{{=XML(need.nodeAttr.value, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
     <br style="clear: both;">
 </div>
