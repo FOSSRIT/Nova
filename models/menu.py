@@ -17,6 +17,7 @@ response.menu = [
     ('Browse', False, "#", [
         ('Tags', False, URL(request.application,'main','tags'), []),
         ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),
+        ('Skills', False, URL(request.application, 'browse', 'index', vars={'attribute':'Skills'}), []),
     ]),
 ]
     
