@@ -216,6 +216,7 @@
 
 <div class="node_container">
     <h2 class="node_name"><div id="name" class="db_editable">{{=node.name}}</div></h2>
+    <div style="float: right; font-size: 70%; margin-top: -20px;">{{=node.type.value_node}}</div>
     <div class="nodeTopLinks" style="">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button" title="View every edit on this page"><span class="magnifier icon"></span>View Page Activity</a>
