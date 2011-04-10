@@ -278,13 +278,13 @@
         {{if node.tags and len(node.tags):}}
         <h4 style="margin:5px; text-align:center;clear: left;" title="Tags make it easy to find and collect People, Projects, Groups, etc.">Tags</h4>
         <div id="tags" class="db_editable">
-            {{=A(node.url, _href=URL('main','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: 
+            {{=A(node.url, _href=URL('browse','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: 
             {{=tags_2_html(node.tags)}}
         </div>
         {{else:}}
         <h4 style="margin:5px; text-align:center;clear: left;">Tags</h4>
         <div id="tags" class="db_editable">
-            {{=A(node.url, _href=URL('main','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: No tags found.
+            {{=A(node.url, _href=URL('browse','tags', args=node.url), _style="font-weight: bold; font-size: 130%;")}}: No tags found.
         </div>
         {{pass}}<br>
         

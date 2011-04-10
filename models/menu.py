@@ -15,7 +15,7 @@ response.menu = [
        ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
     ]),
     ('Browse', False, "#", [
-        ('Tags', False, URL(request.application,'main','tags'), []),
+        ('Tags', False, URL(request.application,'browse','tags'), []),
         ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),
         ('Skills', False, URL(request.application, 'browse', 'index', vars={'attribute':'Skills'}), []),
     ]),
