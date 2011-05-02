@@ -1,13 +1,3 @@
-/* Styling for a comma separated list of values from a ul */
-/* Adapted from http://thingelstad.com/unordered-lists-to-comma-separated-list/ */
-ul.comma-separated { display: inline; list-style: none; margin: 0; padding: 0; }
-ul.comma-separated li { display: inline; }
-ul.comma-separated li:first-child:before { content:""; }
-ul.comma-separated li:before { content: ", "; white-space: pre;}
-ul.comma-separated li:last-child:before { content:" and "; white-space: pre;}
-ul.comma-separated li:last-child:after { content: "."; }
-ul.comma-separated li:only-child:before { content:""; }
-
 /* Force word-wrapping for pre tags*/
 pre {
     white-space: pre-wrap; /* css-3 */
@@ -22,142 +12,6 @@ img{
     border: none;
     max-width: 100%; max-height: 100%;
 }
-
-/************************************
- * HEADER Style
- ************************************/
-div.header{
-        text-align: left;
-        background: #600;
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-    
-    div.header h1{
-        float: left;
-        color: #fff;
-        font-size: 160%;
-    }
-    
-    div.header div.login_form{
-        float: right;
-        width: 400px;
-        color: #fff;
-        text-align: right;
-    }
-    
-    div.login_form #auth_user_username, div.login_form #auth_user_password{
-        width: 100px;
-        font-size: 70%;
-        border: 1px solid #006;
-        background: #ffc;
-    }
-    
-    div.login_form #auth_user_username:hover, div.login_form #auth_user_password:hover{
-        border: 1px solid #f00;
-        background: #ff6;
-    }
-    
-    div.login_form a{
-        color: #fff;
-    }
-    
-    div.login_form span{
-        padding-right: 145px;
-    }
-    div.login_form input[type="submit"],
-    div.login_form input[type="button"]{
-        width: 60px;
-    }
-    
-/************************************
- * NAVIGATION Style
- ************************************/
-    div.navigation{
-        padding-left: 10%;
-        padding-right: 10%;
-        clear:both;
-        font-family: Arial, sans-serif;
-    }
-    
-    div.navigation li a:hover {
-        text-decoration: underline;
-    }
-    
-    div.navigation ul.topnav {  
-        list-style: none;  
-        padding: 0px;
-        margin: 0 auto;
-        font-size: 120%;
-    } 
-
-    div.navigation ul.topnav > li {  
-        float: left;
-        margin: 0;
-        padding-right: 20px; 
-    }  
-
-    div.navigation ul.topnav li a{  
-        color: #A00;
-        text-decoration: none;  
-    } 
-
-    div.navigation ul.topnav li ul{
-        list-style: none;
-        display: none;
-        position: relative;
-    }
-
-    div.navigation ul.topnav li:hover ul{
-        display: block;
-        float: none;
-        position: absolute;
-        padding: 20px;
-        font-size: 80%; 
-        border: 1px solid #A00;
-        background: white;
-        text-align: left;
-        z-index: 50;
-    }
-    
-
-/************************************
- * Footer Style
- ************************************/    
-    div.footer {
-        margin: 0;
-        padding: 10px 0;
-        width: 100%;
-        height: 100px;
-        clear:both;
-        margin-top: 0px;
-        background-color:#600;
-        position:relative;
-        border-top: 5px solid black;
-        color: #fff;
-        text-align: left;
-    }
-    
-    div.footer_content{
-        padding-left: 10%;
-        padding-right: 10%;
-    }
-    
-    div.footer ul{
-        list-style: none;
-        padding: 5px;
-    }
-    
-    div.footer a{
-        color: #fff;
-        font-size: 70%;
-    }
-    
-    #footerpic {
-        position:absolute;
-        bottom: 108px;
-        
-    }
 
 /************************************
  * Node Style
@@ -246,35 +100,13 @@ img{
     max-width: 100%; max-height: 100%;
 }
 
-
-    
-/*
-old/unkown
-*/
-
-
-
-
-
-@media only screen and (max-device-width: 600px)
-     {
-    div#header h1 {
-        font-size:5px;
-        
-    }
-    
-    #header {
-        background-color:#FFF;
-    }
-}
-
 @charset "UTF-8";
 body {
     font: 100% Tahoma,Verdana, Arial, Helvetica, sans-serif;
     background: #FFF;
     margin: 0;
     padding: 0;
-    text-align: center;
+
     color: #000;
 }
 
@@ -310,12 +142,12 @@ a.del_attr_link{
     float:left;
     margin-bottom:20px;
 }
+
 #picture img{
     max-width:auto;
 }
 
 #editForm {
-
     width:auto;
     height:auto;
     margin: 0 auto;
@@ -327,19 +159,8 @@ a.del_attr_link{
     clear:right;
 }
 
-
 .flash {
-    
     font-size:26px;
-}
-
-#mainContent, #onlyMainContent {
-    margin: 20px 290px 0 10px;
-    float: none;
-    text-align: left;
-    
-    border-right:1px solid black;
-    border-left:1px solid black;
 }
 
 #onlyMainContent{
@@ -421,7 +242,6 @@ a.del_attr_link{
     padding:0px;
     margin: 0 auto;
     vertical-align: middle;
-
 }
 
 .panelItem {
@@ -454,12 +274,9 @@ a.del_attr_link{
     float:left;
     margin-left:5px;
     margin-right:5px;
-    
-
 }
 
 .panelItemName {
-    
     padding-top:10px;
 }
 

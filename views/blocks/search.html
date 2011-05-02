@@ -1,0 +1,13 @@
+<div style="position: relative; display: inline;">
+
+{{=A("Search", _href="#", _onclick="$('#search_pane').toggle('slow')")}}
+
+<div id="search_pane" style="display: none; position: absolute; top:20px; right: 0px; background: #fff; border: 1px solid #000; z-index: 1000; width: 250px;">
+<form method="get" action="{{=URL('main','search')}}" style="display:inline; float: right;" title="Type a word, hit enter, see all pages that feature that word.  Click Full Search on that page for a deeper slower full text search.">
+    <input type="text" name="query" value="Type here to search"
+        onfocus="if(this.value=='Type here to search')this.value='';"
+        onblur="if(this.value=='')this.value='Type here to search';">
+    <input type="submit" value="Search">
+</form>
+</div>
+</div>

@@ -1,0 +1,22 @@
+<div id="metanav">
+                <p>Site-wide links</p>
+                <ul>
+                        <li id="metaskip"><a href="#pagecontent" title="Skip to content">Skip to content</a></li>
+                        <li id="metarithome"><a href="http://www.rit.edu/" title="RIT Home"><span id="metarithometext">RIT Home</span><span id="metaritlogo"></span></a></li>
+            <li id="metaritdirectories"><a href="http://www.rit.edu/directories/">Directories</a></li>
+                        <li id="metaritsearch"><a href="http://www.rit.edu/search/">Search RIT</a>
+                                <div id="metaritsearchdiv">
+                                        <form id="metasearchform" method="get" action="http://www.rit.edu/search/">
+                                                <div>
+                                                        <input id="metaritsearchbox" class="faded" name="q" type="text" value="Search RIT" maxlength="250" alt="Search box" onfocus="focusSearch(this)" onblur="blurSearch(this)" />
+                                                        <button title="Submit Search">Search</button>
+                                                </div>
+                                        </form>
+                                </div>
+                        </li>
+                </ul>
+                <script type="text/javascript">
+                function focusSearch(formfield){ if (formfield.defaultValue==formfield.value) formfield.value = ""; formfield.className = "focused"; }
+                function blurSearch(formfield){ if (formfield.value==""){ formfield.value = formfield.defaultValue; formfield.className = "faded";} }
+                </script>
+        </div>
