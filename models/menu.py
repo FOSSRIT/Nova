@@ -8,12 +8,12 @@ response.title = "Center for Student Innovation"
 ##########################################
 response.menu = [
     ('Home', False, URL(request.application,'main','index'), []),
-    ('About', False, URL(request.application,'main','about'), [
-       ('Blog', False, "http://innovation.rit.edu", []),
-       ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
-       ('Calendar', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
-       ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
-    ]),
+    #('About', False, URL(request.application,'main','about'), [
+    #   ('Blog', False, "http://innovation.rit.edu", []),
+    #   ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
+    #   ('Calendar', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
+    #   ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
+    #]),
     ('Browse', False, "#", [
         ('Tags', False, URL(request.application,'browse','tags'), []),
         ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),

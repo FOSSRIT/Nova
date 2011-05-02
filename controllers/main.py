@@ -213,3 +213,7 @@ def email():
         emails.append( db(db.auth_user.home_node == link.id).select().first().email)
     
     return dict(emails=emails, node=node)
+
+def tags():
+    # Function Moved, added redirect to prevent broken links
+    redirect( URL('browse','tags', args=request.args) )

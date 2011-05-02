@@ -330,6 +330,7 @@ ALLOWED_HTML_TAGS = [
     'b',
     'blockquote',
     'br/',
+    'em',
     'i',
     'li',
     'ol',
