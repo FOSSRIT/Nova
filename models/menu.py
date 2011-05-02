@@ -7,24 +7,18 @@ response.title = "Center for Student Innovation"
 ## add/remove items as required
 ##########################################
 response.menu = [
-    ('Home', False, URL(request.application,'main','index'), []),
-    ('About', False, URL(request.application,'main','about'), [
-       ('Blog', False, "http://innovation.rit.edu", []),
-       ('Courses', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/collaborative-innovation-courses-for-winter-make-cool-stuff/", []),
-       ('Calendar', False, "http://www.rit.edu/academicaffairs/centerforstudentinnovation/?page_id=69", []),
-       ('Fellows', False, URL(request.application,'main','node',args='Fellows'), []),
-    ]),
-    ('Browse', False, "#", [
+    #('Browse', False, "#", [
         ('Tags', False, URL(request.application,'browse','tags'), []),
         ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),
         ('Skills', False, URL(request.application, 'browse', 'index', vars={'attribute':'Skills'}), []),
-    ]),
+        ('|', False, "#", [] ),
+    #]),
 ]
     
 #Dynamically add types to main menu
 menu_types = db(db.nodeType.value!=None).select()
 for mnu_item in menu_types:
-    response.menu.append((mnu_item.value, False, URL(request.application, 'main', 'category/%s' % mnu_item.value ),[]))
+    response.menu.append((mnu_item.value, request.args(0) == mnu_item.value, URL(request.application, 'main', 'category/%s' % mnu_item.value ),[]))
 
 
 # RSS HANDELING

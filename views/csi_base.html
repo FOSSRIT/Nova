@@ -1,22 +1,180 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{=T.accepted_language or 'en'}}">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <title>{{=response.title or request.application}}</title>
 {{=printRssHeader()}}
 <link href="{{=URL(request.application,'static','csi_main.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="http://rit.edu/framework/v0/css-metanav-dgrey.css" />
 {{include 'web2py_ajax.html'}}
 {{include 'htmlblocks/google_analytics.html'}}
-</head>
 
-<body>
-{{if auth.user and auth.user.id == 1:}}{{#include "htmlblocks/debug_info.html"}}{{pass}}
+<style type="text/css">
+    body{
+        background: #181144 url("{{=URL("static","back_strip.png")}}") repeat-x;
+        margin: 0px;
+        padding: 0px;
+    }
 
-{{include "template/header.html"}}
-{{include "template/navigation.html"}}
-<div id="overlay"></div>
+    div.body-wrapper{
+        margin-left: auto;
+        margin-right: auto;
+        width: 75%;
+        min-width: 725px;
+    }
 
-<script>
+    div.header{
+        margin-top: 5px;
+        background: url("{{=URL("static","newLogo.png")}}") no-repeat;
+        height: 150px;
+        text-align: right;
+        color: #aaa;
+        font-size: 2em;
+        font-weight: bold;
+        position: relative;
+    }
+
+    div.header blockquote{
+        padding: 0px;
+        margin: 0px;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+    }
+
+    div.content-wrapper{
+        background: #fff;
+        padding-top: 10px;
+    }
+
+     div.nav-wrapper{
+        padding: 0px;
+        margins: 0px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+div.nav-wrapper{
+        padding: 0px;
+        margins: 0px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+   div.navigation{
+        height: 65px;
+        position: relative;
+    }
+
+    ul.menu{
+        list-style: none;
+        padding: 0px;
+        margin-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        width: auto;
+        height: 49px;
+        background: #1E5799; /* old browsers */
+        background: -moz-linear-gradient(left, #1E5799 0%, #F77027 0%, #FC9D28 50%, #F77027 100%); /* firefox */
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1E5799), color-stop(0%,#F77027), color-stop(50%,#FC9D28), color-stop(100%,#F77027)); /* webkit */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1E5799', endColorstr='#F77027',GradientType=1 ); /* ie */
+        background: -o-linear-gradient(left, #1E5799 0%,#F77027 0%,#FC9D28 50%,#F77027 100%); /* opera */
+        
+        border-radius: .75em .75em 0em 0em;
+        /*-moz-border-radius: .75em .75em 0em 0em;
+        -webkit-border-radius: .75em .75em 0em 0em;*/
+    }
+    
+    ul.menu li{
+        float: left;
+        display: block;
+        padding: 0px;
+        margin: 0px;
+        width: 20%;
+        text-align: center;
+        /*background: #d76100;*/
+        height: 36px;
+        line-height: 36px;
+    }
+
+    ul.menu li a{
+        color: #000;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-family: arial, Helvetica,sans-serif;
+        font-weight: bold;
+    }
+
+
+    ul.menu li ul li{
+        width: auto;
+        padding-left: 10px;
+        background #666;
+        height: 33px;
+    }
+
+
+    ul.menu li a:hover,
+    ul.menu li.active-trail > a{
+        color: #fff;
+    }
+
+    ul.menu li ul li a{
+        text-transform:lowercase;
+        color: #000;
+
+    }
+
+    /*ul.menu li ul.menu{
+        display: none;
+    }*/
+
+    ul.menu li ul.menu{
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        list-style: none;
+        padding: 0px;
+        padding-left: 50px;
+        margin: 0px;
+        display: block;
+        font-size: 90%;
+        background: #828282;
+        height: 33px;
+        border-top: 1px groove #d76100;
+        border-radius: 50% 50% 50% 50%;
+        /*-moz-border-radius: 0px 0px 10em 10em;
+        -webkit-border-radius: 0px 0px 10em 10em;*/
+    }
+
+    ul.menu li ul li{
+        /*background: #828282;*/
+    }
+
+    div.content{
+        background: #fff;
+        padding: 15px;
+        clear: both;
+    }
+
+    div.footer{
+        clear:both;
+        background: #fff;
+        border-top: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    div.footer ul, div.footer li{
+        list-style: none;
+        display: inline;
+        padding: 0px;
+    }
+    
+</style>
+
+<script language="javascript" type="text/javascript">
 function show_overlay(title, content, url){
     jQuery("#overlay_title").html(title);
     jQuery("#overlay_body").html(content);
@@ -32,6 +190,12 @@ function hide_overlay(){
     jQuery("#overlay_holder").fadeOut();
 }
 </script>
+
+</head>
+<body>
+{{include "blocks/rit_header.html"}}
+<div id="overlay"></div>
+
 <div id="overlay_holder" style="display:none; text-align: left;">
 <div style="position:fixed;top:0%;left:0%;width:100%;height:100%;background-color:black;z-index:1001;-moz-opacity:0.8;opacity:.80;opacity:0.8;"></div>
 <div style="position:fixed;top:15%;left:15%;width:70%;height:70%;padding:16px;border:2px solid black;background-color:white;opacity:1.0;z-index:1002;">
@@ -39,20 +203,51 @@ function hide_overlay(){
 <span style="float:right">[<a href="#" onclick="hide_overlay();return false;">close</a>]</span><hr/><div id="overlay_body" style="overflow-y: auto; overflow-x: hidden; height: 95%; width: 100%">content</div></div></div>
 
 
-
-<br sytle="clear:both;">
-<style>
-    div.container {
-        margin-left: 10%;
-        margin-right: 10%;
-        margin-bottom: 90px;
-    }
-</style>
-    <div class="container">
-        <div class="flash">{{=response.flash or ''}}</div>
-        {{include}}
-    </div><!-- end Container -->
-    
-{{include "template/footer.html" }}
+<div class="body-wrapper">
+    <div class="header">
+        <blockquote>
+            <div>&ldquo;Where we embrace<br />problem-seekers&rdquo;</div>
+        </blockquote>
+    </div>
+    <div class="content-wrapper">
+    <div style="float: right;">
+        {{include "blocks/account_info.html"}}
+        {{include "blocks/search.html"}}
+    </div><br style="clear: both;" />
+    <div class="nav-wrapper">
+    <div class="navigation">
+    <ul class="menu">
+        <li class="leaf first"><a href="http://rit.edu/innovationcenter/" title="Home">Home</a></li>
+        <li class="collapsed"><a href="http://rit.edu/innovationcenter/aboutus" title="About Us">About Us</a>    
+        <li class="collapsed"><a href="http://rit.edu/innovationcenter/getinvolved" title="Get Involved">Get Involved</a></li>
+        <li class="collapsed"><a href="http://rit.edu/innovationcenter/news" title="News">News</a></li>
+        <li class="expanded active-trail last"><a href="{{=URL('main','index')}}" title="">The Nova</a>
+            <ul class="menu">
+            {{for txt, act, lnk, lst in response.menu:}}
+                {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
+                {{pass}}
+            </ul>
+        </li>
+</ul>
+    <br style="clear: both;" />
+    </div>
+    </div>
+    <div class="flash">{{=response.flash or ''}}</div>
+    <div class="content">
+    {{include}}
+    <br style="clear:both;" />
+    </div>
+    <div class="footer">
+        <div style="float: right;">{{=printRss()}}</div>
+        <div style="float: left;">
+        <ul>
+            <li>{{=A("Activity Log", _href=URL('main','log'), _title="A Log of every edit on the site")}}</li>
+            <li>{{=A("Submit Feedback", _href=URL('edit','feedback'), _title="Help us improve the site by sending us your feedback")}}</li>
+        </ul>
+        </div>
+        <br style="clear: both;" />
+    </div>
+</div>
+</div>
 </body>
 </html>
