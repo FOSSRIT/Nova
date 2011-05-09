@@ -25,8 +25,11 @@ def add_rem_watch(node, add):
 
 def tags_2_html(tags):
     if tags:
-        ret = UL(_class='comma-separated')
-        [ret.append(A(tag, _href=URL('browse','tags', args=tag, extension=""))) for tag in tags]
+        if isinstance( tags, list):
+            ret = UL(_class='comma-separated')
+            [ret.append(A(tag, _href=URL('browse','tags', args=tag, extension=""))) for tag in tags]
+        else:
+            ret = tags
         return ret
     else:
         return "No Tags Found"
