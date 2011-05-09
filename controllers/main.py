@@ -11,8 +11,8 @@ def index():
             cNode = db(db.node.id == nodeid).select().first()
             info = {
                     "Name": cNode.name,
-                    "Url": URL('main','node', args=cNode.url, extension="").xml(),
-                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="").xml() \
+                    "Url": URL('main','node', args=cNode.url, extension=""),
+                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="") \
                            if cNode.picFile else URL('static', 'images', args='placeholder_thumb.png', extension="")
                     }
             tmp_list.append(info)
