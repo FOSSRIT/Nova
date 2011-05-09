@@ -136,7 +136,7 @@ def editnode():
         
         
     form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
-                    comments=(request.args(1) in ['feeds']), formstyle="divs" , showid = False, submit_button="Save",
+                    comments=(request.args(1) in ['feeds', 'tags']), formstyle="divs" , showid = False, submit_button="Save",
                     _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
                     
     
