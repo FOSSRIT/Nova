@@ -1,4 +1,6 @@
 <style>
+
+     
     @media screen{
         .no_print{
             background: #eee;
@@ -26,26 +28,27 @@ function toggle_print(item){
     Click on elements that you wish to not print.
     {{=A("Return to Normal Mode", _href=URL('main','node',args=node.url))}}
 </div>
-<div style="width: 400px;">
-    <h1 style="float: right; margin: 0px;" onclick="toggle_print(this)">{{=node.name}}</h1>
-    <img src="{{=URL("static","images",args="footer.png")}}" width="150px;" style="float: left;" onclick="toggle_print(this)">
+
+<img src="http://chart.apis.google.com/chart?cht=qr&chs=160x160&chl={{="http://" +  request.env.http_host + URL('main','node',args=node.url)}}" onclick="toggle_print(this)" style="position: absolute; bottom: 0px; right:0px;">
+    <img src="{{=URL("static","csi_logo_bw_small.png")}}" width="150px;" style="position: absolute; bottom: 20px; left: 0px;" onclick="toggle_print(this)">
+    
+<div style="width: 100%; margin-left: auto; margin-right: auto;">
+    <h1 style="text-align: right; margin: 0px; border-bottom: 2px solid black; width: 100%;" onclick="toggle_print(this)">{{=node.name}}</h1>
     <div style="float: right; clear:right; font-size: 80%;" onclick="toggle_print(this)">
         {{="http://" +  request.env.http_host + URL('main','node',args=node.url)}}
     </div>
-    <img src="{{=URL('default','download',args=node.picFile)}}" width="400px" onclick="toggle_print(this)"/><br />
-    <div onclick="toggle_print(this)" style="text-align: center; float: left;">
-        <img src="http://chart.apis.google.com/chart?cht=qr&chs=150x150&chl={{="http://" +  request.env.http_host + URL('main','node',args=node.url)}}">
-    </div>
+    <img src="{{=URL('default','download',args=node.picFile)}}" width="400px" onclick="toggle_print(this)" style="float: left; padding-right: 30px;"/>
+
     <div onclick="toggle_print(this)">
         {{=XML(node.description,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
     </div>
 
-    <table width="100%">
+    
     {{for attr in node_attributes:}}
-        <tr onclick="toggle_print(this)">
-            <td width="150px">{{=attr.vocab.value}}:</td>
-            <td>{{=XML(attr.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</td>
-        </tr>
+        <div onclick="toggle_print(this)">
+            <h3 style="border-bottom: 2px solid black;">{{=attr.vocab.value}}</h3>
+            {{=XML(attr.value,True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}
+        </div>
     {{pass}}
-    </table>
+    
 </div>

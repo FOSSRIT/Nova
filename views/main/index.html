@@ -1,13 +1,5 @@
-{{extend 'csi_view.html'}}
-    <div style="border-radius: 16px; background-color:#EBEBEB; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; padding:10px;">
-    <div style="border: 1px solid #666; text-align: center; width: 400px; float: left; margin: 15px;">
-      <img src="{{=URL('static','images/csi_home_image.png')}}">
-    <p style="font-size: 80%; color: #4F81BD;">
-      A round glass building on a campus of brick cubes, the Center for
-      Student Innovation is a mixing bowl ;-) for collaborative innovation
-      that thinks outside the discipline.
-    </p>
-    </div>
+{{extend 'csi_base.html'}}
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; padding:10px;">
     <p style="text-align: center;">
       Welcome to the RIT {{=A("Center for Student Innovation",
                             _href="http://innovation.rit.edu",
@@ -19,25 +11,27 @@
       {{=A("Projects", _href=URL("main","category",args="Projects"), _style="font-weight: bold; text-decoration:none; color: #A00;")}} and
       {{=A("Events", _href=URL("main","category",args="Events"), _style="font-weight: bold; text-decoration:none; color: #A00;")}}.
     </p>
-    <p>
-      The best way to have a great idea is to have a lot of ideas.
-      And the best way to have a lot of ideas is by sharing them,
+    <p style="text-align: center;">
+        {{=A(
+        IMG(_src=URL("static","person_button_over.png"),
+        _onmouseover="this.src='%s'" % URL("static","person_button.png"),
+        _onmouseout="this.src='%s'" %  URL("static","person_button_over.png")), _href=URL("main","category",args="People"))}}
+    {{=A(
+        IMG(_src=URL("static","project_button_over.png"),
+        _onmouseover="this.src='%s'" % URL("static","project_button.png"),
+        _onmouseout="this.src='%s'" %  URL("static","project_button_over.png")), _href=URL("main","category",args="Projects"))}}
+    {{=A(
+        IMG(_src=URL("static","place_button_over.png"),
+        _onmouseover="this.src='%s'" % URL("static","place_button.png"),
+        _onmouseout="this.src='%s'" %  URL("static","place_button_over.png")), _href=URL("main","category",args="Places"))}}
+    </p>
+    <p style="font-size: 70%; text-align: center;">
+      The best way to have a great idea is to have a lot of ideas.<br />
+      And the best way to have a lot of ideas is by sharing them,<br />
       and combining them with others.  That's what happens here.
     </p>
-    <p>
-      (Our informational website is at
-      <a href="http://innovation.rit.edu">http://innovation.rit.edu</a>.)
-    </p>
-    <p>
-      If you have an RIT email address, just log in with your RIT Username
-      and Password.  Or click the {{=A("Signup link", _href=URL("default","user",args="login"))}} to create an account.
-    </p>
-    <p>
-      Once you're logged in, you can create new pages and connect with others.
-      Don't post any proprietary information as this site is publicly viewable! 
-    </p>
     <br style="clear:both;">
-    </div>
+</div>
     {{if auth.has_membership("Site Admin"):}}
     {{=A("Add New Category", _href=URL('edit','home_page_cat'))}}
     {{pass}}
