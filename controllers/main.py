@@ -19,8 +19,6 @@ def index():
         h_list.append((highlight.title, tmp_list))
         
     return dict(highlights=h_list)
-    
-def about(): return dict()
 
 def search():
     """

@@ -10,8 +10,6 @@
 
 def index():
     redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, "main"))
-def not_in_beta():
-    return dict()
     
 def user():
     """
