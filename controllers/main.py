@@ -195,7 +195,7 @@ def blog():
     
     return dict(
             title=node.name,
-            link = URL('main', 'blog', args=node.url),
+            link = URL('main', 'blog', args=node.url, extension=""),
             description = "%s's blog" % node.name,
             created_on = request.now,
             entries=entries, node=node)
