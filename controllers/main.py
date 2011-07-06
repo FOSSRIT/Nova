@@ -187,7 +187,7 @@ def blog():
         
     entries = [dict(title = entry.title,
               id = entry.id,
-              link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id])),
+              link = "http://%s%s" % (request.env.http_host, URL('main','blog',args=[node.url, entry.id], extension="")),
               description = entry.body,
               author = entry.author,
               tags = entry.tags,
