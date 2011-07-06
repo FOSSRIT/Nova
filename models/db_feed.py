@@ -71,4 +71,5 @@ def update_feeds():
     
     for feed in db(db.rss_feed.id>0).select():
         status_log += update_feed(feed)
+        db.commit()
     return status_log
