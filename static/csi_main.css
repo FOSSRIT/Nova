@@ -102,12 +102,13 @@ img{
 
 @charset "UTF-8";
 body {
-    font: 100% Tahoma,Verdana, Arial, Helvetica, sans-serif;
-    background: #FFF;
+    font: 100% Helvetica, Arial, Verdana, sans-serif;
+    background-image:url('back_strip.png');
+        background-repeat:repeat-x;
     margin: 0;
     padding: 0;
 
-    color: #000;
+    color: #4D4D4D;
 }
 
 
@@ -171,9 +172,9 @@ a.del_attr_link{
 .nodeBox {
     width: 180px;
     height:225px;
-    margin-right: 36px;
-    margin-left:50px;
-    margin-top:30px;
+    margin-right:10px;
+    margin-left:10px;
+    margin-top:20px;
     float:left;
     background-color:#CCC;
     text-align: top;

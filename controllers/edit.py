@@ -124,7 +124,7 @@ def node():
             
     elif not node and request.vars.type:
         type = db(db.nodeType.value==request.vars.type).select().first()
-        if type and type.public:
+        if type and type.public or auth.has_membership("Site Admin"):
             form = SQLFORM(db.node, node)
             form.vars.type=type
             form.vars.date=datetime.now()
@@ -198,8 +198,50 @@ def link():
 
     return dict( node=node, linkedSet=linkedSet)
 
-def category():
-    return dict(message="hello from edit.py")
+@auth.requires_membership("Site Admin")
+def category():   
+    """
+    Display a category edit form.  If request has an id, it will attempt to
+    pull the id from the database and allow the view to populate with
+    the correct data.
+    """   
+    
+    # Now we want to populate the response
+    category = None
+
+    # If requested a node in the url, pull from the database
+    if len(request.args):
+        try:
+            category = db(db.nodeType.value == request.args[0]).select().first()
+        except:
+            pass
+            
+    if category:
+        # Make sure they are not trying to edit someone's node
+        # TODO ADD PERMISSION SYSTEM HERE
+        #if not can_edit(category):
+        #    raise HTTP(403, "Not Authorized to edit this category")
+      
+        # Process NODE SQL FORM
+        form = SQLFORM(db.nodeType, category, deletable=False, showid=False)
+        
+        # Node found, Check and submit to db if needed
+        if form.accepts(request.vars):
+            session.flash = 'form accepted'
+            db.syslog.insert(action="Edited Page", target=category.id, target2="Full Page (Unknown, manual form)")
+            
+            redirect(URL('main','category',args=category.value))
+        elif form.errors:
+            response.flash = 'form has errors'
+
+        #else:
+        #    raise HTTP(404, "Type Not Found")
+    else:
+        #No node found and no type requested (BAD)
+        raise HTTP(404, "No node requested, no type requested")
+    
+    return dict(node=category, form=form)
+
     
 @auth.requires_login()
 def batch_tag():

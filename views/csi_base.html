@@ -10,10 +10,11 @@
 {{include 'htmlblocks/google_analytics.html'}}
 
 <style type="text/css">
+     
     body{
-        background: #181144 url("{{=URL("static","back_strip.png")}}") repeat-x;
         margin: 0px;
         padding: 0px;
+        background: url("{{=URL("static","back_strip.png")}}") repeat-x;
     }
 
     div.body-wrapper{
@@ -24,27 +25,28 @@
     }
 
     div.header{
-        margin-top: 5px;
         background: url("{{=URL("static","newLogo.png")}}") no-repeat;
         height: 150px;
         text-align: right;
-        color: #aaa;
         font-size: 2em;
-        font-weight: bold;
         position: relative;
     }
 
     div.header blockquote{
+        font-family:New Baskerville, Times New Roman, serif;
+        font-style:italic;
+        font-size:90%;
+        color:#FFFFFF;
         padding: 0px;
         margin: 0px;
         position: absolute;
-        bottom: 0px;
+        bottom: 10px;
         right: 0px;
     }
 
     div.content-wrapper{
-        background: #fff;
-        padding-top: 10px;
+        background: #a6a6a6;
+        padding: 10px 10px 10px 10px;
     }
 
      div.nav-wrapper{
@@ -54,14 +56,7 @@
         margin-right: -15px;
     }
 
-div.nav-wrapper{
-        padding: 0px;
-        margins: 0px;
-        margin-left: -15px;
-        margin-right: -15px;
-    }
-
-   div.navigation{
+    div.navigation{
         height: 65px;
         position: relative;
     }
@@ -72,58 +67,81 @@ div.nav-wrapper{
         margin-top: 0px;
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 0px;
         text-align: center;
         width: auto;
-        height: 49px;
-        background: #1E5799; /* old browsers */
-        background: -moz-linear-gradient(left, #1E5799 0%, #F77027 0%, #FC9D28 50%, #F77027 100%); /* firefox */
-        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1E5799), color-stop(0%,#F77027), color-stop(50%,#FC9D28), color-stop(100%,#F77027)); /* webkit */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1E5799', endColorstr='#F77027',GradientType=1 ); /* ie */
-        background: -o-linear-gradient(left, #1E5799 0%,#F77027 0%,#FC9D28 50%,#F77027 100%); /* opera */
-        
-        border-radius: .75em .75em 0em 0em;
-        /*-moz-border-radius: .75em .75em 0em 0em;
-        -webkit-border-radius: .75em .75em 0em 0em;*/
+        height: 60px;
+        background: #f2f2f2; /* Old browsers */
+background: -moz-linear-gradient(top, #f2f2f2 0%, #cbcbcb 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f2f2), color-stop(100%,#cbcbcb)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f2f2f2 0%,#cbcbcb 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f2f2f2 0%,#cbcbcb 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #f2f2f2 0%,#cbcbcb 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#cbcbcb',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #f2f2f2 0%,#cbcbcb 100%); /* W3C */
     }
     
     ul.menu li{
         float: left;
         display: block;
-        padding: 0px;
-        margin: 0px;
+        padding-bottom: 0px;
+        margin-bottom: 10px;
         width: 20%;
         text-align: center;
         /*background: #d76100;*/
         height: 36px;
         line-height: 36px;
     }
-
+    
     ul.menu li a{
-        color: #000;
+        color: #4D4D4D;
         text-decoration: none;
         text-transform: uppercase;
-        font-family: arial, Helvetica,sans-serif;
+        font-family: Helvetica, arial, sans-serif;
         font-weight: bold;
     }
+    
+    ul.menu li a:hover,
+    ul.menu li.active-trail > a{
+        color: #FF6B26;   
+    }
 
+    ul.menu li ul{
+    list-style: none;
+        padding: 0px;
+        margin-top: 20px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: -10px;
+        text-align: center;
+    }
+
+    ul.menu li ul a{
+        color: #333333;
+        font-weight:200;
+        text-decoration: none;        
+        float: left;
+        display: block;
+        padding: 0px 5px -5px 5px;
+        margin: 0px;
+        width: auto;
+    }
+
+    ul.menu li ul a:hover,
+    ul.menu li ul li.active-trail > a{
+        color: #FFFFFF;   
+    }
 
     ul.menu li ul li{
         width: auto;
         padding-left: 10px;
         background #666;
-        height: 33px;
-    }
-
-
-    ul.menu li a:hover,
-    ul.menu li.active-trail > a{
-        color: #fff;
+        height: auto;
     }
 
     ul.menu li ul li a{
         text-transform:lowercase;
         color: #000;
-
     }
 
     /*ul.menu li ul.menu{
@@ -141,12 +159,15 @@ div.nav-wrapper{
         margin: 0px;
         display: block;
         font-size: 90%;
-        background: #828282;
         height: 33px;
-        border-top: 1px groove #d76100;
-        border-radius: 50% 50% 50% 50%;
-        /*-moz-border-radius: 0px 0px 10em 10em;
-        -webkit-border-radius: 0px 0px 10em 10em;*/
+        background: #a6a6a6; /* Old browsers */
+background: -moz-linear-gradient(top, #a6a6a6 0%, #808080 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a6a6a6), color-stop(100%,#808080)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #a6a6a6 0%,#808080 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #a6a6a6 0%,#808080 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #a6a6a6 0%,#808080 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6a6a6', endColorstr='#808080',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #a6a6a6 0%,#808080 100%); /* W3C */
     }
 
     ul.menu li ul li{
@@ -154,15 +175,20 @@ div.nav-wrapper{
     }
 
     div.content{
-        background: #fff;
+        background: #F1F1F1;
         padding: 15px;
+        width: auto;
+        min-width: 725px;
         clear: both;
+        margin-left:-10px;
+        margin-right:-10px;
+        margin-top:0px;
     }
 
     div.footer{
         clear:both;
-        background: #fff;
-        border-top: 1px solid #ddd;
+        background: #4D4D4D4D;
+        color: #FFFFFF;
         padding: 10px;
     }
     
@@ -206,7 +232,7 @@ function hide_overlay(){
 <div class="body-wrapper">
     <div class="header">
         <blockquote>
-            <div>&ldquo;Where we embrace<br />problem seekers&rdquo;</div>
+            <div>&ldquo;Where we embrace problem seekers.&rdquo;</div>
         </blockquote>
     </div>
     <div class="content-wrapper">
