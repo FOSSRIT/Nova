@@ -1,0 +1,11 @@
+*.pyc
+*.swp
+*.bak
+errors/
+sessions/
+cache/
+databases/
+uploads/
+ABOUT
+LICENSE
+
