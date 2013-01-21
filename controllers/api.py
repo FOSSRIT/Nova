@@ -32,16 +32,19 @@ def search():
     limit_end = (page + 1) * API_MAX_NODES_PER_PAGE
     
     # Determine order information
-    try:
-        orderby = db.node[request.vars.order]
-        if request.vars.sort == 'desc':
-            orderby = ~orderby
-    except:
-        orderby = db.node.name
+    orderby = (db.node.sortOrder,db.node.name)
+    if request.vars.order:
+        try:
+            if request.vars.sort == 'desc':
+                orderby = (db.node.sortOrder, ~db.node[request.vars.order])
+            else:
+                orderby = (db.node.sortOrder, db.node[request.vars.order])
+        except:
+            orderby = (db.node.sortOrder,db.node.name)
     
     search = None
     # Search Criteria
-    if request.vars.search and len(request.vars.search):
+    if request.vars and request.vars.search and len(request.vars.search):
         search = (db.node.description.contains(request.vars.search)) | \
                  (db.node.name.contains(request.vars.search)) | \
                  (db.node.url.contains(request.vars.search)) |\
@@ -55,7 +58,7 @@ def search():
                       )
     
     # Category Criteria
-    if request.vars.category and len(request.vars.category):
+    if request.vars and request.vars.category and len(request.vars.category):
         typeId = db(db.nodeType.value==request.vars.category).select().first()
         
         if search:
@@ -64,17 +67,21 @@ def search():
             search = (db.node.type == typeId)
             
     # Tag Criteria
-    if request.vars.tag and len(request.vars.tag):
+    if request.vars and request.vars.tag and len(request.vars.tag):
         if search:
             search = search & ((db.node.tags.contains(request.vars.tag)) | (db.node.url == request.vars.tag))
         else:
             search = (db.node.tags.contains(request.vars.tag)) | (db.node.url == request.vars.tag)
 
+    if not request.vars.showarchive:
+        search = search & (db.node.archived == False)
+        
+
     # If no criteria, then select everything
     if not search:
         search = (db.node.id>0) 
 
-    return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, db.node.tags, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )
+    return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, db.node.tags, db.node.archived, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )
     
 def searchBlog():
     # Determine Page Information
@@ -183,3 +190,8 @@ def myFileList():
 @auth.requires_login()
 def quota():
     return dict( quota=get_quota_usage(), quota_text = get_quota_string(), quota_max=get_quota_usage()>MAX_FILE_STORE)
+
+def visual():
+    node = get_node_or_404(request.args(0))
+    response.files.append(URL("static","jit.js"))
+    return dict(node=node)

@@ -96,6 +96,9 @@ def addattribute():
 
 @auth.requires_login()
 def editnode():
+    if auth.has_membership("Site Admin"):
+        db.node.sortOrder.writable = True
+        
     response.view = "generic.load"
     
     # Find the node we are trying to update
@@ -136,7 +139,7 @@ def editnode():
         
         
     form = SQLFORM( db.node, node, fields=[request.args(1)], labels={request.args(1):""},
-                    comments=(request.args(1) in ['feeds', 'tags']), formstyle="divs" , showid = False, submit_button="Save",
+                    comments=(request.args(1) in ['feeds', 'tags', 'sortOrder']), formstyle="divs" , showid = False, submit_button="Save",
                     _action = URL('ajaxedit','editnode', args=[node.url,request.args(1)]) )
                     
     

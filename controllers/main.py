@@ -181,7 +181,12 @@ def blog():
     node = get_node_or_404(request.args(0))
     
     if request.args(1):
-        rows = db( (db.blog.nodeId == node.id) & (db.blog.id == request.args(1) ) ).select(orderby=~db.blog.id)
+        try:
+            blogId = int(request.args(1))
+        except:
+            raise HTTP(404, "Invalid Blog")
+            
+        rows = db( (db.blog.nodeId == node.id) & (db.blog.id == blogId ) ).select(orderby=~db.blog.id)
     else:
         rows = db(db.blog.nodeId == node.id).select(orderby=~db.blog.id)
         

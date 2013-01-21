@@ -336,3 +336,17 @@ def feedback():
         response.flash = 'Thankyou for your feedback'
     
     return dict(form=form)
+    
+@auth.requires_membership("Site Admin")
+def archive():
+    node = get_node_or_404( request.args(1) )
+    if request.args(0) == "archive":
+        node.update_record(archived=True)
+        session.flash = "Archived"
+        redirect(URL('main','node',args=node.url))  
+    elif request.args(0) == "unarchive":
+        node.update_record(archived=False)
+        session.flash = "Removed from Archive"
+        redirect(URL('main','node',args=node.url))  
+    else:
+        raise HTTP(405, 'Could not process request')

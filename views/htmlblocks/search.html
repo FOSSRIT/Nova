@@ -55,6 +55,9 @@ function pull_data(search, page, empty, full){
     gpage = page;
     gfull = full
     reqest_part = "?order=" + $("#order").val() + "&sort=" + $("#sort").val() + "&{{=search_mode}}&page=" + page + "&search=" + escape(search);
+    if($("#showarchive").is(':checked')){
+        reqest_part += "&showarchive=true";
+    }
     request = autoload_request_url + reqest_part;
     requestb = autoload_request_urlblog + reqest_part;
     requestf = autoload_request_urlfeed + reqest_part;
@@ -85,7 +88,10 @@ function pull_data(search, page, empty, full){
             if( is_visible( val.url, val.id ) ){
                 style = "";
                 if( is_highlighted( val.url, val.id ) ){
-                    style = "background: green";
+                    style = "background: green;";
+                }
+                if( val.archived == true){
+                    style += "font-style:italic; text-decoration:line-through;";
                 }
                 var html_add = "\
                     <div class='nodeBox' style='" + style + "'>\
@@ -200,7 +206,8 @@ $(document).ready(function(){
     <option value="asce">Ascending</option>
     <option value="desc" selected="selected">Descending</option>
     </select>
-    <input type="button" value="Full Search (include attributes)" onclick="pull_data($('#search_filter').val(), 1, true, true);">
+    <input type="checkbox" NAme="showarchive" id="showarchive" onchange="pull_data($('#search_filter').val(), 1, true, false);"/>Show Archived
+    <input type="button" value="Full Search (include attributes)" onclick="pull_data($('#search_filter').val(), 1, true, true);"/>
 </form>
 <div id="status"></div>
 </div>

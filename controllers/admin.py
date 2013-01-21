@@ -4,7 +4,7 @@ def index(): return dict(message="hello from admin.py")
 
 @auth.requires_membership("Site Admin")
 def email_dump():
-    return dict(emails=db(db.auth_user.email!="").select(db.auth_user.email).as_list())
+    return dict(emails=db((db.auth_user.email!="") & (db.auth_user.optout==False)).select(db.auth_user.email).as_list())
 
 @auth.requires_membership("Site Admin")
 def image_resize():

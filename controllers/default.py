@@ -100,3 +100,12 @@ def call():
     """
     session.forget()
     return service()
+
+@auth.requires_login()
+def optinout():
+    form = SQLFORM( db.auth_user, db.auth_user(auth.user_id),
+            showid = False, fields=['optout'], submit_button="Save")
+            
+    if form.accepts(request.vars, session):
+        response.flash = "Your changes have been saved" 
+    return dict(form=form)

@@ -6,13 +6,21 @@ def index():
     return dict(feeds=feed)
 
 def feed():
-    feed = db(db.rss_feed.id == request.args(0)).select().first()
+    try:
+        feed_id = int(request.args(0))
+    except:
+        session.flash="Invalid Feed"
+        redirect( URL('feeds','index') )
+
+        
+    feed = db(db.rss_feed.id == feed_id).select().first()
     
     if feed:
-        entries = feed.rss_entry.select(orderby=~db.rss_entry.updated)
-
         if request.vars.preview:
             response.view = "feeds/feed_preview.html"
+            entries = feed.rss_entry.select(orderby=~db.rss_entry.updated, limitby=(0,15))
+        else:
+            entries = feed.rss_entry.select(orderby=~db.rss_entry.updated)
         
         node_owner = db(db.node.feeds.contains(feed.id)).select(db.node.id, db.node.url, db.node.name).first()
         return dict(title=feed.title, created_on=feed.updated,
@@ -24,10 +32,14 @@ def feed():
 
 def entry():
     entry = db(db.rss_entry.id == request.args(0)).select().first()
-    node_owner = db(db.node.feeds.contains(entry.feed.id)).select(db.node.id, db.node.url, db.node.name).first()
-    return dict(id=entry.id, link=entry.link, tags=entry.tags,
-                description=entry.description, title=entry.title,
-                feedid=entry.feed, node_owner=node_owner)
+    if entry:
+        node_owner = db(db.node.feeds.contains(entry.feed.id)).select(db.node.id, db.node.url, db.node.name).first()
+        return dict(id=entry.id, link=entry.link, tags=entry.tags,
+                    description=entry.description, title=entry.title,
+                    feedid=entry.feed, node_owner=node_owner)
+    else:
+        session.flash="Entry Not Found"
+        redirect( URL('feeds','index') )
 
 def edit_entry():
      entry = db(db.rss_entry.id == request.args(0)).select().first()

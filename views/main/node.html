@@ -215,8 +215,12 @@
 {{pass}}
 
 <div class="node_container">
+    {{if node.archived:}}<div style="color: red;"><I><b>This page has been Archived</b> and will not be listed in searches by default</I></div>{{pass}}
     <h2 class="node_name"><div id="name" class="db_editable">{{=node.name}}</div></h2>
     <div style="float: right; font-size: 70%; margin-top: -20px;">{{=node.type.value_node}}</div>
+    {{if auth.has_membership("Site Admin"):}}
+    <div style="float: right; font-size: 70%;" class="db_editable" id="sortOrder">Sort: {{=node.sortOrder}}</div>
+    {{pass}}
     <div class="nodeTopLinks" style="">
 {{if request.env.http_x_forwarded_for or request.env.wsgi_url_scheme in ['https', 'HTTPS']:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','https://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button" title="View every edit on this page"><span class="magnifier icon"></span>View Page Activity</a>
@@ -252,7 +256,11 @@
 {{else:}}
 <a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','email',args=node.url)}}'); return false;" class="middle pill button"><span class="mail icon"></span>Email Linked  People</a>
 {{pass}}
-    
+    {{if node.archived:}}
+    <a href="{{=URL('edit','archive', args=['unarchive',node.url])}}" class="middle negative pill button"><span class="icon trash"></span>Unarchive Page</a>
+    {{else:}}
+    <a href="{{=URL('edit','archive', args=['archive',node.url])}}" class="middle pill button"><span class="icon trash"></span>Archive Page</a>
+    {{pass}}
     {{pass}}
 {{pass}}
 

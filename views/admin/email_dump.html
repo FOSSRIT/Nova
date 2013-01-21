@@ -2,4 +2,7 @@
 <h1>Email Dump</h1>
 Warning: This is not to be abused... You should not be using this to send out emails.  You need to start using the newsletter feature in the drupal, if not this will be removed.  Emailing from this list is classified as spam if there is no opt-out option.
 
+<br><br>
+To optout {{=A(URL("default", "optinout"), _href=URL("default", "optinout"))}}.
+<br><br>
 {{=", ".join([x['email'] for x in emails])}}

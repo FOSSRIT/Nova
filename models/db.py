@@ -37,6 +37,9 @@ db.define_table('node',
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False,readable=False),
     Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
     Field('feeds', 'list:reference rss_feed', label="External Feeds", comment="A list of RSS feeds related to the page.  One feed per box, press enter to add more boxes.", writable=False,readable=False),
+    Field('sortOrder', 'integer', writable=False, readable=False, default=0,
+        comment="ADMIN SORT ORDER. Set to 0 for natural sort... higher number shows up first"),
+    Field('archived', 'boolean', default=False, writable=False, readable=False),
     format='%(name)s'
     )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
@@ -129,6 +132,8 @@ auth_table = db.define_table(
     Field('email_watch', 'boolean', default=True, readable=False, writable=False),
     #BugFIX?
     Field('remember', readable=False, writable=False),
+    Field('optout', 'boolean', label="Opt Out of our Announcement Emails",
+            comment="Check to Block Announcement Emails", default=False),
     )
 
 auth_table.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
