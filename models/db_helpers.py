@@ -5,8 +5,11 @@ def get_home_node():
         
 def get_home_from_user(userid):
     user = db(db.auth_user.id == userid).select().first()
-    return db(db.node.id == user.home_node).select().first()
-        
+    if user:
+        return db(db.node.id == user.home_node).select().first()
+    else:
+        raise HTTP(404, "User Page not found")
+                
 def can_edit(node):
     if auth.is_logged_in() and (node.type.public or node.id == auth.user.home_node):
         return True

@@ -74,7 +74,10 @@ def search():
             search = (db.node.tags.contains(request.vars.tag)) | (db.node.url == request.vars.tag)
 
     if not request.vars.showarchive:
-        search = search & (db.node.archived == False)
+        if search:
+            search = search & (db.node.archived == False)
+        else:
+            search = (db.node.archived == False)
         
 
     # If no criteria, then select everything
