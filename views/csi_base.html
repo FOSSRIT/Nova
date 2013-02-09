@@ -52,20 +52,12 @@ function hide_overlay(){
         <br style="clear: both;" />
     </div><br style="clear: both;" />
     <div class="nav-wrapper">
-    <div class="navigation">
+    <div class="navigation" id="navigation">
     <ul class="menu">
-        <li class="leaf first"><a href="http://nova.innovation.rit.edu/csi2/main/category/CSI_Info" title="Home">Home</a></li>
-        <li class="collapsed"><a href="http://rit.edu/innovationcenter/aboutus" title="About Us">About Us</a>    
-        <li class="collapsed"><a href="http://rit.edu/innovationcenter/getinvolved" title="Get Involved">Get Involved</a></li>
-        <li class="collapsed"><a href="http://rit.edu/innovationcenter/news" title="News">News</a></li>
-        <li class="expanded active-trail last"><a href="{{=URL('main','index')}}" title="">The Nova</a>
-            <ul class="menu">
-            {{for txt, act, lnk, lst in response.menu:}}
-                {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
-                {{pass}}
-            </ul>
-        </li>
-</ul>
+    {{for txt, act, lnk, lst in response.menu:}}
+        {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
+    {{pass}}
+	</ul>
     <br style="clear: both;" />
     </div>
     </div>
