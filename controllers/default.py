@@ -70,7 +70,7 @@ def thumb():
         raise HTTP(400, "Invalid Image Dementions")
         
     if request.vars.square:
-        pathStr = "%d_%d_%s_square"
+        pathStr = "%d_%d_square_%s"
     else:
         pathStr = "%d_%d_%s"
         
@@ -107,8 +107,18 @@ def thumb():
         thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
         try:
             thumb.save(request_path)
-        except KeyError:
-            thumb.save(request_path, "JPEG")
+        except:
+            try:
+                thumb.save(request_path, "JPEG")
+            except:
+                try:
+                    thumb.save(request_path, "PNG")
+                except:
+                    try:
+                        thumb.save(request_path, "GIF")
+                    except:
+                        raise HTTP(404, "Unable to process image")
+                
 
         response.headers['Content-Type'] = c.contenttype(request_path) 
         return response.stream(open(request_path, 'rb'))
