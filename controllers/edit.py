@@ -175,10 +175,6 @@ def link():
     """
     Shows list of all nodes that can be linked with current node as
     well as links any nodes requested.
-    
-    TODO: This is a temporary way as the the number of nodes increases,
-    this function will get out of control in its current state.  A better
-    way must be used then displaying all nodes and let them choose.
     """
     node = get_node_or_404(request.args(0))
         
@@ -188,13 +184,10 @@ def link():
         db((db.linkTable.nodeId == int(request.vars.unlinkNode)) & (db.linkTable.linkId==node)).delete() 
     # Select all nodes that can be linked
     # While we are finding possible links, keep a list of nodes that we do have linked
-    nodeSet = []
     linkedSet = []
-    
-    for row in db(db.node.id != node.id).select(orderby=db.node.name.lower()):
-        # Filter out existing links
-        if is_linked(node, row):
-            linkedSet.append(row)
+
+    for row in db((db.linkTable.nodeId == node) | (db.linkTable.linkId == node)).select():
+        linkedSet.append(row)
 
     return dict( node=node, linkedSet=linkedSet)
 
