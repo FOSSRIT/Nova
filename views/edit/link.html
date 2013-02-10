@@ -8,7 +8,7 @@ proto = 'http://{{=request.env.http_host}}';
 {{pass}}
 
 </script>
-{{search_functions="var links = [ " + ",".join([str(x.id) for x in linkedSet]) + """ ];
+{{search_functions="var links = [ " + ",".join([str(x) for x in linkedSet]) + """ ];
 
 function click_action( url, node_id, link_element ){
     if( links.indexOf(parseInt(node_id)) != -1 ){
