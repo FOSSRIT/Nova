@@ -7,12 +7,6 @@ response.title = "Center for Student Innovation"
 ## add/remove items as required
 ##########################################
 response.menu = [
-        ('Home', False, URL(request.application,'main','index'), []),
-        ('|', False, "#", [] ),
-        ('Tags', False, URL(request.application,'browse','tags'), []),
-        ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),
-        ('Skills', False, URL(request.application, 'browse', 'index', vars={'attribute':'Skills'}), []),
-        ('|', False, "#", [] ),
 ]
 
 #Dynamically add types to main menu

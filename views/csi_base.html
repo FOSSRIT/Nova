@@ -29,7 +29,6 @@ function hide_overlay(){
 
 </head>
 <body>
-{{include "blocks/rit_header.html"}}
 <div id="overlay"></div>
 
 <div id="overlay_holder" style="display:none; text-align: left;">
@@ -40,23 +39,46 @@ function hide_overlay(){
 
 
 <div class="body-wrapper">
-     <div class="content-wrapper">
-    <div style="float: right;">{{include "blocks/search.html"}}</div>
+    <div class="content-wrapper" style="position: relative;">
+        <div style="position: absolute; left: 344px; top: 0;">
+            <img src="http://rit.edu/research/simonecenter/sites/rit.edu.research.simonecenter/files/tigernews_logo.png" alt="Home" width="216px" height="108px">
+        </div>
+        <div style="height: 78px;">
+        <a href="http://rit.edu" style="position: absolute; top: 20px; left: 14px;"><img src="http://www.rit.edu/research/simonecenter/sites/rit.edu.research.simonecenter/files/imagecache/directory_small/rit_logo.png" alt="RIT Logo" width="58" height="18" style="padding: 15px;"></a>
+        <div style="position: absolute; top: 20px; right:32px;">           
+                <form method="get" action="http://www.rit.edu/search/" style="padding: 0; margin: 0;">
+                    <input name="q" type="text" value="Search RIT" maxlength="250" alt="Search box" style="padding: 0; margin: 0; border:1px solid #C2C1C1"/>
+                    <button title="Submit Search" style="padding: 0; margin: 0;">Search</button>
+                </form>    
+        </div>
+        </div>
+    </div>
+    <div class="nav-wrapper">
+    <div class="navigation" id="navigation">
+    <ul class="menu">
+        <li class="leaf"><a href="{{=URL(request.application,'main','index')}}">Home</a>
+        <ul>
+                <li class="leaf"><a href="{{=URL(request.application,'browse','tags')}}">Tags</a></li>
+        <li class="leaf"><a href="{{=URL(request.application, 'browse', 'index', vars={'attribute':'Needs'})}}">Needs</a></li>
+        <li class="leaf"><a href="URL(request.application, 'browse', 'index', vars={'attribute':'Skills'})}">Skills</a></li>
+        </ul></li>
+        <li class="leaf"><a href="#">Categories</a><ul>
+
+    {{for txt, act, lnk, lst in response.menu:}}
+        {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
+    {{pass}}
+    </ul>
+    </li></ul>
+     <div style="float: right; padding: 3px;">{{include "blocks/search.html"}}</div>
+    <br style="clear: both;" />
+    </div>
+    </div>
+         <div class="content-wrapper">
+   
         <div style="float: left;">{{include "blocks/account_info.html"}}</div>
         
         <br style="clear: both;" />
     </div><br style="clear: both;" />
-
-    <div class="nav-wrapper">
-    <div class="navigation" id="navigation">
-    <ul class="menu">
-    {{for txt, act, lnk, lst in response.menu:}}
-        {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
-    {{pass}}
-	</ul>
-    <br style="clear: both;" />
-    </div>
-    </div>
     <div class="flash">{{=response.flash or ''}}</div>
     <div class="content">
     {{include}}

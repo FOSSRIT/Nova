@@ -127,7 +127,6 @@ body {
     background: #000000 url('stripe_background.png') repeat-x center top;
     margin: 0;
     padding: 0;
-
     color: #232020;
 }
 
@@ -185,7 +184,6 @@ a.del_attr_link{
 
 #onlyMainContent{
     margin: 0;
-    min-width:800px;
 }
 
 .nodeBox {
@@ -234,7 +232,7 @@ a.del_attr_link{
     margin-top:10px;
     text-align: center;
     font-size: 80%;
-	color: #000;
+    color: #000;
 }
 .nodeName a {
     text-decoration:none;
@@ -337,11 +335,10 @@ a.del_attr_link{
     height:auto;
 }
 
-        div.body-wrapper{
+    div.body-wrapper{
         margin-left: auto;
         margin-right: auto;
-        width: 75%;
-        min-width: 725px;
+        width: 894px;
     }
 
     div.header{
@@ -366,25 +363,23 @@ a.del_attr_link{
 
     div.content-wrapper{
         background: #FFFFFF;
-        padding: 10px 10px 10px 10px;
+        padding: 0px;
+        margin: 0px;
     }
 
      div.nav-wrapper{
         padding: 0px;
-        margins: 0px;
-        margin-left: -15px;
-        margin-right: -15px;
+        margin: 0px;
     }
     
     div.content{
         background: #FFFFFF;
-        padding: 15px;
-        width: auto;
-        min-width: 725px;
+        padding: 0px;
+        margin:0px;
+        width: 894px;
         clear: both;
-        margin-left:-10px;
-        margin-right:-10px;
         margin-top:0px;
+        
     }
 
     div.footer{
