@@ -185,9 +185,12 @@ def link():
     # Select all nodes that can be linked
     # While we are finding possible links, keep a list of nodes that we do have linked
     linkedSet = []
-
+    
     for row in db((db.linkTable.nodeId == node) | (db.linkTable.linkId == node)).select():
-        linkedSet.append(row)
+        if row.nodeId == node.id:
+            linkedSet.append(row.linkId)
+        else:
+            linkedSet.append(row.nodeId)
 
     return dict( node=node, linkedSet=linkedSet)
 
