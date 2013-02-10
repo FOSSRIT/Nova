@@ -195,7 +195,7 @@ a.del_attr_link{
     margin-left:10px;
     margin-top:20px;
     float:left;
-    background-color:#CCC;
+    background-color:#E9590F;
     text-align: top;
 }
 
@@ -217,6 +217,7 @@ a.del_attr_link{
     float:left;
     background-color:#999;
 }
+
 .nodePic {
     width:150px;
     height:150px;
@@ -233,11 +234,12 @@ a.del_attr_link{
     margin-top:10px;
     text-align: center;
     font-size: 80%;
-
+	color: #000;
 }
 .nodeName a {
     text-decoration:none;
 }
+
 .nodeName a:hover {
     text-decoration:underline;
 }

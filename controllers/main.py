@@ -12,7 +12,7 @@ def index():
             info = {
                     "Name": cNode.name,
                     "Url": URL('main','node', args=cNode.url, extension=""),
-                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="") \
+                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], vars={'square':True}, extension="") \
                            if cNode.picFile else URL('static', 'images', args='placeholder_thumb.png', extension="")
                     }
             tmp_list.append(info)

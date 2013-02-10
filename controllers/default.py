@@ -69,8 +69,12 @@ def thumb():
     except:
         raise HTTP(400, "Invalid Image Dementions")
         
+    if request.vars.square:
+        pathStr = "%d_%d_%s_square"
+    else:
+        pathStr = "%d_%d_%s"
         
-    request_path = os.path.join(request.folder, 'uploads','thumb', "%d_%d_%s" % (size_x, size_y, request.args(2)))
+    request_path = os.path.join(request.folder, 'uploads','thumb', pathStr % (size_x, size_y, request.args(2)))
     request_sorce_path = os.path.join(request.folder, 'uploads', request.args(2))
     
     if os.path.exists(request_path):
@@ -79,13 +83,33 @@ def thumb():
     
     elif os.path.exists(request_sorce_path):
         import Image
+        
+        THUMB_SIZE = size_x, size_y
+        
         thumb = Image.open(request_sorce_path)
-        thumb.thumbnail((size_x,size_y), Image.ANTIALIAS)
+        if request.vars.square:
+            width, height = thumb.size
+    
+            if width > height:
+               delta = width - height
+               left = int(delta/2)
+               upper = 0
+               right = height + left
+               lower = height
+            else:
+                delta = height - width
+                left = 0
+                upper = int(delta/2)
+                right = width
+                lower = width + upper
+    
+            thumb = thumb.crop((left, upper, right, lower))
+        thumb.thumbnail(THUMB_SIZE, Image.ANTIALIAS)
         try:
             thumb.save(request_path)
         except KeyError:
             thumb.save(request_path, "JPEG")
-        
+
         response.headers['Content-Type'] = c.contenttype(request_path) 
         return response.stream(open(request_path, 'rb'))
     else:
