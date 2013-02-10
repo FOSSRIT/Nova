@@ -195,7 +195,7 @@ a.del_attr_link{
     margin-left:10px;
     margin-top:20px;
     float:left;
-    background-color:#E9590F;
+    background-color:#FFB52D;
     text-align: top;
 }
 
@@ -366,7 +366,7 @@ a.del_attr_link{
     }
 
     div.content-wrapper{
-        background: #F1F1F1;
+        background: #FFFFFF;
         padding: 10px 10px 10px 10px;
     }
 
@@ -378,7 +378,7 @@ a.del_attr_link{
     }
     
     div.content{
-        background: #F1F1F1;
+        background: #FFFFFF;
         padding: 15px;
         width: auto;
         min-width: 725px;
