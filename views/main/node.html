@@ -324,7 +324,7 @@
           {{for node_item in node_holder:}}
               <a href="{{=node_item['url']}}" id="link_{{=node_item['id']}}" title="{{=node_item['name']}}" class="node_link_widget">
                   {{if node_item.picFile:}}
-                  <img src="{{=URL('default','thumb', args=[75,75,node_item.picFile])}}"/>
+                  <img src="{{=URL('default','thumb', args=[75,75,node_item.picFile], vars={"square":True})}}"/>
                   {{else:}}
                   <img src="{{=URL('static','images', args='placeholder_mini_thumb.png')}}" />
                   {{pass}}
