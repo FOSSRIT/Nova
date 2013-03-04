@@ -17,13 +17,15 @@ function click_action( url, node_id, link_element ){
             success: function(){
                 var idx = links.indexOf(node_id); // Find the index
                 if(idx!=-1) links.splice(idx, 1);
-                $('div.flash').html('Node Added/Removed');
-                $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
-                if($(link_element).parent().css('background') == ""){
+                
+                if($(link_element).parent().css('background') != "green"){
+                    $('div.flash').html('Node Added');
                     $(link_element).parent().css('background', 'green');
                 }else{
+                    $('div.flash').html('Node Removed');
                     $(link_element).parent().css('background', '');
                 }
+                $('div.flash').slideDown('slow').delay(3000).slideUp('slow');
                 //pull_data(gsearch, gpage, true, gfull);
             },
             error: function(){

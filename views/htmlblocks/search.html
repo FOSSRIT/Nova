@@ -99,7 +99,7 @@ function pull_data(search, page, empty, full){
                            onclick='javascript:return click_action(\"" + val.url + "\", " + val.id + ", this);'>\
                             <div class='nodePic'>\
                                 <img class='img-ondemand' src='{{=URL('static', 'images', args='lightbox_ico_loading.gif')}}' longdesc='" +
-                                    ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"' /></div>\
+                                    ((val.picFile==""||val.picFile==null)?"{{=URL('static', 'images', args='placeholder_thumb.png')}}":"{{=URL('default','thumb',args=[150,150])}}/"+val.picFile) +"?square=True' width='150px' height='150px'/></div>\
                             <div class='nodeName'>" + val.name + "</div>\
                         </a>\
                      </div>";

@@ -20,6 +20,8 @@ db.define_table('nodeType',
     Field('public', 'boolean'),
     Field('required_vocab', 'list:reference vocab'),
     Field('cat_header','text'),
+    Field('icon','upload', label="Icon", autodelete=True, 
+        requires=IS_IMAGE(maxsize=(2400, 2400),error_message="Must be an image smaller then 2400px by 2400px")),
     format='%(value)s'
     )
 

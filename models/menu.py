@@ -7,16 +7,11 @@ response.title = "Center for Student Innovation"
 ## add/remove items as required
 ##########################################
 response.menu = [
-        ('Tags', False, URL(request.application,'browse','tags'), []),
-        ('Needs', False, URL(request.application, 'browse', 'index', vars={'attribute':'Needs'}), []),
-        ('Skills', False, URL(request.application, 'browse', 'index', vars={'attribute':'Skills'}), []),
-        ('|', False, "#", [] ),
 ]
-    
+
 #Dynamically add types to main menu
-menu_types = db(db.nodeType.value!=None).select()
-for mnu_item in menu_types:
-    response.menu.append((mnu_item.value, request.args(0) == mnu_item.value, URL(request.application, 'main', 'category/%s' % mnu_item.value ),[]))
+menu_types = db(db.nodeType.value!=None).select(orderby=db.nodeType.value)
+response.node_types = menu_types.as_list()
 
 
 # RSS HANDELING

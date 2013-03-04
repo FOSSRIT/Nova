@@ -12,11 +12,10 @@ def index():
             info = {
                     "Name": cNode.name,
                     "Url": URL('main','node', args=cNode.url, extension=""),
-                    "Pic": URL('default','thumb',args=[150,150,cNode.picFile], extension="") \
-                           if cNode.picFile else URL('static', 'images', args='placeholder_thumb.png', extension="")
+                    "Pic": node_pic(cNode, 150, 150, True)
                     }
             tmp_list.append(info)
-        h_list.append((highlight.title, tmp_list))
+        h_list.append((highlight, tmp_list))
         
     return dict(highlights=h_list)
 

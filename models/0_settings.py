@@ -91,7 +91,7 @@ mail=Mail()
 mail.settings.server = 'smtp.gmail.com:587'
 mail.settings.tls = True
 mail.settings.sender = 'fossrit@gmail.com'
-mail.settings.login = 'fossrit:1CvTS3sIwT4hNz9Fh805TIDCc'
+mail.settings.login = 'fossrit:southeastwards+perceptually'
 
 auth.settings.mailer = mail
 auth.settings.registration_requires_verification = True
@@ -106,6 +106,7 @@ http://%s%s/%%(key)s
 Thanks again,
 
 The Innovation Team
+Note: This is an automated email. Do Not Reply, this inbox is not monitored
 """ % ( request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']) )
 
 auth.settings.register_next = URL('user', args='login')
