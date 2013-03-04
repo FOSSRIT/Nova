@@ -50,7 +50,7 @@ def download():
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
-    response.headers['Cache-Control'] = "max-age=3600"
+    response.headers['Cache-Control'] = "max-age=2592000"
     return response.download(request,db)
 
 def thumb():
@@ -59,7 +59,7 @@ def thumb():
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
-    response.headers['Cache-Control'] = "max-age=3600"
+    response.headers['Cache-Control'] = "max-age=2592000"
 
     import os.path
     import gluon.contenttype as c

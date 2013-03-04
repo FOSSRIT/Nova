@@ -84,7 +84,19 @@ def search():
     if not search:
         search = (db.node.id>0) 
 
-    return dict(nodes=db(search).select(db.node.id, db.node.name, db.node.url, db.node.description, db.node.picFile, db.node.tags, db.node.archived, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id).as_list() )
+    node_list = []
+    for node in db(search).select(orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id):
+        node_dict = {}
+        node_dict['id'] = node.id
+        node_dict['name'] = node.name
+        node_dict['url'] = node.url
+        node_dict['description'] = node.description
+        node_dict['picFile'] = node_pic_url(node)#node.picFile
+        node_dict['db.node.tags'] = node.tags
+        node_dict['archived'] = node.archived 
+        node_list.append(node_dict)
+    return dict(nodes=node_list)
+
     
 def searchBlog():
     # Determine Page Information

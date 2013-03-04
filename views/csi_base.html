@@ -41,7 +41,7 @@ function hide_overlay(){
 <div class="body-wrapper">
     <div class="content-wrapper" style="position: relative;">
         <div style="position: absolute; left: 344px; top: 0;">
-            <img src="http://rit.edu/research/simonecenter/sites/rit.edu.research.simonecenter/files/tigernews_logo.png" alt="Home" width="216px" height="108px">
+        <a href="http://www.rit.edu/research/simonecenter/"><img src="http://rit.edu/research/simonecenter/sites/rit.edu.research.simonecenter/files/tigernews_logo.png" alt="Home" width="216px" height="108px"></a>
         </div>
         <div style="height: 78px;">
         <a href="http://rit.edu" style="position: absolute; top: 20px; left: 14px;"><img src="http://www.rit.edu/research/simonecenter/sites/rit.edu.research.simonecenter/files/imagecache/directory_small/rit_logo.png" alt="RIT Logo" width="58" height="18" style="padding: 15px;"></a>
@@ -58,17 +58,41 @@ function hide_overlay(){
     <ul class="menu">
         <li class="leaf"><a href="{{=URL(request.application,'main','index')}}">NOVA</a>
         <ul>
-                <li class="leaf"><a href="{{=URL(request.application,'browse','tags')}}">Tags</a></li>
-        <li class="leaf"><a href="{{=URL(request.application, 'browse', 'index', vars={'attribute':'Needs'})}}">Needs</a></li>
-        <li class="leaf"><a href="URL(request.application, 'browse', 'index', vars={'attribute':'Skills'})}">Skills</a></li>
+            <li class="leaf"><a href="{{=URL(request.application,'browse','tags')}}">Tag Cloud</a></li>
+            <li class="leaf"><a href="{{=URL(request.application, 'browse', 'attributes', args=['Needs'])}}">Needs</a></li>
+            <li class="leaf"><a href="{{=URL(request.application, 'browse', 'attributes', args=['Skills'])}}">Skills</a></li>
+            <li class="leaf"><a href="{{=URL(request.application,'browse','attributes')}}">Other Attributes</a></li>
         </ul></li>
-        <li class="leaf"><a href="#">Categories</a><ul>
-
-    {{for txt, act, lnk, lst in response.menu:}}
-        {{=LI( A( txt, _href=lnk), _class= "leaf%s" % " active-trail" if act else "")}}
-    {{pass}}
+        <li class="leaf"><a href="#">Find...</a>
+            <ul>
+            {{for node_type in response.node_types:}}
+                {{=LI(A(
+                    IMG(_src=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension=""),
+                        _style="margin-left:-25px; vertical-align:middle;"),
+                    node_type['value'].replace("_", " "),
+                    _href=URL("main","category", args=[node_type['value']]),
+                    _class= "leaf%s" % " active-trail" if request.args(0) == node_type['value'] else "" ))}}
+            {{pass}}
     </ul>
-    </li></ul>
+    </li>
+    <li class="leaf"><a href="#">Create New...</a>
+        <ul>
+            {{for node_type in response.node_types:}}
+                {{if node_type['public']:}}
+                    {{=LI(A(
+                        IMG(_src=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension=""),
+                            _style="margin-left:-25px; vertical-align:middle;"),
+                        node_type['value_node'].replace("_", " "), _href=URL("edit","node", vars={"type": node_type['value']})))}}
+                {{elif auth.has_membership("Site Admin"):}}
+                    {{=LI(A(
+                        IMG(_src=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension=""),
+                            _style="margin-left:-25px; vertical-align:middle;"),
+                        node_type['value_node'].replace("_", " ") + " [Admin Ability]", _href=URL("edit","node", vars={"type": node_type['value']})))}}
+                {{pass}}
+            {{pass}}
+        </ul>
+    </li>
+    </ul>
      <div style="float: right; padding: 3px;">{{include "blocks/search.html"}}</div>
     <br style="clear: both;" />
     </div>
