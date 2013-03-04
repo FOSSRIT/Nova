@@ -13,6 +13,27 @@ img{
     max-width: 100%; max-height: 100%;
 }
 
+a{
+  color: #F16410;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  color: #F16410;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+}
+
+
+fieldset{
+  border: 1px solid #FBB12A;
+}
+
+legend{
+  color: #F16410;
+}
+
+
 /************************************
  * Node Style
  ************************************/
@@ -100,17 +121,14 @@ img{
     max-width: 100%; max-height: 100%;
 }
 
-@charset "UTF-8";
+
 body {
-    font: 100% Helvetica, Arial, Verdana, sans-serif;
-    background-image:url('back_strip.png');
-        background-repeat:repeat-x;
+    font: 100% Helvetica, Arial, sans-serif;
+    background: #000000 url('stripe_background.png') repeat-x center top;
     margin: 0;
     padding: 0;
-
-    color: #4D4D4D;
+    color: #232020;
 }
-
 
 
 #add_attr_link{
@@ -166,7 +184,6 @@ a.del_attr_link{
 
 #onlyMainContent{
     margin: 0;
-    min-width:800px;
 }
 
 .nodeBox {
@@ -176,8 +193,17 @@ a.del_attr_link{
     margin-left:10px;
     margin-top:20px;
     float:left;
-    background-color:#CCC;
+    background-color:#FFB52D;
     text-align: top;
+    text-decoration:none;
+}
+
+.nodeBox a{
+    text-decoration:none;
+}
+
+.nodeBox a:hover{
+    text-decoration:underline;
 }
 
 #node_name {
@@ -198,6 +224,7 @@ a.del_attr_link{
     float:left;
     background-color:#999;
 }
+
 .nodePic {
     width:150px;
     height:150px;
@@ -214,11 +241,14 @@ a.del_attr_link{
     margin-top:10px;
     text-align: center;
     font-size: 80%;
-
+    color: #000;
+    text-decoration:none;
 }
 .nodeName a {
     text-decoration:none;
+    color: black;
 }
+
 .nodeName a:hover {
     text-decoration:underline;
 }
@@ -314,9 +344,145 @@ a.del_attr_link{
 #viewbar {
     width: 100%;
     height:auto;
-    background-color:#999;
 }
 
+    div.body-wrapper{
+        margin-left: auto;
+        margin-right: auto;
+        width: 894px;
+    }
+
+    div.header{
+        background: url("newLogo.png") no-repeat;
+        height: 150px;
+        text-align: right;
+        font-size: 2em;
+        position: relative;
+    }
+
+    div.header blockquote{
+        font-family:New Baskerville, Times New Roman, serif;
+        font-style:italic;
+        font-size:90%;
+        color:#FFFFFF;
+        padding: 0px;
+        margin: 0px;
+        position: absolute;
+        bottom: 10px;
+        right: 0px;
+    }
+
+    div.content-wrapper{
+        background: #FFFFFF;
+        padding: 0px;
+        margin: 0px;
+    }
+
+     div.nav-wrapper{
+        padding: 0px;
+        margin: 0px;
+    }
+    
+    div.content{
+        background: #FFFFFF;
+        padding: 0px;
+        margin:0px;
+        width: 894px;
+        clear: both;
+        margin-top:0px;
+        
+    }
+
+    div.footer{
+        clear:both;
+        background-color: #666;
+        color: #FFFFFF;
+        padding: 10px;
+    }
+    
+    div.footer ul, div.footer li{
+        list-style: none;
+        display: inline;
+        padding: 0px;
+    }
+    
+    
+#navigation{
+  background: #FFB52D url(nav_gradient.png) repeat-x left top;
+  height: 34px;
+  width: 100%;
+  z-index: 0;
+}
+
+#navigation ul{
+  list-style: none;
+  margin: 0;
+  padding: 0 26px;
+  z-index: 200;
+}
+
+#navigation li{
+  display: block;
+  float: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+#navigation a{
+  display: block;
+  font: bold 14px/16px "Times New Roman", Times, serif;
+  padding: 9px;
+}
+
+#block-menu-secondary-links a{
+  padding: 9px 13px;
+}
+
+#navigation a:link, #navigation a:visited{
+  background-color: transparent;
+  color: #333333;
+  text-decoration: none;
+}
+
+#navigation a:hover, #navigation a:focus{
+  background-color: #E9590F;
+  color: #333333;
+  text-decoration: none;
+}
+
+#navigation a:active{}
+
+#navigation li.active-trail > a, #navigation a.active{
+  background-color: #E9590F;
+  color: #333333;
+}
+
+#navigation li ul{
+  background-color: #FBD37B;
+  border: 1px solid #ECA51B;
+  left: -2000px;
+  margin: -1px 0 0 -1px;
+  padding: 0;
+  position: absolute;
+  top: 100%;
+  width: 235px;
+  z-index: 300;
+}
+
+#navigation li:hover > ul{
+  left: 0;
+}
+
+#navigation li li{
+  float: none;
+}
+
+#navigation li li a{
+  font: 13px normal Helvetica, Arial, sans-serif;
+  padding: 6px 24px;
+}
 
 @media print{
   #header_bar, #navigation, .nodeTopLinks{

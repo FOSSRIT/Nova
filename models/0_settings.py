@@ -106,6 +106,7 @@ http://%s%s/%%(key)s
 Thanks again,
 
 The Innovation Team
+Note: This is an automated email. Do Not Reply, this inbox is not monitored
 """ % ( request.env.http_host, URL(r=request,c='default',f='user',args=['verify_email']) )
 
 auth.settings.register_next = URL('user', args='login')

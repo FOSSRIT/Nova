@@ -1,22 +1,31 @@
 # coding: utf8
 # try something like
 def index():
-    response.view = "browse/index.html"
-    attr = db(db.vocab.value == request.vars.attribute).select().first()
+    redirect(URL("browse", "attributes"))
+
+def attributes():
     
-    if attr:
-        needs = db((db.nodeAttr.vocab==attr) & (db.node.id == db.nodeAttr.nodeId)).select(
+    if request.args(0):
+        attr = db(db.vocab.value == request.args(0).replace("_", " ")).select().first()
+        attrs = db((db.nodeAttr.vocab==attr) & (db.node.id == db.nodeAttr.nodeId)).select(
             db.nodeAttr.value,
             db.node.name,
             db.node.url,
             db.node.picFile,
+            db.node.type,
             db.node.tags,
             orderby=~db.node.modified)
     
-        return dict(mode_text=attr.value, needs=needs)
+        return dict(mode_text=request.args(0), attrs=attrs)
     else:
-        raise HTTP(404, "Attribte not found")
+        count = db.nodeAttr.id.count()
+        attrList = db((db.vocab.id > 1) & (db.vocab.id == db.nodeAttr.vocab)).select(
+            db.vocab.ALL, count, orderby=db.vocab.value, groupby=db.vocab.id)
+        
+        
 
+        return dict(attributes=[{"value":row.vocab.value, "count":row[count]} for row in attrList])
+        
 def tags():
     if request.args(0):
         return dict(tag=request.args(0))    
@@ -54,7 +63,8 @@ def tags():
             else:
                 size = count / 10.0
             
-            ret.append( A("%s (%d)" % (tag, count), _href=URL('browse','tags', args=tag),
-                _style="font-size: " + str( size )+ "em;") )
-        
+            if count > 1 or request.vars.showall:
+                ret.append( A("%s (%d)" % (tag, count), _href=URL('browse','tags', args=tag),
+                    _style="font-size: " + str( size )+ "em; text-decoration: none;") )
+            
         return dict(tagcount=ret)

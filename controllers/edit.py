@@ -124,7 +124,7 @@ def node():
             
     elif not node and request.vars.type:
         type = db(db.nodeType.value==request.vars.type).select().first()
-        if type and type.public or auth.has_membership("Site Admin"):
+        if type and (type.public or auth.has_membership("Site Admin")):
             form = SQLFORM(db.node, node)
             form.vars.type=type
             form.vars.date=datetime.now()
@@ -245,7 +245,7 @@ def batch_tag():
     
 @auth.requires_membership("Site Admin")
 def home_page():
-    linkedSet = db(db.highlights.title == request.args(0).replace("_"," ")).select().first()
+    linkedSet = db(db.highlights.id == request.args(0)).select().first()
 
     if linkedSet:
         return dict(linkedSet=linkedSet.nodes, category=linkedSet)
@@ -255,7 +255,7 @@ def home_page():
 @auth.requires_membership("Site Admin")
 def home_page_cat():
     if request.args(0):
-        highlight = db(db.highlights.title == request.args(0).replace("_"," ")).select().first()
+        highlight = db(db.highlights.id == request.args(0)).select().first()
     else:
         highlight = None
     form = SQLFORM(db.highlights, highlight, deletable=True, showid=False, fields=['title','weight'])

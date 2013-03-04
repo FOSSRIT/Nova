@@ -3,7 +3,7 @@
 def index(): return dict(message="hello from cron.py")
 
 def send_watch_email():
-    if request.env.remote_addr not in ["127.0.0.1","129.21.47.143"]:
+    if request.env.remote_addr not in ["127.0.0.1","129.21.142.164"]:
         raise HTTP(401, 'unauthorized')
         
     #TODO Remove this
@@ -23,12 +23,27 @@ def send_watch_email():
                         (db.syslog.date > datetime.now()-timedelta(days=1))
     
                      ).select(db.syslog.string_cache, db.syslog.date, limitby=(0,100), orderby=~db.syslog.id)
-            email_message="""You have requested to be notified of updates on beta.innovation.rit.edu.<br><br>Recent Changes:<br>"""
+            email_message=""
             for change in activity:
                 email_message += XML(change.string_cache, True, ['a']).flatten() + "<br />"
             
             if len(activity):
-                mail.send(user.email, "Beta.innovation.rit.edu Watched Page Updates", "<html><head><base href='http://beta.innovation.rit.edu'></head><body>%s</body></html>" % email_message)
+                mail.send(user.email, "NOVA Watched Page Updates", 
+                """<html>
+                <head>
+                    <base href='http://nova.innovation.rit.edu'>
+                </head>
+                <body>
+                    You have requested to be notified of updates on nova.innovation.rit.edu.<br><br>
+                    
+                    Recent Changes:<br>
+                    %s<br><br>
+                    
+                    ---<br>
+                    This is an automated email. Do Not Reply, this inbox is not monitored.<br>
+                    If you wish to disable this email please visit your <a href='/csi2/main/watched'>Watched Pages</a> and disable this notification.
+                </body>
+                </html>""" % email_message)
     
 def _username_to_email():
     for user in db(db.auth_user.email == "").select():
