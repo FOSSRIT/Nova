@@ -3,9 +3,9 @@
     <div id="viewbar">
     {{if category:}} {{# if the category is defined }}
         <div style="padding: 10px">
-        <h2 style="float:left; margin: 0px; padding: 0px;">{{=category.value}}</h2>
+        <h2 style="float:left; margin: 0px; padding: 0px;">{{=category.value.replace("_", " ")}}</h2>
         {{if auth.is_logged_in() and (category.public or auth.has_membership("Site Admin")):}}
-            <a href="{{=URL('edit', 'node', vars={'type':category.value})}}" class="big pill button" style="float: right"><span class="icon cog"></span>Add your own!</a>
+            <a href="{{=URL('edit', 'node', vars={'type':category.value})}}" class="big pill button" style="float: right"><span class="icon cog"></span>Create a new {{=category.value_node}}</a>
         {{pass}}
         {{if auth.has_membership("Site Admin"):}}
             <a href="{{=URL('edit', 'category', args=category.value)}}" class="big pill button" style="float:right"><span class="icon cog"></span>Edit Category</a>

@@ -31,7 +31,12 @@ def feed():
         redirect( URL('feeds','index') )
 
 def entry():
-    entry = db(db.rss_entry.id == request.args(0)).select().first()
+    try:
+        entry_id = int(request.args(0))
+    except:
+        raise HTTP(404, "Invalid Entry Id")
+
+    entry = db(db.rss_entry.id == entry_id).select().first()
     if entry:
         node_owner = db(db.node.feeds.contains(entry.feed.id)).select(db.node.id, db.node.url, db.node.name).first()
         return dict(id=entry.id, link=entry.link, tags=entry.tags,

@@ -195,6 +195,15 @@ a.del_attr_link{
     float:left;
     background-color:#FFB52D;
     text-align: top;
+    text-decoration:none;
+}
+
+.nodeBox a{
+    text-decoration:none;
+}
+
+.nodeBox a:hover{
+    text-decoration:underline;
 }
 
 #node_name {
@@ -233,9 +242,11 @@ a.del_attr_link{
     text-align: center;
     font-size: 80%;
     color: #000;
+    text-decoration:none;
 }
 .nodeName a {
     text-decoration:none;
+    color: black;
 }
 
 .nodeName a:hover {

@@ -1,0 +1,21 @@
+{{extend 'csi_base.html'}}
+<h1>{{=mode_text if "mode_text" in locals() else "Select Attribute"}}</h1>
+
+{{if "attrs" in locals():}}
+    {{=A("Browse More Attributes", _href=URL("browse", "attributes"))}}
+    {{for attr in attrs:}}
+    <div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">
+        <div style="float: left; padding: 10px;">{{=IMG(_src=node_pic(attr.node, 150, 150, True))}}</div>
+        <div style="font-weight: bold;">{{=A(attr.node.name, _href=URL('main', 'node', args=attr.node.url))}}</div>
+        <div style="font-size: 80%">{{=tags_2_html(attr.node.tags)}}</div>
+        <div>{{=XML(attr.nodeAttr.value, True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+        <br style="clear: both;">
+    </div>
+    {{pass}}
+{{else:}}
+    <ul>
+    {{for attr in attributes:}}
+        {{=LI(A("%s (%s)" % (attr['value'], attr['count']), _href=URL("browse","attributes",args=[attr['value']])))}}
+    {{pass}}
+    </ul>
+{{pass}}

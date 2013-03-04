@@ -101,3 +101,10 @@ def page_ref_support(new_tags, old_tags, page_id ):
 
 def feed_ref_support(new_tags, old_tags, page_id ):
     _ref_support(new_tags, old_tags, page_id, "Feed")
+
+def node_pic(node, width=125, height=125, square=True):
+    return URL('default','thumb',args=[width,height,node_pic_url(node)], vars={'square':square}, extension="")
+        #URL('static', 'images', args='placeholder_thumb.png')
+
+def node_pic_url(node):
+    return node['picFile'] if node['picFile'] else node['type']['icon']

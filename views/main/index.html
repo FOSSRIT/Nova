@@ -1,33 +1,49 @@
 {{extend 'csi_base.html'}}
-<div style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; padding:10px;">
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; padding:10px;">
     <p style="text-align: center;">
-      The NOVA is the RIT {{=A("Center for Student InNOVAtion",
-                            _href="http://nova.innovation.rit.edu/csi2/main/category/CSI_Info",
-                            _style="font-weight: bold; color: #F36E23; text-decoration:underline;")}}'s<br>
-      virtual collaboration space, where<br>
+      The NOVA is a virtual collaboration space, where<br>
       {{=A("People", _href=URL("main","category",args="People"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}} and 
       {{=A("Groups", _href=URL("main","category",args="Groups"), _style="font-weight: bold; text-decoration:underline;; color: #F36E23;")}} develop
+      {{=A("Companies", _href=URL("main","category",args="Companies"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}},
       {{=A("Ideas", _href=URL("main","category",args="Ideas"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}},
       {{=A("Projects", _href=URL("main","category",args="Projects"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}} and
       {{=A("Events", _href=URL("main","category",args="Events"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}}.
     </p>
-    
     <p style="font-size: 80%; text-align: center; color: 4D4D4D4D;">
       The best way to have a great idea is to have a lot of ideas.<br />
       And the best way to have a lot of ideas is by sharing them,<br />
       and combining them with others.  That's what happens here.
     </p>
-    <br style="clear:both;">
+    <br style="clear: both;"/>
+    {{for node_type in response.node_types:}}
+        <div class="nodeBox">
+            <div style="text-align: center; font-weight: bold;">{{=node_type['value'].replace("_", " ")}}</div>
+            <div class="nodePic">
+                <img src="{{=URL('default','thumb',args=[150,150,node_type['icon']], vars={'square':True}, extension="")}}">
+            </div>
+            <div class="nodeName">
+                <a href="{{=URL("main","category",args=[node_type['value']])}}">Browse</a>
+                {{if node_type['public']:}}
+                | <a href="{{=URL("edit","node", vars={"type": node_type['value']})}}">Create</a>
+                {{pass}}
+            </div>
+        </div>
+    {{pass}}
 </div>
+
+<br style="clear:both;"/>
     {{if auth.has_membership("Site Admin"):}}
-    {{=A("Add New Category", _href=URL('edit','home_page_cat'))}}
+    <br/>
+    {{=A(SPAN(_class="icon plus"), "Add New Category", _href=URL('edit','home_page_cat'), _class="button")}}
     {{pass}}
     {{for category, nodes in highlights:}}
         <div class="highlight" style="clear: both;">
-        <h2 style="margin: 0px; padding: 0px;">{{=category}}</h2>
+        <h2 style="margin: 0px; padding: 0px;">{{=category.title}}</h2>
         {{if auth.has_membership("Site Admin"):}}
-        {{=A("Add Members",_href=URL('edit','home_page',args=category))}} 
-        {{=A("Edit Category", _href=URL('edit','home_page_cat', args=category))}}<br>{{pass}}
+            {{=A("Add Members",_href=URL('edit','home_page',args=category.id),  _class="button")}} 
+            {{=A("Edit Category", _href=URL('edit','home_page_cat', args=category.id), _class="button")}}
+            <br style="clear:both;"/>
+        {{pass}}
         {{if nodes:}}
             {{for node_i in nodes:}}
                   <div class="nodeBox">

@@ -3,9 +3,13 @@
 <div id="viewbar"> 
 {{if vars().has_key('tagcount'):}}
     <div style="padding: 10px;">
-    <h2 style="float:left; margin:0px; padding: 0px; color:#FFF;">Tags</h2>
     {{if auth.is_logged_in():}}
         {{=A(SPAN(SPAN("",_class="icon cog"),"Batch Tag"), _class="big pill button", _style="float: right;", _href=URL('edit','batch_tag'))}}
+    {{pass}}
+    <h2>Tags</h2>
+    {{if not request.vars.showall:}}
+        Tags with only one occurrence are hidden,
+        {{=A("Click here to include these tags as well", _href=URL("browse","tags", vars={"showall":True}))}}.
     {{pass}}
     <br style="clear: both;">
     </div>
