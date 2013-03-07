@@ -1,0 +1,43 @@
+{{extend 'csi_base.html'}}
+<h1>Match by {{=category['namePlural']}}</h1>
+
+{{if lookingForMe:}}
+    <h2>Looking for {{=A(node['name'], _href=URL("main","node",args=node['url']))}}:</h2>
+       
+    {{for key,valDict in sorted(lookingForMe.items(), key=lambda x: x[1]['match'], reverse=True):}}
+        <div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">
+            <div style="float: left; padding-right: 10px;">{{=IMG(_src=node_pic(valDict['node'], 75, 75, True))}}</div>
+            <div>
+            {{=B(A(valDict['node']['name'], _href=URL("main","node", args=valDict['node']['url'])))}} can get a
+                match of {{="%.2f" % valDict['match']}}% of desired {{=category['namePlural']}} with {{=node['name']}}
+            </div>
+            <div>
+                <ul style="padding-left:100px;">
+                    {{for value in valDict['attrs']:}}
+                        <li><b>{{=value['name']}}</b>{{if value['description']:}} - {{=value['description']}}{{pass}}</li>
+                    {{pass}}
+                </ul>
+            </div>
+            <br style="clear: both;">
+        </div>
+    {{pass}}
+{{pass}}
+
+{{if imLookingFor:}}
+    <h2>{{=A(node['name'], _href=URL("main","node",args=node['url']))}} is looking for:</h2>
+    {{for key,valDict in sorted(imLookingFor.items(), key=lambda x: x[1]['match'], reverse=True):}}
+               <div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">
+            <div style="float: left; padding-right: 20px;">{{=IMG(_src=node_pic(valDict['node'], 75, 75, True))}}</div>
+            <div>{{=B(A(valDict['node']['name'], _href=URL("main","node", args=valDict['node']['url'])))}}
+                matches {{="%.2f" % valDict['match']}}% of {{=node['name']}}'s desired {{=category['namePlural']}}</div>
+            <div>
+                <ul style="padding-left:100px;">
+                    {{for value in valDict['attrs']:}}
+                        <li><b>{{=value['name']}}</b>{{if value['description']:}} - {{=value['description']}}{{pass}}</li>
+                    {{pass}}
+                </ul>
+            </div>
+            <br style="clear: both;">
+        </div>
+    {{pass}}
+{{pass}}

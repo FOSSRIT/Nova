@@ -1,0 +1,45 @@
+<div id="viewnode_container">
+{{for cat in match:}}
+    {{if cat['provides']:}}
+    <h1>{{=cat['category']['namePlural']}}</h1>
+        <ul>
+        {{for attr in cat['provides']:}}
+            <li>{{=A(attr['value'], _href=URL("match","browse",args=[cat['category']['namePlural'],attr['value']], extension=""))}}
+                [{{=A("edit",
+                _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"provides",attr['value']], extension="load"),
+                cid="viewnode_container")}}]
+                {{if attr['description']:}}<br/>{{=attr['description']}}{{pass}}
+            </li>
+        {{pass}}
+        </ul>
+    {{pass}}
+    
+    {{if cat['wants']:}}
+    <h1>Desired {{=cat['category']['namePlural']}}</h1>
+        <ul>
+        {{for attr in cat['wants']:}}
+            <li>{{=A(attr['value'], _href=URL("match","browse",args=[cat['category']['namePlural'],attr['value']], extension=""))}}
+                [{{=A("edit",
+                _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"wants",attr['value']], extension="load"),
+                cid="viewnode_container")}}]
+                {{if attr['description']:}}<br/>{{=attr['description']}}{{pass}}
+            </li>
+        {{pass}}
+        </ul>
+    {{pass}}
+    
+    {{if can_edit:}}
+        You may
+            {{=A("add",
+                _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"provides"], extension="load"),
+                _class="button",
+                cid="viewnode_container")}} or
+            {{=A("desire",
+                _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"wants"], extension="load"),
+                _class="button",
+                cid="viewnode_container")}} a {{=cat['category']['name']}}.
+    {{pass}}
+    <br/>{{=A("Find Nodes with complementing %s" % cat['category']['namePlural'],
+                _href=URL("match", "findMatch", args=[cat['category']['namePlural'],node['url']], extension=""))}}
+{{pass}}
+</div>

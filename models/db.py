@@ -13,7 +13,7 @@ if request.post_vars.username:
 db.define_table('vocab',
     Field('value', 'string', unique=True),
     format='%(value)s'
-    )
+    )    
 db.define_table('nodeType',
     Field('value', 'string'),
     Field('value_node', 'string'),
@@ -116,6 +116,24 @@ db.define_table('filebox',
     Field('owner', default = auth.user_id, writable=False, readable=False),
 )
 
+
+
+db.define_table('matchingCategory',
+    Field('name', 'string', unique=True, required=True),
+    Field('namePlural', 'string', unique=True, required=True),
+    Field('help_text', 'text', required=False),
+    format='%(name)s'
+)
+    
+db.define_table('matchingAttribute',
+    Field('category', db.matchingCategory, writable=False, readable=False),
+    Field('node', db.node, writable=False, readable=False),
+    Field('value', 'string', requires=IS_NOT_EMPTY(), required=True),
+    Field('provides', 'boolean', writable=False, readable=False, comment="Check if node provides, uncheck if node is looking for"),
+    Field('description', 'text', required=False, comment="(Optional) Feel free to provide more information"),
+    format="%(value)"
+)
+     
 #########################################################################
 ## Authentication
 #########################################################################
