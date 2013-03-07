@@ -337,6 +337,12 @@
     </div>
     </div>
 
+    {{if auth.has_membership("Site Admin"):}}
+    <div style="border: 3px solid red;">
+        {{=LOAD('match','viewNode.load',args=node.url, ajax=False)}}
+    </div>
+    {{pass}}
+
     <div id="sideStats">
     {{include "htmlblocks/attributes.html"}}
     </div>
