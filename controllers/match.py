@@ -11,7 +11,7 @@ def browse():
         if request.args(1):
             matchedNodes = db(
                 (db.matchingAttribute.category==nodeCategory) &
-                (db.matchingAttribute.value == request.args(1)) &
+                (db.matchingAttribute.value == request.args(1).replace("_", " ")) &
                 (db.node.id == db.matchingAttribute.node)
                 ).select(db.matchingAttribute.ALL, db.node.name, db.node.url, db.node.picFile).as_list()
             return dict(category=nodeCategory.as_dict(), matchedNodes=matchedNodes)
@@ -24,41 +24,6 @@ def browse():
 
     else:
         return dict(categories=db(db.matchingCategory.id>0).select(orderby=db.matchingCategory.namePlural).as_list())
-
-@auth.requires_login()
-def addAttribute():
-    if len(request.args) != 3:
-        raise HTTP(404, "Unexpected Request")
-        
-    nodeCategory = db(db.matchingCategory.name == request.args(0)).select().first()
-    if not nodeCategory:
-        raise HTTP(404, "Category Not Found")
-    
-    node = get_node_or_404(request.args(1))
-    if not can_edit(node):
-        raise HTTP(403, "Not allowed to edit this node's Attributes")
-        
-    if "provides" == request.args(2):
-        provides = True
-    elif "wants" == request.args(2):
-        provides = False
-    else:
-        raise HTTP(404, "Unknown mode")
-    
-    db.matchingAttribute.value.widget = SQLFORM.widgets.autocomplete(
-        request, db.matchingAttribute.value,limitby=(0,10), min_length=2,
-        db=db(db.matchingAttribute.category==nodeCategory), keyword="w2p_autocomplete_matchingattr")
-        
-    form = SQLFORM(db.matchingAttribute, showid = False, submit_button="Add %s" % nodeCategory.name)
-    form.vars.category = nodeCategory
-    form.vars.node = node
-    form.vars.provides = provides
-
-    if form.accepts(request.vars, session):
-        #db.syslog.insert(action="Edited Attribute", target=node.id, target2=attr.id)
-        pass
-        
-    return dict(form=form)
         
 @auth.requires_login()
 def addAttribute():
@@ -82,7 +47,7 @@ def addAttribute():
     
     db.matchingAttribute.value.widget = SQLFORM.widgets.autocomplete(
         request, db.matchingAttribute.value,limitby=(0,10), min_length=2,
-        db=db(db.matchingAttribute.category==nodeCategory), keyword="w2p_autocomplete_matchingattr")
+        db=db(db.matchingAttribute.category==nodeCategory), keyword="w2p_autocomplete_matchingattr", distinct=True)
     
     submit_str = "Add Desired %s" if request.args(2) == "wants" else "Add %s"
     
@@ -93,13 +58,15 @@ def addAttribute():
             (db.matchingAttribute.category==nodeCategory) &
             (db.matchingAttribute.node == node) &
             (db.matchingAttribute.provides == provides) &
-            (db.matchingAttribute.value == request.args(3))).select().first()
+            (db.matchingAttribute.value == request.args(3).replace("_", " "))).select().first()
+            
+        submit_str = "Edit Desired %s" if request.args(2) == "wants" else "Edit %s"
         if not attrMatch:
             raise HTTP(404, "Attribute Not Found")
     else:
         attrMatch = None
         
-    form = SQLFORM(db.matchingAttribute, attrMatch, showid = False, submit_button=submit_str % nodeCategory.name)
+    form = SQLFORM(db.matchingAttribute, attrMatch, showid = False, submit_button=submit_str % nodeCategory.name, deletable=True)
     
     
     form.vars.category = nodeCategory
