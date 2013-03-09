@@ -1,5 +1,3 @@
 <div style="padding: 10px;">{{=XML(category['help_text']) or ""}}</div>
 {{=form}}
 {{=A("BACK", _class="button", _href=URL("match","viewNode",args=node['url']), cid="viewnode_container")}}
-<br/>
-Note, auto complete currently shows duplicates, this will be removed in the future.

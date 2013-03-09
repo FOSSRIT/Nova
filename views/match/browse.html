@@ -16,7 +16,7 @@
     {{pass}}
     </ul>
 {{else:}}
-    <h1>{{=category['namePlural']}} - {{=request.args(1)}}</h1>
+    <h1>{{=category['namePlural']}} - {{=request.args(1).replace("_", " ")}}</h1>
     {{=A("Back to %s Selection" % category['name'], _href=URL(args=[category['namePlural']]))}}
     {{for match in matchedNodes:}}
     <div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">

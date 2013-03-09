@@ -17,7 +17,7 @@
     {{pass}}
     
     {{if cat['wants']:}}
-    <h1>Desired {{=cat['category']['namePlural']}}</h1>
+    <h1>Needed {{=cat['category']['namePlural']}}</h1>
         <ul>
         {{for attr in cat['wants']:}}
             <li>{{=A(attr['value'], _href=URL("match","browse",args=[cat['category']['namePlural'],attr['value']]))}}
@@ -34,7 +34,7 @@
             {{=A("add",
                 _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"provides"]),
                 _class="button")}} or
-            {{=A("desire",
+            {{=A("seek",
                 _href=URL("match","addAttribute",args=[cat['category']['name'],node['url'],"wants"]),
                 _class="button")}} a {{=cat['category']['name']}}.
     {{pass}}

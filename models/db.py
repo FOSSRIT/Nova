@@ -128,11 +128,14 @@ db.define_table('matchingCategory',
 db.define_table('matchingAttribute',
     Field('category', db.matchingCategory, writable=False, readable=False),
     Field('node', db.node, writable=False, readable=False),
-    Field('value', 'string', requires=IS_NOT_EMPTY(), required=True),
+    Field('value', 'string',
+        requires=IS_MATCH("^[A-Za-z0-9]+(?:[\s-][A-Za-z0-9]+)*$", error_message="Alphanumeric and non consecutive white space"), required=True),
     Field('provides', 'boolean', writable=False, readable=False, comment="Check if node provides, uncheck if node is looking for"),
     Field('description', 'text', required=False, comment="(Optional) Feel free to provide more information"),
-    format="%(value)"
+    auth.signature,
+    format="%(node.name)s %(value)s"
 )
+db.matchingAttribute._enable_record_versioning()
      
 #########################################################################
 ## Authentication
