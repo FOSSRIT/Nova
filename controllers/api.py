@@ -48,7 +48,14 @@ def search():
         search = (db.node.description.contains(request.vars.search)) | \
                  (db.node.name.contains(request.vars.search)) | \
                  (db.node.url.contains(request.vars.search)) |\
-                 (db.node.tags.contains(request.vars.search))
+                 (db.node.tags.contains(request.vars.search)) |\
+                 (
+                     (db.node.id == db.matchingAttribute.node) &
+                     (
+                         (db.matchingAttribute.value.contains(request.vars.search)) |
+                         (db.matchingAttribute.description.contains(request.vars.search))
+                     )
+                 )
                  
         # Should we search the attributes table (slow)
         if request.vars.fulltext:
@@ -85,7 +92,7 @@ def search():
         search = (db.node.id>0) 
 
     node_list = []
-    for node in db(search).select(orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id):
+    for node in db(search).select(db.node.ALL, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id):
         node_dict = {}
         node_dict['id'] = node.id
         node_dict['name'] = node.name
