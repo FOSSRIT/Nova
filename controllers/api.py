@@ -48,21 +48,17 @@ def search():
         search = (db.node.description.contains(request.vars.search)) | \
                  (db.node.name.contains(request.vars.search)) | \
                  (db.node.url.contains(request.vars.search)) |\
-                 (db.node.tags.contains(request.vars.search)) |\
-                 (
-                     (db.node.id == db.matchingAttribute.node) &
-                     (
-                         (db.matchingAttribute.value.contains(request.vars.search)) |
-                         (db.matchingAttribute.description.contains(request.vars.search))
-                     )
-                 )
-                 
-        # Should we search the attributes table (slow)
-        if request.vars.fulltext:
-            search = search | (
-                         (db.node.id == db.nodeAttr.nodeId) & \
-                         (db.nodeAttr.value.contains(request.vars.search))
-                      )
+                 (db.node.tags.contains(request.vars.search))
+
+        # search matching attributes
+        mattingAttrs = db((db.matchingAttribute.value.contains(request.vars.search)) |
+                         (db.matchingAttribute.description.contains(request.vars.search))).select(db.matchingAttribute.node)
+        search = search | (db.node.id.belongs([x.node for x in mattingAttrs]))
+        
+        # Search attributes table
+        attrIds = db(db.nodeAttr.value.contains(request.vars.search)).select(db.nodeAttr.nodeId)
+        search = search | (db.node.id.belongs([x.nodeId for x in attrIds]))
+
     
     # Category Criteria
     if request.vars and request.vars.category and len(request.vars.category):
