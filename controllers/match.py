@@ -88,8 +88,10 @@ def viewNode():
     for category in db(db.matchingCategory.id>0).select():
         match.append(
             {"category":category,
-            "provides":db((db.matchingAttribute.category==category)&(db.matchingAttribute.node==node)&(db.matchingAttribute.provides==True)).select().as_list(),
-            "wants":db((db.matchingAttribute.category==category)&(db.matchingAttribute.node==node)&(db.matchingAttribute.provides==False)).select().as_list(),
+            "provides":db((db.matchingAttribute.category==category) &
+                (db.matchingAttribute.node==node)&(db.matchingAttribute.provides==True)).select(db.matchingAttribute.value, db.matchingAttribute.description).as_list(),
+            "wants":db((db.matchingAttribute.category==category) &
+                (db.matchingAttribute.node==node)&(db.matchingAttribute.provides==False)).select().as_list(),
             })
         
     return dict(match=match, node=node.as_dict(), can_edit=can_edit(node))
@@ -131,6 +133,8 @@ def findMatch():
             imLookingFor[match.node.id] = {
                 "node":match.node,
                 "match":(float(ct)/skillsIWantCount)*100,
+                "matchCt": ct,
+                "totalCt": skillsIWantCount,
                 "attrs":[{"name":match.value, "description":match.description}]}
         
         
@@ -154,6 +158,8 @@ def findMatch():
             lookingForMe[match.node.id] = {
                 "node":match.node,
                 "match":min((float(ctTotal - ctLessMatch)/ctTotal)*100, 100.0),
+                "matchCt": ctTotal - ctLessMatch,
+                "totalCt": ctTotal,
                 "attrs":[{"name":match.value, "description":match.description}]}
 
     return dict(node=node,category=nodeCategory.as_dict(),imLookingFor=imLookingFor, lookingForMe=lookingForMe )
