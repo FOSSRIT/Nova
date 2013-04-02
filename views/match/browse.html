@@ -1,0 +1,33 @@
+{{extend 'csi_base.html'}}
+
+{{if "categories" in locals():}}
+    <h1>Select Category</h1>
+    <ul>
+    {{for cat in categories:}}
+        {{=LI(A(cat['namePlural'], _href=URL(args=[cat['namePlural']])))}}
+    {{pass}}
+    </ul>
+{{elif "categoryValues" in locals():}}
+    <h1>Select {{=category['name']}}</h1>
+    {{=A("Back to Category Selection", _href=URL())}}
+    <ul>
+    {{for catVal in categoryValues:}}
+        {{=LI(A("%s (%s)" % (catVal['value'], catVal['count']), _href=URL(args=[category['namePlural'], catVal['value']])))}}
+    {{pass}}
+    </ul>
+{{else:}}
+    <h1>{{=category['namePlural']}} - {{=request.args(1).replace("_", " ")}}</h1>
+    {{=A("Back to %s Selection" % category['name'], _href=URL(args=[category['namePlural']]))}}
+    {{for match in matchedNodes:}}
+    <div style="clear: both; text-align: left; border: 1px solid #666; margin: 3px;">
+        <div style="float: left; padding-right: 10px;">{{=IMG(_src=node_pic(match['node'], 75, 75, True))}}</div>
+        <div style="font-weight: bold;">
+            {{=A(match['node']['name'], _href=URL("main","node", args=match['node']['url']))}}
+             -
+            {{=SPAN(B("Provides"), _style="color: #00FF00") if match['matchingAttribute']['provides'] else SPAN(B("Looking For"), _style="color: #FF0000")}}
+        </div>
+        <div>{{=XML(match['matchingAttribute']['description'], True, ALLOWED_HTML_TAGS, ALLOWED_HTML_ATTR)}}</div>
+        <br style="clear: both;">
+    </div>
+    {{pass}}    
+{{pass}}

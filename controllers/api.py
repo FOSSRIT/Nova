@@ -49,13 +49,16 @@ def search():
                  (db.node.name.contains(request.vars.search)) | \
                  (db.node.url.contains(request.vars.search)) |\
                  (db.node.tags.contains(request.vars.search))
-                 
-        # Should we search the attributes table (slow)
-        if request.vars.fulltext:
-            search = search | (
-                         (db.node.id == db.nodeAttr.nodeId) & \
-                         (db.nodeAttr.value.contains(request.vars.search))
-                      )
+
+        # search matching attributes
+        mattingAttrs = db((db.matchingAttribute.value.contains(request.vars.search)) |
+                         (db.matchingAttribute.description.contains(request.vars.search))).select(db.matchingAttribute.node)
+        search = search | (db.node.id.belongs([x.node for x in mattingAttrs]))
+        
+        # Search attributes table
+        attrIds = db(db.nodeAttr.value.contains(request.vars.search)).select(db.nodeAttr.nodeId)
+        search = search | (db.node.id.belongs([x.nodeId for x in attrIds]))
+
     
     # Category Criteria
     if request.vars and request.vars.category and len(request.vars.category):
@@ -85,7 +88,7 @@ def search():
         search = (db.node.id>0) 
 
     node_list = []
-    for node in db(search).select(orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id):
+    for node in db(search).select(db.node.ALL, orderby=orderby,limitby=(limit_start,limit_end),groupby=db.node.id):
         node_dict = {}
         node_dict['id'] = node.id
         node_dict['name'] = node.name
