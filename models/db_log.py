@@ -233,8 +233,43 @@ def log_to_string(entry, links=True):
                     node.url,
                     URL('feeds','entry',args=entry.id, extension=""), entry.title
                     )
-                     
-                     
+    
+    def add_match(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.matchingAttribute.id==entry.target2).select().first()
+        
+        return "Added <a href=\"%s\">%s</a> to <a href=\"%s\">%s</a>'s list of %s <a href=\"%s\">%s</a>." % \
+             (
+                 URL('match', 'browse', args=[entry.category.namePlural, entry.value], extension=""), entry.value,
+                 URL('main','node',args=node.url, extension=""), node.name,
+                 "" if entry.provides else "desired",
+                 URL('match', 'browse', args=[entry.category.namePlural], extension=""), entry.category.namePlural
+              )
+        
+    def rem_match(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.matchingAttribute_archive.current_record==entry.target2).select(orderby=~db.matchingAttribute_archive.id).first()
+        
+        return "Removed <a href=\"%s\">%s</a> from <a href=\"%s\">%s</a>'s list of %s <a href=\"%s\">%s</a>." % \
+             (
+                 URL('match', 'browse', args=[entry.category.namePlural, entry.value], extension=""), entry.value,
+                 URL('main','node',args=node.url, extension=""), node.name,
+                 "" if entry.provides else "desired",
+                 URL('match', 'browse', args=[entry.category.namePlural], extension=""), entry.category.namePlural
+              )
+     
+    def edit_match(entry):
+        node = db(db.node.id==entry.target).select().first()
+        entry = db(db.matchingAttribute.id==entry.target2).select().first()
+        
+        return "Edited <a href=\"%s\">%s</a> on <a href=\"%s\">%s</a>'s list of %s <a href=\"%s\">%s</a>." % \
+             (
+                 URL('match', 'browse', args=[entry.category.namePlural, entry.value], extension=""), entry.value,
+                 URL('main','node',args=node.url, extension=""), node.name,
+                 "" if entry.provides else "desired",
+                 URL('match', 'browse', args=[entry.category.namePlural], extension=""), entry.category.namePlural
+              )
+              
     switch = {
         "Linked Page":link_page,
         "Unlinked Page":unlink_page,
@@ -254,6 +289,9 @@ def log_to_string(entry, links=True):
         "Derefereced by Blog":rem_ref_by_blog,
         "Refereced by Feed":add_ref_by_feed,
         "Derefereced by Feed":rem_ref_by_feed,
+        "Added Match Element":add_match,
+        "Removed Match Element":rem_match,
+        "Edited Match Element":edit_match,
         }
     
     ret_val = "%s | <a href=\"%s\">%s</a> %s" % (
@@ -305,6 +343,9 @@ db.define_table('syslog',
                 'Derefereced by Page',
                 'Refereced by Blog',
                 'Derefereced by Blog',
+                'Added Match Element',
+                'Removed Match Element',
+                'Edited Match Element',
             )
         ) ),
     Field('target', 'integer'),

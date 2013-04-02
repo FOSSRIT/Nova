@@ -75,7 +75,15 @@ def addAttribute():
     
 
     if form.accepts(request.vars, session):
-        #db.syslog.insert(action="Edited Attribute", target=node.id, target2=attr.id)
+        
+        if attrMatch:
+            if form.vars.delete_this_record:
+                db.syslog.insert(action="Removed Match Element", target=node, target2=attrMatch.id)
+            else:
+                db.syslog.insert(action="Edited Match Element", target=node, target2=attrMatch.id)
+        else:
+            db.syslog.insert(action="Added Match Element", target=node, target2=form.vars.id)
+        
         return LOAD("match","viewNode",args=[node.url])
 
         
