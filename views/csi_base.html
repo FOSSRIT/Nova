@@ -72,6 +72,7 @@ function hide_overlay(){
                     _href=URL("main","category", args=[node_type['value']]),
                     _class= "leaf%s" % " active-trail" if request.args(0) == node_type['value'] else "" ))}}
             {{pass}}
+            {{=LI(A("Not Sure? Search All!", _href=URL("main","search", vars={"query":""})))}}
     </ul>
     </li>
     <li class="leaf"><a href="#">Create New...</a>
