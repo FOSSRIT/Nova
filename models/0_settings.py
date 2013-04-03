@@ -2,7 +2,7 @@
 response.generic_patterns=['*']
 
 DATE_FORMAT = "%m/%d/%y %I:%M %p"
-MAX_FILE_STORE = 20971520
+MAX_FILE_STORE = 41943040
 MAX_UPLOAD_SIZE = 10485760
 MAX_SIZE_ENG = "10mb"
 
