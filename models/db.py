@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*- 
 
+#####
+# NOTE: Migrate DISABLED in settings.py, enable if making db changes
+#####
+
 if request.vars.username:
         request.vars.username = request.vars.username.lower()
 if request.post_vars.username:

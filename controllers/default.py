@@ -47,18 +47,20 @@ def download():
     allows downloading of uploaded files
     http://..../[app]/default/download/[filename]
     """
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
+    headers = ('Expires', 'Pragma')
+    for header in headers:
+        response.headers[header] = None
     response.headers['Cache-Control'] = "max-age=2592000"
+        
     return response.download(request,db)
 
 def thumb():
     if not request.args(2):
         raise HTTP(404, "Image Not Found")
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
+        
+    headers = ('Expires', 'Pragma')
+    for header in headers:
+        response.headers[header] = None
     response.headers['Cache-Control'] = "max-age=2592000"
 
     import os.path

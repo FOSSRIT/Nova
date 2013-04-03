@@ -1,4 +1,6 @@
 # coding: utf8
+response.generic_patterns=['*']
+
 DATE_FORMAT = "%m/%d/%y %I:%M %p"
 MAX_FILE_STORE = 20971520
 MAX_UPLOAD_SIZE = 10485760
@@ -67,7 +69,7 @@ ALLOWED_HTML_ATTR = {
 
 
 
-db = DAL('sqlite://storage.sqlite')
+db = DAL('sqlite://storage.sqlite', migrate=False)
     
 #########################################################################
 ## Prepare Auth
