@@ -5,7 +5,7 @@ def index():
 
 def attributes():
     
-    if request.args(0):
+    if request.args(0) and request.args(0) != "Email":
         attr = db(db.vocab.value == request.args(0).replace("_", " ")).select().first()
         attrs = db((db.nodeAttr.vocab==attr) & (db.node.id == db.nodeAttr.nodeId)).select(
             db.nodeAttr.value,
@@ -19,7 +19,7 @@ def attributes():
         return dict(mode_text=request.args(0), attrs=attrs)
     else:
         count = db.nodeAttr.id.count()
-        attrList = db((db.vocab.id > 1) & (db.vocab.id == db.nodeAttr.vocab)).select(
+        attrList = db((db.vocab.value != "Email") & (db.vocab.id == db.nodeAttr.vocab)).select(
             db.vocab.ALL, count, orderby=db.vocab.value, groupby=db.vocab.id)
         
         
