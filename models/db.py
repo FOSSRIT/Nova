@@ -26,6 +26,8 @@ db.define_table('nodeType',
     Field('cat_header','text'),
     Field('icon','upload', label="Icon", autodelete=True, 
         requires=IS_IMAGE(maxsize=(2400, 2400),error_message="Must be an image smaller then 2400px by 2400px")),
+    Field('dashboard', 'boolean'),
+    Field('dashboard_order','integer'),
     format='%(value)s'
     )
 

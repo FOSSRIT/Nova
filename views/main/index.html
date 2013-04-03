@@ -1,33 +1,53 @@
 {{extend 'csi_base.html'}}
 <div style="margin-left: auto; margin-right: auto; margin-top: 20px; padding:10px;">
+    <table><tr><td>
+    {{node_type=response.node_types[0]}}
+     <div class="nodeBox">
+                <div style="text-align: center; font-weight: bold;">{{=node_type['value'].replace("_", " ")}}</div>
+                <div class="nodePic">
+                    <a href="{{=URL("main","category",args=[node_type['value']])}}">
+                        <img src="{{=URL('default','thumb',args=[150,150,node_type['icon']], vars={'square':True}, extension="")}}">
+                    </a>
+                </div>
+                <div class="nodeName" style="display: block; height: auto; width: auto">
+                    <a href="{{=URL("main","category",args=[node_type['value']])}}">Browse</a>
+                    {{if node_type['public']:}}
+                    | <a href="{{=URL("edit","node", vars={"type": node_type['value']})}}">Create</a>
+                    {{pass}}
+                </div>
+            </div>
+    </td><td>
     <p style="text-align: center;">
       The NOVA is a virtual collaboration space, where<br>
       {{=A("People", _href=URL("main","category",args="People"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}} and 
-      {{=A("Groups", _href=URL("main","category",args="Groups"), _style="font-weight: bold; text-decoration:underline;; color: #F36E23;")}} develop
-      {{=A("Companies", _href=URL("main","category",args="Companies"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}},
-      {{=A("Ideas", _href=URL("main","category",args="Ideas"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}},
+      {{=A("Groups", _href=URL("main","category",args="Groups"), _style="font-weight: bold; text-decoration:underline;; color: #F36E23;")}} develop innovative
       {{=A("Projects", _href=URL("main","category",args="Projects"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}} and
-      {{=A("Events", _href=URL("main","category",args="Events"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}}.
+      {{=A("Companies", _href=URL("main","category",args="Companies"), _style="font-weight: bold; text-decoration:underline; color: #F36E23;")}}.
     </p>
     <p style="font-size: 80%; text-align: center; color: 4D4D4D4D;">
       The best way to have a great idea is to have a lot of ideas.<br />
       And the best way to have a lot of ideas is by sharing them,<br />
       and combining them with others.  That's what happens here.
     </p>
+    </td></tr></table>
     <br style="clear: both;"/>
     {{for node_type in response.node_types:}}
-        <div class="nodeBox">
-            <div style="text-align: center; font-weight: bold;">{{=node_type['value'].replace("_", " ")}}</div>
-            <div class="nodePic">
-                <img src="{{=URL('default','thumb',args=[150,150,node_type['icon']], vars={'square':True}, extension="")}}">
+        {{if node_type['dashboard']:}}
+            <div class="nodeBox">
+                <div style="text-align: center; font-weight: bold;">{{=node_type['value'].replace("_", " ")}}</div>
+                <div class="nodePic">
+                    <a href="{{=URL("main","category",args=[node_type['value']])}}">
+                        <img src="{{=URL('default','thumb',args=[150,150,node_type['icon']], vars={'square':True}, extension="")}}">
+                    </a>
+                </div>
+                <div class="nodeName" style="display: block; height: auto; width: auto">
+                    <a href="{{=URL("main","category",args=[node_type['value']])}}">Browse</a>
+                    {{if node_type['public']:}}
+                    | <a href="{{=URL("edit","node", vars={"type": node_type['value']})}}">Create</a>
+                    {{pass}}
+                </div>
             </div>
-            <div class="nodeName">
-                <a href="{{=URL("main","category",args=[node_type['value']])}}">Browse</a>
-                {{if node_type['public']:}}
-                | <a href="{{=URL("edit","node", vars={"type": node_type['value']})}}">Create</a>
-                {{pass}}
-            </div>
-        </div>
+        {{pass}}
     {{pass}}
 </div>
 
