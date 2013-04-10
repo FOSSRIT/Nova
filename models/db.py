@@ -48,10 +48,12 @@ db.define_table('node',
     Field('sortOrder', 'integer', writable=False, readable=False, default=0,
         comment="ADMIN SORT ORDER. Set to 0 for natural sort... higher number shows up first"),
     Field('archived', 'boolean', default=False, writable=False, readable=False),
+    auth.signature,
     format='%(name)s'
     )
 db.node.url.requires = [IS_NOT_EMPTY(), IS_ALPHANUMERIC(), IS_NOT_IN_DB(db, 'node.url')]
 db.node.type.requires = IS_IN_DB(db,db.nodeType.id,'%(value)s')
+db.node._enable_record_versioning()
 
 
 db.define_table('nodeAttr',
@@ -62,12 +64,14 @@ db.define_table('nodeAttr',
     Field('created', 'datetime', writable=False, readable=False, default=request.now),
     Field('modified', 'datetime', writable=False, readable=False, default=request.now, update=request.now),
     Field('modified_by','integer', default=auth.user_id,update=auth.user_id,writable=False, readable=False),
+    auth.signature,
     format='%(nodeId)s: %(vocab)s'
     )
     
 db.nodeAttr.vocab.requires = IS_IN_DB(db,db.vocab.id,'%(value)s')
 db.nodeAttr.nodeId.requires = IS_IN_DB(db,db.node.id,'%(name)s (%(url)s)')
 db.nodeAttr.vocab.widget = SQLFORM.widgets.autocomplete(request, db.vocab.value, id_field=db.vocab.id, limitby=(0,10), min_length=1)
+db.nodeAttr._enable_record_versioning()
 
 db.define_table('linkTable',
     Field('nodeId', db.node),
@@ -88,9 +92,10 @@ db.define_table('blog',
     Field('date', 'datetime', writable=False, readable=False, default=request.now),
     Field('author','integer', default=auth.user_id, writable=False, readable=False),
     Field('tags', 'list:string', label='Keywords', comment="A list of words that describe this node. One tag per box. Press enter in the text box to get another box."),
+    auth.signature,
     format='%(nodeId)s: Post: %(title)s'
     )
-    
+db.blog._enable_record_versioning()
 
 db.define_table('feedback',
     Field('user_input', 'text'),
