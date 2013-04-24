@@ -1,7 +1,6 @@
 # coding: utf8
 
 def index():
-    #redirect(URL('main','node', args="csi"))
     highlights = db(db.highlights.id>0).select(orderby=db.highlights.weight)
     
     h_list = []
@@ -102,7 +101,7 @@ def node():
             raise HTTP(404, "Node not Found")
     else:
         # No node was requested, Redirect to index of current controller
-        redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, request.controller))        
+        redirect( URL(request.application, request.controller) )
 
 def node_print():
     return node()

@@ -9,7 +9,7 @@
 #########################################################################  
 
 def index():
-    redirect('http://%s/%s/%s/' % (request.env.http_host, request.application, "main"))
+    redirect(URL("main", "index"))
     
 def user():
     """
