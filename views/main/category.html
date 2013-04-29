@@ -6,7 +6,9 @@
         <h2 style="float:left; margin: 0px; padding: 0px;">{{=category.value.replace("_", " ")}}</h2>
         {{if auth.is_logged_in() and (category.public or auth.has_membership("Site Admin")):}}
             <a href="{{=URL('edit', 'new', args={'type':category.value_node})}}"
+               {{if auth.user:}}
                onclick="show_overlay('Create New','loading...','{{=URL('edit','new',args=category['value_node'], extension="load")}}'); return false;"
+               {{pass}}
                class="big pill button" style="float: right"><span class="icon cog"></span>Create a new {{=category.value_node}}</a>
 
         {{pass}}

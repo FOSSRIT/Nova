@@ -80,8 +80,13 @@ function hide_overlay(){
             {{for node_type in response.node_types:}}
                 {{if node_type['public'] or auth.has_membership("Site Admin"):}}
                 <li>
+                    
                 	<a href="{{=URL('edit','new',args=node_type['value_node'])}}"
-                	   		onclick="show_overlay('Create New','loading...','{{=URL('edit','new',args=node_type['value_node'], extension="load")}}'); return false;">
+                	{{if auth.user:}}
+                	   	onclick="show_overlay('Create New','loading...','{{=URL('edit','new',args=node_type['value_node'], extension="load")}}'); return false;"
+                    {{pass}}}
+                	   	>
+                   
                     	<img src="{{=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension="")}}"
                                 style="margin-left:-25px; vertical-align:middle;"/>
                         {{=node_type['value_node'].replace("_", " ")}}
