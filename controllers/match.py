@@ -60,7 +60,7 @@ def addAttribute():
             (db.matchingAttribute.provides == provides) &
             (db.matchingAttribute.value == request.args(3).replace("_", " "))).select().first()
             
-        submit_str = "Edit Desired %s" if request.args(2) == "wants" else "Edit %s"
+        submit_str = "Update Desired %s" if request.args(2) == "wants" else "Update %s"
         if not attrMatch:
             raise HTTP(404, "Attribute Not Found")
     else:

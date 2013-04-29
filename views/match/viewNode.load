@@ -39,7 +39,9 @@
                 _class="button",
                 cid="viewnode_container")}} a {{=cat['category']['name']}}.
     {{pass}}
+    {{if cat['provides'] or cat['wants']:}}
     <br/>{{=A("Find Nodes with complementing %s" % cat['category']['namePlural'],
                 _href=URL("match", "findMatch", args=[cat['category']['namePlural'],node['url']], extension=""))}}
+    {{pass}}
 {{pass}}
 </div>
