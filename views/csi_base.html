@@ -78,16 +78,16 @@ function hide_overlay(){
     <li class="leaf"><a href="#">Create New...</a>
         <ul>
             {{for node_type in response.node_types:}}
-                {{if node_type['public']:}}
-                    {{=LI(A(
-                        IMG(_src=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension=""),
-                            _style="margin-left:-25px; vertical-align:middle;"),
-                        node_type['value_node'].replace("_", " "), _href=URL("edit","node", vars={"type": node_type['value']})))}}
-                {{elif auth.has_membership("Site Admin"):}}
-                    {{=LI(A(
-                        IMG(_src=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension=""),
-                            _style="margin-left:-25px; vertical-align:middle;"),
-                        node_type['value_node'].replace("_", " ") + " [Admin Ability]", _href=URL("edit","node", vars={"type": node_type['value']})))}}
+                {{if node_type['public'] or auth.has_membership("Site Admin"):}}
+                <li>
+                	<a href="{{=URL('edit','new',args=node_type['value_node'])}}"
+                	   		onclick="show_overlay('Create New','loading...','{{=URL('edit','new',args=node_type['value_node'], extension="load")}}'); return false;">
+                    	<img src="{{=URL('default','thumb',args=[25,25,node_type['icon']], vars={'square':True}, extension="")}}"
+                                style="margin-left:-25px; vertical-align:middle;"/>
+                        {{=node_type['value_node'].replace("_", " ")}}
+                        {{if not node_type['public']:}}[Admin Ability]{{pass}}
+                    </a>
+            	</li>
                 {{pass}}
             {{pass}}
         </ul>

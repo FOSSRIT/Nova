@@ -231,11 +231,11 @@
 <a href="#" onclick="show_overlay('Page Activity','loading...','http://{{=request.env.http_host}}{{=URL('main','node_activity',args=node.url)}}'); return false;" class="left pill button" title="View every edit on this page"><span class="magnifier icon"></span>View Page Activity</a>
 {{pass}}
 {{if can_edit(node):}}
-    {{if node.url==node.name and node.type==1:}}
+    {{if (node.url==node.name and node.type==1) or request.vars.edit:}}
     <script type="text/javascript">
         $(document).ready( function(){
             enter_edit_mode();
-            $("#name").html("Put your name here (click here to edit)");
+            {{if node.url==node.name and node.type==1:}}$("#name").html("Put your name here (click here to edit)");{{pass}}
         });
     </script>
     {{pass}}

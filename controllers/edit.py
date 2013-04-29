@@ -76,6 +76,53 @@ def take_picture():
         return "File Uploaded"
     
     
+@auth.requires_login()
+def new():
+    type = db(db.nodeType.value_node==request.args(0)).select().first()
+    if type and (type.public or auth.has_membership("Site Admin")):
+        form = SQLFORM(db.node, fields=["name"], submit_button = "Create %s" % type.value_node,
+            comments=False, _action=URL(args=request.args, extension=""))
+        form.vars.type=type.id
+        
+        if request.vars.name:
+            slugbase = IS_SLUG()(request.vars.name)[0]
+            tmpurl = slugbase
+            i = 1
+            while db(db.node.url==tmpurl).count():
+                tmpurl = slugbase + str(i)
+                i += 1
+            form.vars.url = tmpurl
+             
+
+        if form.accepts(request.vars):
+            session.flash = type.value_node + ' Created'
+            
+            # Populate Node with required Attributes
+            node = db(db.node.url == form.vars.url).select().first()
+            populate_node_with_required(node)
+            
+            db.syslog.insert(action="Added Page", target=node.id)
+            
+            if isinstance( request.vars.tags, list ):
+                page_ref_support(request.vars.tags, [], node.id )
+            else:
+                page_ref_support([request.vars.tags], [], node.id )
+                    
+            # Link user node to page
+            db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
+                    
+            # Set Watch Node
+            add_rem_watch(node, True)
+                    
+            redirect(URL('main','node',args=form.vars.url, vars={"edit":True}))
+        elif form.errors:
+            response.flash = 'form has errors'
+        
+        return dict(form=form)
+        
+    else:
+        raise HTTP(404, "Type Not Found")
+
 
 @auth.requires_login()
 def node():
@@ -122,51 +169,9 @@ def node():
         elif form.errors:
             response.flash = 'form has errors'
             
-    elif not node and request.vars.type:
-        type = db(db.nodeType.value==request.vars.type).select().first()
-        if type and (type.public or auth.has_membership("Site Admin")):
-            form = SQLFORM(db.node, node)
-            form.vars.type=type
-            form.vars.date=datetime.now()
-             
-            if form.accepts(request.vars):
-                session.flash = 'form accepted'
-                if session.tmp_node_file:
-                    #TODO: CHECK IF UPLOADED INSTEAD
-                    node = db(db.node.url == form.vars.url).select().first()
-                    f = open(session.tmp_node_file, 'r')
-                    node.update_record(picFile=db.node.picFile.store(f,'%s.jpg'% node.id))
-                    f.close()
-                    del session.tmp_node_file
-                    os.unlink(f.name)
-                    
-                # Populate Node with required Attributes
-                node = db(db.node.url == form.vars.url).select().first()
-                populate_node_with_required(node)
-                
-                db.syslog.insert(action="Added Page", target=node.id)
-
-                if isinstance( request.vars.tags, list ):
-                    page_ref_support(request.vars.tags, [], node.id )
-                else:
-                    page_ref_support([request.vars.tags], [], node.id )
-
-                
-                # Link user node to page
-                db.linkTable.insert(nodeId=auth.user.home_node, linkId=node.id)
-                
-                # Set Watch Node
-                add_rem_watch(node, True)
-                
-                redirect(URL('main','node',args=form.vars.url))
-            elif form.errors:
-                response.flash = 'form has errors'
-
-        else:
-            raise HTTP(404, "Type Not Found")
     else:
-        #No node found and no type requested (BAD)
-        raise HTTP(404, "No node requested, no type requested")
+        #No node found
+        raise HTTP(404, "Node not found")
     
     return dict(node=node, form=form)
 
