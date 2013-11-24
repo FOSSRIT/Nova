@@ -107,4 +107,8 @@ def node_pic(node, width=125, height=125, square=True):
         #URL('static', 'images', args='placeholder_thumb.png')
 
 def node_pic_url(node):
-    return node['picFile'] if node['picFile'] else node['type']['icon']
+    try:
+        return node['picFile'] if node['picFile'] else node['type']['icon']
+    except:
+        #TODO: FIX ME
+	pass

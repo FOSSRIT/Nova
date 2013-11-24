@@ -112,13 +112,23 @@ function hide_overlay(){
     <div class="content">
     {{include}}
     <br style="clear:both;" />
+    {{if auth.has_membership("Site Admin") and auth.user.id == 1:}}
+        <button onclick="document.location='{{=URL("admin","default","design",args=request.application)}}'">admin</button>
+        <button onclick="jQuery('#request').slideToggle()">request</button>
+        <div class="hidden" id="request"><h2>request</h2>{{=BEAUTIFY(request)}}</div>
+        <button onclick="jQuery('#session').slideToggle()">session</button>
+        <div class="hidden" id="session"><h2>session</h2>{{=BEAUTIFY(session)}}</div>
+        <button onclick="jQuery('#response').slideToggle()">response</button>
+        <div class="hidden" id="response"><h2>response</h2>{{=BEAUTIFY(response)}}</div>
+        <script>jQuery('.hidden').hide();</script>
+    {{pass}}
     </div>
     <div class="footer">
         <div style="float: right;">{{=printRss()}}</div>
         <div style="float: left;">
         <ul>
             <li>{{=A("Activity Log", _href=URL('main','log'), _title="A Log of every edit on the site")}}</li>
-            <li>{{=A("Submit Feedback", _href=URL('edit','feedback'), _title="Help us improve the site by sending us your feedback")}}</li>
+            <li>{{#=A("Submit Feedback", _href=URL('edit','feedback'), _title="Help us improve the site by sending us your feedback")}}</li>
         </ul>
         </div>
         <br style="clear: both;" />

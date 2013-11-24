@@ -1,2 +1,7 @@
-Write something about this app.
+This is the RIT Innovation Center's collaboration platform.
+
 Developed with web2py.
+
+Required Libs:
+* python-ldap - To connect to RIT's ldap server
+* PIL - To render image thumbnails

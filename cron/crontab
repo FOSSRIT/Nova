@@ -1,2 +1,2 @@
 #crontab
-0 0 * * * web2py *cron/send_watch_email
+#0 0 * * * web2py *cron/send_watch_email
