@@ -69,7 +69,7 @@ ALLOWED_HTML_ATTR = {
 
 
 
-db = DAL('sqlite://storage.sqlite', migrate=False)
+db = DAL('sqlite://storage.sqlite', migrate=True)
     
 #########################################################################
 ## Prepare Auth
