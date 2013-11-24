@@ -8,12 +8,7 @@ response.title = "Center for Student Innovation"
 ##########################################
 response.menu = [
 ]
-
-#Dynamically add types to main menu
-menu_types = db(db.nodeType.value!=None).select(
-    db.nodeType.id, db.nodeType.value, db.nodeType.value_node, db.nodeType.public,
-    db.nodeType.icon, db.nodeType.dashboard, orderby=(db.nodeType.dashboard_order, db.nodeType.value))
-response.node_types = menu_types.as_list()
+#Dynamic main built from response.node_types
 
 
 # RSS HANDELING

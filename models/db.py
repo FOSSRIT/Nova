@@ -230,3 +230,20 @@ if auth.is_logged_in():
         db.nodeAttr.insert(nodeId=id, vocab=6, value=email)
         
         redirect( URL("main","node",args=url ))
+
+menu_types = db(db.nodeType.value!=None).select(
+    db.nodeType.id, db.nodeType.value, db.nodeType.value_node, db.nodeType.public,
+    db.nodeType.icon, db.nodeType.dashboard, orderby=(db.nodeType.dashboard_order, db.nodeType.value))
+if menu_types:
+    response.node_types = menu_types.as_list()
+else:
+    # First Run, Preload DB
+    db.nodeType.insert(value="People", value_node="Person", public=False, dashboard=True, dashboard_order=1)
+    db.nodeType.insert(value="Groups", value_node="Group", public=True, dashboard=True, dashboard_order=2)
+    db.nodeType.insert(value="Projects", value_node="Project", public=True, dashboard=True, dashboard_order=3)
+    db.nodeType.insert(value="Ideas", value_node="Idea", public=True, dashboard=True, dashboard_order=2)
+    db.commit()
+    menu_types = db(db.nodeType.value!=None).select(
+    db.nodeType.id, db.nodeType.value, db.nodeType.value_node, db.nodeType.public,
+    db.nodeType.icon, db.nodeType.dashboard, orderby=(db.nodeType.dashboard_order, db.nodeType.value))
+    response.node_types = menu_types.as_list()
